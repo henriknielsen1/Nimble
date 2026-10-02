@@ -71,7 +71,7 @@ const NIMBLE_DATA = {
       level: 1,
       ancestry: "Menneske",
       background: "Klostermunk",
-      quote: "En adræt kampsportsekspert, der afværger angreb med de bare næver og suser lynhurtigt over slagmarken uden panser.",
+      quote: "En disciplineret nævekæmper, der afværger angreb med de bare hænder og bevæger sig ubesværet over slagmarken uden panser.",
       hp: 13,
       hp_max: 13,
       hit_die: "1d8",
@@ -87,26 +87,25 @@ const NIMBLE_DATA = {
         WIL: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Insight (+1), Influence (0), Naturecraft (0), Perception (+1)" }
       },
       attacks: [
-        { name: "👊 Håndkantstød & Næver (Unarmed)", damage: "1d4 + 2", traits: "Nærkamp, STR" },
-        { name: "🥢 Munkestav (Quarterstaff)", damage: "1d8 + 2", traits: "Nærkamp, 2-hånds" }
+        { name: "Bare Næver & Spark (Unarmed)", damage: "1d4 + 2", traits: "Nærkamp, STY" },
+        { name: "Munkestav (Quarterstaff)", damage: "1d8 + 2", traits: "Nærkamp, Tohånds" }
       ],
       class_features: [
-        { title: "Iron Defense", text: "Din Defense er altid lig med din DEX + STR (2 + 2 = 4), forudsat at du ikke bærer nogen form for rustning." },
-        { title: "Swift Fists", text: "Dine ubevæbnede angreb rammes aldrig af Ulempe ved Hasteangreb (Rushed Attacks)! Du kan angribe ubevæbnet flere gange i træk uden straf." }
+        { title: "Iron Defense", text: "Din Defense er altid lig med DEX + STR (2 + 2 = 4), så længe du ikke bærer rustning." },
+        { title: "Swift Fists", text: "Dine ubevæbnede angreb rammes aldrig af Ulempe ved Hasteangreb (Rushed Attacks). Du kan angribe ubevæbnet flere gange i træk uden straf." }
       ],
       inventory: [
-        "Afslebet Munkestav af jerntræ",
-        "Let træningskappe og sandaler (Ingen rustning)",
-        "Næver og fødder svøbt i linnedbånd",
+        "Afslebet munkestav af jerntræ",
+        "Træningsdragt og sandaler (ingen rustning)",
         "Slot 1: Bønnesnor & bundt røgelsespinde",
         "Slot 2: Rulle fint linned & helende urtesalve",
         "Slot 3: Drejet træskål til te & vand",
-        "Slot 4: Pose med tørrede teblade & urteblandinger",
-        "Rejserationer (Ris og tørret frugt): 3 dage",
+        "Slot 4: Pose med tørrede teblade & urter",
+        "Rejserationer (ris og tørret frugt): 3 dage",
         "Rensende urtemedicin: [ ] [ ]"
       ],
       gold: { gp: 12, sp: 0, cp: 0 },
-      notes: "Kendetegn: Rolig, afbalanceret vejrtrækning; bevæger sig altid uden en lyd.\nPersonligt Mål: Finde den forsvundne mester og bringe klosterets stjålne skriftrulle tilbage."
+      notes: "Kendetegn: Rolig, kontrolleret vejrtrækning; bevæger sig fuldstændig lydløst.\nPersonligt Mål: Finde den forsvundne mester og bringe klosterets stjålne skriftrulle tilbage."
     },
     {
       id: "bram_bloodfury",
@@ -115,7 +114,7 @@ const NIMBLE_DATA = {
       level: 1,
       ancestry: "Menneske",
       background: "Vildmarkskriger",
-      quote: "En ustoppelig naturkraft af vildt raseri og blodtørst, der vokser sig stærkere og farligere, jo tættere han er på fjendens linjer.",
+      quote: "En voldsom urkraft drevet af blodtørst og raseri, der vokser i styrke og farlighed, jo dybere han trænger ind i kampen.",
       hp: 17,
       hp_max: 17,
       hit_die: "1d10",
@@ -131,25 +130,24 @@ const NIMBLE_DATA = {
         WIL: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Insight (0), Influence (0), Naturecraft (0), Perception (0)" }
       },
       attacks: [
-        { name: "🪓 Tohånds Bøddeløkse (Greataxe)", damage: "1d12 + 2", traits: "Nærkamp, 2-hånds" },
-        { name: "🪓 Kasteøkser (2 stk.)", damage: "1d6 + 2", traits: "Light, Thrown Range 4 felter" }
+        { name: "Tohånds Bøddeløkse (Greataxe)", damage: "1d12 + 2", traits: "Nærkamp, Tohånds" },
+        { name: "Kasteøkser (2 stk.)", damage: "1d6 + 2", traits: "Light, Kast Rækkevidde 4" }
       ],
       class_features: [
-        { title: "Rage (1/tur - Action)", text: "Rul en Fury Die (1d4) og læg den til side. Tilføj terningens værdi til alle dine STR-angreb! (Maks 2 Fury Dice i puljen). Rage ophører ved 0 HP, eller hvis du går 1 hel runde uden at angribe/rage." },
-        { title: "Is That All You Got?!", text: "Bliver du angrebet, kan du spendere 1 eller flere Fury Dice for at reducere skaden med STR + DEX (4) pr. terning!" }
+        { title: "Rage (1/tur - Handling)", text: "Rul en Fury Die (1d4) og læg den i din pulje. Læg terningens værdi til alle dine STY-angreb (maks. 2 Fury Dice i puljen). Dit raseri ophører ved 0 HP, eller hvis en hel runde passerer uden angreb eller raseri." },
+        { title: "Is That All You Got?!", text: "Når du bliver angrebet, kan du bruge 1 eller flere Fury Dice fra puljen til at reducere skaden med STY + BEV (4) pr. terning." }
       ],
       inventory: [
         "Cheap Hides læderrustning (+3 Defense)",
-        "Massiv Tohånds Bøddeløkse",
+        "Massiv tohånds bøddeløkse",
         "2x Kasteøkser i brystremme",
-        "Krigsmaling, knogleamuletter",
-        "Slot 1: Læderremme & ekstra kasteøkse-stropper",
-        "Slot 2: Tørret proviantkød (3 dagsrationer)",
-        "Slot 3: Drikkehorn fyldt med stærk dværgemjød",
+        "Slot 1: Læderremme & slibesten",
+        "Slot 2: Røget vildtkød (3 dagsrationer)",
+        "Slot 3: Drikkehorn med stærk dværgemjød",
         "Slot 4: Groft uldtæppe & flintesten"
       ],
       gold: { gp: 8, sp: 0, cp: 0 },
-      notes: "Kendetegn: Brede skuldre dækket af kampar; ler højt midt under kampens hede.\nPersonligt Mål: Nedlægge et legendarisk monster alene og bringe dets kranie hjem."
+      notes: "Kendetegn: Brede skuldre dækket af ar; ler triumferende midt under kampens hede.\nPersonligt Mål: Nedlægge et sagnomspundet udyr alene og bringe dets kranie hjem som trofæ."
     },
     {
       id: "caldra_brightward",
@@ -158,7 +156,7 @@ const NIMBLE_DATA = {
       level: 1,
       ancestry: "Dværg",
       background: "Hellig Vægter",
-      quote: "En urokkelig, tungt pansret vægter, der kanaliserer guddommelig stråleglans i sine knusende hammerslag og holder sit hold i live.",
+      quote: "En urokkelig, svært pansret beskytter, der kanaliserer guddommelig glans i sine knusende slag og holder sine forbundsfæller oprejst.",
       hp: 17,
       hp_max: 17,
       hit_die: "1d10",
@@ -174,27 +172,27 @@ const NIMBLE_DATA = {
         WIL: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Influence (+4), Insight (+4), Naturecraft (+2), Perception (+2)" }
       },
       attacks: [
-        { name: "🔨 Stridskølle (Mace)", damage: "1d6 + 2", traits: "Nærkamp" },
-        { name: "🛡️️ Træskjold (Wooden Buckler)", damage: "-", traits: "+2 Defense (allerede medregnet i de 8 Defense)" }
+        { name: "Stridskølle (Mace)", damage: "1d6 + 2", traits: "Nærkamp" },
+        { name: "Træskjold (Wooden Buckler)", damage: "-", traits: "+2 Defense (medregnet i Defense-total)" }
       ],
       class_features: [
-        { title: "Radiant Judgment", text: "Hver gang en fjende angriber dig uden aktive Judgment Dice: Rul straks 2d6 Judgment Dice. Ved dit næste nærkampsangreb lægges summen direkte til som ekstra Radiant Damage!" },
-        { title: "Lay on Hands", text: "Helbredelsespulje på 5 HP (5 x Lvl). Handling (Action): Rør en allieret og spender point for at helbrede dem. Genoplades ved Sikker Hvile (Safe Rest)." }
+        { title: "Radiant Judgment", text: "Hver gang en fjende angriber dig, og du ikke har aktive Judgment Dice: Rul straks 2d6 Judgment Dice. Ved dit næste nærkampsangreb lægges terningernes sum direkte til som ekstra Radiant-skade." },
+        { title: "Lay on Hands", text: "Helbredelsespulje på 5 HP (5 x Level). Handling: Berør en allieret og brug point fra puljen til at helbrede vedkommende. Genoplades ved Sikker Hvile (Safe Rest)." }
       ],
       inventory: [
         "Rusty Mail ringbrynje (+6 Defense)",
         "Træskjold med jernbeslag (+2 Defense)",
-        "Jern-stridskølle (Mace)",
-        "Dværeggudens hammer udskåret i granit",
-        "Slot 1: Stål-håndjern med nøgle",
-        "Slot 2: Rulle rene linned-bandager & helende salve",
-        "Slot 3: Vievands-flaske",
-        "Slot 4: Kraftig tømrerhammer & 4 jernkiler",
+        "Jern-stridskølle",
+        "Dværgegudens symbol udskåret i granit",
+        "Slot 1: Stålfanger / håndjern med nøgle",
+        "Slot 2: Rulle rene bandager & salver",
+        "Slot 3: Flaske med vievand",
+        "Slot 4: Lille mukkert & 4 jernkiler",
         "Feltrationer: 3 dage",
-        "Olieflaske & lunte: [ ] [ ]"
+        "Lampeolie & lunte: [ ] [ ]"
       ],
       gold: { gp: 10, sp: 0, cp: 0 },
-      notes: "Kendetegn: Flettet mørkt skæg pyntet med bronzeringe; taler med fast og rungende stemme.\nPersonligt Mål: Rense det vanhelligede bjergtempel og genoprette ordenen."
+      notes: "Kendetegn: Flettet mørkt skæg bundet med bronzeringe; taler med en dyb, bydende røst.\nPersonligt Mål: Rense et vanhelliget bjergtempel og genrejse dets faldne alter."
     },
     {
       id: "virel_ember_eye",
@@ -203,7 +201,7 @@ const NIMBLE_DATA = {
       level: 1,
       ancestry: "Højelver",
       background: "Frafalden Arkainer",
-      quote: "En nysgerrig og beregnende elvertroldmand, der manipulerer Ild, Is og Lyn uden tøven og uden at rulle for at ramme.",
+      quote: "En beregnende og skarp elvertroldmand, der tøjler Ild, Is og Lyn med præcis, uafvigelig kontrol.",
       hp: 10,
       hp_max: 10,
       hit_die: "1d6",
@@ -219,27 +217,27 @@ const NIMBLE_DATA = {
         WIL: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Insight (+2), Influence (+2), Naturecraft (+2), Perception (+2)" }
       },
       attacks: [
-        { name: "🧹 Egetræsstav (Staff)", damage: "1d8 - 1", traits: "Nærkamp, 2-hånds" },
-        { name: "🔥 Fire Blast (Cantrip)", damage: "1d10 Ild", traits: "Range 8 felter, Crits eksploderer" },
-        { name: "❄️ Frost Ray (Cantrip)", damage: "1d8 Is", traits: "Range 8 felter, -2 Speed i 1 runde" },
-        { name: "⚡ Lightning Arc (Cantrip)", damage: "1d6 Lyn", traits: "Range 8 felter, kædes automatisk til nærmeste skabning for 1d6 Lyn" }
+        { name: "Egetræsstav (Staff)", damage: "1d8 - 1", traits: "Nærkamp, Tohånds" },
+        { name: "Fire Blast (Cantrip)", damage: "1d10 Ild", traits: "Rækkevidde 8 felter" },
+        { name: "Frost Ray (Cantrip)", damage: "1d8 Is", traits: "Rækkevidde 8 felter, -2 Speed i 1 runde" },
+        { name: "Lightning Arc (Cantrip)", damage: "1d6 Lyn", traits: "Rækkevidde 8 felter, springer til nærmeste væsen for 1d6 Lyn" }
       ],
       class_features: [
-        { title: "Elemental Spellcasting", text: "Mestrer urkræfterne. Cantrips koster 0 mana, kræver ingen to-hit rul og koster 1 handling." }
+        { title: "Elemental Spellcasting", text: "Mestrer elementerne. Dine Cantrips koster 0 Mana og kræver 1 handling." }
       ],
       inventory: [
-        "Adventurer's Garb magikerkappe (+2 Defense)",
-        "Snittet Egetræsstav med indfældet glødesten",
-        "Bogpose, lyssten i lædersnor",
-        "Slot 1: Bog med arkane noter og formelskitse",
-        "Slot 2: Blækhorn, 3 fjerpenne & 5 ark pergament",
-        "Slot 3: Magisk lyssten (lyser ved berøring)",
-        "Slot 4: Stykke fint duftsæbe & tørt klæde",
+        "Adventurer's Garb kappe (+2 Defense)",
+        "Udskåret egetræsstav med indfældet fokus-sten",
+        "Læderetui til skriftruller",
+        "Slot 1: Formelbog med arkane diagrammer",
+        "Slot 2: Blækhus, 3 fjerpenne & 5 ark pergament",
+        "Slot 3: Arkan lyssten (aktiveres ved berøring)",
+        "Slot 4: Vaskesæbe & tørt klæde",
         "Mana Potion (+3 Mana): [ ] [ ]",
         "Rejserationer: 3 dage"
       ],
       gold: { gp: 12, sp: 0, cp: 0 },
-      notes: "Kendetegn: Ravgyldne øjne; mumler formelord under åndedrættet.\nPersonligt Mål: Bevise over for akademiet, at elementarkræfter ikke behøver bureaukratisk kontrol."
+      notes: "Kendetegn: Ravgyldne øjne; mumler formler dæmpet under åndedrættet.\nPersonligt Mål: Bevise over for akademiet, at elementarkræfterne ikke tæmmes af rigide dogmer og regelrytteri."
     },
     {
       id: "thorne_underbough",
@@ -248,7 +246,7 @@ const NIMBLE_DATA = {
       level: 1,
       ancestry: "Halvering",
       background: "Skovboer & Bueskytte",
-      quote: "En usvigelig sporer og bueskytte fra de dybe skove, der mærker sit bytte og nedlægger det sikkert på lang afstand.",
+      quote: "En skarp sporer og bueskytte fra de dybe skove, der udpeger sit bytte og nedlægger det sikkert på lang afstand.",
       hp: 13,
       hp_max: 13,
       hit_die: "1d8",
@@ -264,26 +262,26 @@ const NIMBLE_DATA = {
         WIL: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Naturecraft (+4), Insight (+3), Perception (+2), Influence (+2)" }
       },
       attacks: [
-        { name: "🏹 Kortbue (Shortbow)", damage: "1d6 + 2", traits: "2-hånds, Range 12 felter" },
-        { name: "🗡️ Jægerdolk (Dagger)", damage: "1d4 + 2", traits: "Light, Thrown Range 4 felter" }
+        { name: "Kortbue (Shortbow)", damage: "1d6 + 2", traits: "Tohånds, Rækkevidde 12 felter" },
+        { name: "Jægerdolk (Dagger)", damage: "1d4 + 2", traits: "Light, Kast Rækkevidde 4" }
       ],
       class_features: [
-        { title: "Hunter's Mark (Action)", text: "Mærk en synlig skabning i 1 dag. Den kan ikke gemme sig; angreb mod den får enten Fordel (Advantage) eller +1 ekstra skade (vælges før hvert angreb)." },
-        { title: "Forager", text: "Altid fordel på skill checks til at finde føde, rent drikkevand og sikkert ly i vildmarken." }
+        { title: "Hunter's Mark (Handling)", text: "Udpeg en synlig skabning i 1 dag. Målet kan ikke gemme sig for dig. Dine angreb mod målet får enten Fordel (Advantage) eller +1 skade (vælges før hvert angreb)." },
+        { title: "Forager", text: "Har altid fordel på færdighedstjek til at finde føde, rent vand og ly i vildmarken." }
       ],
       inventory: [
         "Cheap Hides læderrustning (+3 Defense)",
-        "Kortbue + pilekogger med 20 pile",
-        "Jægerdolk i bæltehylster",
-        "Slot 1: Rævesaks / Jægerfælde af jern",
-        "Slot 2: Sejlgarn og klatrereb (15 m)",
-        "Slot 3: Feltflaske af læder (rent vand)",
-        "Slot 4: Pelsforet tæppe & tændsæt",
+        "Kortbue & pilekogger med 20 pile",
+        "Jægerdolk i bælteskede",
+        "Slot 1: Kraftig jægerfælde af jern",
+        "Slot 2: Sejlgarn og klatretov (15 m)",
+        "Slot 3: Læderfeltflaske med farsk vand",
+        "Slot 4: Uldent felttæppe & tændstål",
         "Tørret vildtkød & nødder: 4 dagsrationer",
-        "Lægende urter (stabiliserer en såret): [ ] [ ]"
+        "Lægende urter (stabiliserer sårede): [ ] [ ]"
       ],
       gold: { gp: 10, sp: 0, cp: 0 },
-      notes: "Kendetegn: Piberygende halvering; lytter altid til vinden.\nPersonligt Mål: Opspore det bæst, der drev hans klan væk fra de sydlige skove."
+      notes: "Kendetegn: Piberygende og fåmælt; observerer altid terræn og vindretning.\nPersonligt Mål: Opspore det udyr, der fordrev hans familie fra de sydlige skove."
     },
     {
       id: "kessa_quickstep",
@@ -292,7 +290,7 @@ const NIMBLE_DATA = {
       level: 1,
       ancestry: "Menneske",
       background: "Gadebarn",
-      quote: "En snarrådig og lynsnild lommetyv med to slebne dolke og en slynge, der slår hårdt og præcist til fra skyggerne.",
+      quote: "En snarrådig lommetyv med to slebne dolke og en slynge, der slår hårdt og ubemærket til fra skyggerne.",
       hp: 10,
       hp_max: 10,
       hit_die: "1d6",
@@ -308,26 +306,26 @@ const NIMBLE_DATA = {
         WIL: { rating: "0", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Insight (+1), Influence (0), Naturecraft (0), Perception (0)" }
       },
       attacks: [
-        { name: "🗡️ Dobbelt-Dolke", damage: "1d4 + 2", traits: "Light, Thrown Range 4 felter" },
-        { name: "🎯 Slynge (Sling)", damage: "1d4 + 2", traits: "Range 12 felter, Vicious" }
+        { name: "Tvillingedolke (Daggers)", damage: "1d4 + 2", traits: "Light, Kast Rækkevidde 4" },
+        { name: "Slynge (Sling)", damage: "1d4 + 2", traits: "Rækkevidde 12 felter, Vicious" }
       ],
       class_features: [
-        { title: "Sneak Attack (1/tur)", text: "Når du slår en Kritisk Træffer (maksimal terningværdi), tilføjer du +1d6 ekstra skade." },
-        { title: "Vicious Opportunist (1/tur)", text: "Når du rammer et Distracted mål i nærkamp, bestemmer du selv hvad skadesterningen viser! Sæt den til maks for automatisk Crit." }
+        { title: "Sneak Attack (1/tur)", text: "Når du ruller en Kritisk Træffer (maksimal terningværdi), tilføjer du +1d6 ekstra skade." },
+        { title: "Vicious Opportunist (1/tur)", text: "Når du rammer et afledt mål (Distracted) i nærkamp, vælger du selv terningens udfald. Vælger du maksimum, tæller det som en Kritisk Træffer." }
       ],
       inventory: [
         "Cheap Hides læderrustning (+3 Defense)",
-        "Ståldolk (Højre hånd) & Ståldolk (Venstre hånd)",
-        "Læderslynge + stenpose (20 sten)",
-        "Låsedirkesæt",
-        "Slot 1: Rulle tynd rebsnøre (10 m) + klatrekrog",
-        "Slot 2: Kridt (3 stykker) + lille lommespejl",
-        "Slot 3: Tændstål & tørsvamp",
-        "Rationer (Tørret frugt og brød): 3 dage",
-        "Lille helbredelseseliksir (Healer 1d6 HP): [ ] [ ]"
+        "2x Ståldolke i specialskeder",
+        "Læderslynge & pose med 20 rullesten",
+        "Låsedirkesæt i inderlomme",
+        "Slot 1: Tynd rebsnøre (10 m) & klatrekrog",
+        "Slot 2: Kridt (3 stykker) & lille lommespejl",
+        "Slot 3: Tændstål & tøndresvamp",
+        "Rationer (tørret frugt og brød): 3 dage",
+        "Lille helbredelseseliksir (helbreder 1d6 HP): [ ] [ ]"
       ],
       gold: { gp: 15, sp: 0, cp: 0 },
-      notes: "Kendetegn: Et ar over venstre øjenbryn; går altid lydløst.\nPersonligt Mål: Finde ud af hvem der forrådte den gamle gadebande i havnekvarteret."
+      notes: "Kendetegn: Et tyndt ar over venstre øjenbryn; træder altid blødt og uden lyd.\nPersonligt Mål: Afsløre hvem der forrådte den gamle gadebande i havnekvarteret."
     }
   ]
 };
