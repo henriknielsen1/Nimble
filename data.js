@@ -2,7 +2,7 @@ const NIMBLE_DATA = {
   rules: {
     actions: {
       title: "1. Dine 3 Handlinger (Actions)",
-      desc: "På din tur har du altid 3 handlinger til fri fordeling:",
+      desc: "På din tur har du altid 3 handlinger (Actions) til rådighed til fri fordeling:",
       items: [
         "Bevæge dig (Move): Ryk din Speed i felter (1 felt = 5 fod / standard gitter).",
         "Angribe (Attack): Udfør et nærkamps- eller afstandsangreb.",
@@ -10,41 +10,44 @@ const NIMBLE_DATA = {
         "Vurdere Situationen (Assess): Søg efter svagheder, fælder eller overblik.",
         "Hjælpe Holdet: Samarbejd taktisk med dine allierede."
       ],
-      refreshNote: "Action Refresh: Så snart din tur SLUTTER, genoplades puljen straks med 3 friske handlinger til fjendens tur! Gem aldrig handlinger på din egen tur."
+      refreshNote: "Action Refresh (Nulstilling): Så snart din tur SLUTTER, genoplades puljen straks med 3 friske handlinger til fjendens tur! Gem aldrig handlinger på din egen tur."
     },
     attacks: {
       title: "2. Sådan Angriber Du (Ingen 'Rul for at Ramme')",
+      desc: "I Nimble ruller du aldrig for at se, om du rammer. Du ruller direkte dit våbens eller din formels skadesterning:",
       items: [
         "1'er på primær terning = Fejlskud (Miss): Angrebet glipper fuldstændigt (0 skade).",
-        "MAX på skadesterning = Kritisk Træffer (Crit)! Terningen eksploderer: Rul igen og læg sammen. Ignorerer altid rustning (Defense).",
-        "Hasteangreb (Rushed Attacks): Angriber du flere gange på samme tur, får 2. og 3. angreb Ulempe (Disadvantage): Rul 1 ekstra terning og fjern den højeste."
+        "MAX på skadesterning = Kritisk Træffer (Crit)! Terningen eksploderer: Rul terningen igen og læg tallet oveni (fortsæt hvis du slår max igen!). Kritiske træffere ignorerer altid fjendens rustning (Defense).",
+        "Hasteangreb (Rushed Attacks): Angriber du flere gange på samme tur, får dit 2. og 3. angreb Ulempe (Disadvantage): Rul 1 ekstra terning og fjern den højeste."
       ]
     },
     defense: {
       title: "3. Aktivt Forsvar (Reaktioner på Fjendens Tur)",
-      desc: "Koster 1 handling fra den genvundne pulje (maks. én af hver pr. runde):",
+      desc: "Når monstrene angriber, bruger du af de 3 handlinger, du lige har genvundet (koster 1 handling hver, maks. én af hver reaktion pr. runde):",
       items: [
         "Forsvar (Defend): Træk din samlede Defense-værdi direkte fra den indgående skade.",
-        "Træd Imellem (Interpose): Skub en allieret (inden for 2 felter) i sikkerhed og tag angrebet i deres sted.",
-        "Hjælp (Help): Giv en allieret lov til at omrulle en terning ved angreb eller save."
+        "Træd Imellem (Interpose): Skub en allieret (inden for 2 felter) i sikkerhed, indtag deres felt og tag angrebet i deres sted.",
+        "Hjælp (Help): Giv en allieret lov til at omrulle en terning ved et angreb eller save, hvis du kan forklare DM, hvordan du assisterer."
       ]
     },
     saves: {
       title: "4. Redningsslag (Saves)",
+      desc: "Når du skal modstå magi, fælder eller farer, rulles et d20-save:",
       items: [
-        "Advantaged Save (+): Slå altid med Fordel (2d20, vælg højeste).",
-        "Disadvantaged Save (-): Slå altid med Ulempe (2d20, vælg laveste).",
-        "Neutrale Saves: Slå 1d20. Nat 1 fejler altid; Nat 20 lykkes altid."
+        "1 Advantaged Save (+): Slå altid med Fordel (rul 2d20, vælg den højeste).",
+        "1 Disadvantaged Save (-): Slå altid med Ulempe (rul 2d20, vælg den laveste).",
+        "Neutrale Saves (de 2 øvrige): Slå 1d20. Naturlig 1 fejler altid; naturlig 20 lykkes altid automatisk."
       ]
     },
     dying: {
       title: "5. Hvad sker der ved 0 HP? (Dying & Wounds)",
+      desc: "Når dine HP rammer 0, segner du om som Døende (Dying) og modtager straks 1 Wound:",
       items: [
-        "Ved 0 HP segner du om som Døende (Dying) og tager straks 1 Wound.",
-        "Som Dying har du kun 1 handling pr. tur. DC 10 STR-save for at angribe/kaste magi (ellers +1 Wound).",
-        "Tager du skade som Dying: +2 Wounds (+3 ved Crit).",
-        "6 Wounds = Døden indtræffer.",
-        "Modtager du healing, fjernes Dying-tilstanden øjeblikkeligt."
+        "Som Dying har du kun 1 handling pr. tur.",
+        "Vil du angribe eller kaste magi som Dying, skal du bestå et DC 10 STR-save (ellers tager du straks +1 Wound).",
+        "Tager du skade, mens du er Dying, får du +2 Wounds (+3 ved et fjendtligt Crit).",
+        "6 Wounds = Karakteren er død.",
+        "Modtager du healing, fjernes Dying-tilstanden øjeblikkeligt!"
       ]
     }
   },
@@ -80,13 +83,18 @@ const NIMBLE_DATA = {
         { title: "Swift Fists", text: "Dine ubevæbnede angreb rammes aldrig af Ulempe ved Hasteangreb (Rushed Attacks)! Du kan angribe ubevæbnet flere gange i træk uden straf." }
       ],
       inventory: [
-        "Afslebet Munkestav af jerntræ", "Let træningskappe og sandaler", "Linnedbånd om hænder og fødder",
-        "Slot 1: Bønnesnor & bundt røgelsespinde", "Slot 2: Rulle fint linned & helende urtesalve",
-        "Slot 3: Drejet træskål til te & vand", "Slot 4: Pose med tørrede teblade",
-        "Forbrug: Rejserationer (3 dage), Rensende urtemedicin [ ][ ]"
+        "Afslebet Munkestav af jerntræ",
+        "Let træningskappe og sandaler (Ingen rustning)",
+        "Næver og fødder svøbt i linnedbånd",
+        "Slot 1: Bønnesnor & bundt røgelsespinde",
+        "Slot 2: Rulle fint linned & helende urtesalve",
+        "Slot 3: Drejet træskål til te & vand",
+        "Slot 4: Pose med tørrede teblade & urteblandinger",
+        "Rejserationer (Ris og tørret frugt): 3 dage",
+        "Rensende urtemedicin: [ ] [ ]"
       ],
       gold: { gp: 12, sp: 0, cp: 0 },
-      notes: "Kendetegn: Rolig vejrtrækning; bevæger sig altid uden en lyd.\nPersonligt mål: Finde den forsvundne mester og bringe klosterets skriftrulle tilbage."
+      notes: "Kendetegn: Rolig, afbalanceret vejrtrækning; bevæger sig altid uden en lyd.\nPersonligt Mål: Finde den forsvundne mester og bringe klosterets stjålne skriftrulle tilbage."
     },
     {
       id: "bram_bloodfury",
@@ -115,16 +123,21 @@ const NIMBLE_DATA = {
         { name: "🪓 Kasteøkser (2 stk.)", damage: "1d6 + 2", traits: "Light, Thrown Range 4 felter" }
       ],
       class_features: [
-        { title: "Rage (1/tur - Action)", text: "Rul en Fury Die (1d4) og læg den til side. Føj værdien til STR-angreb! (Maks 2 Fury Dice). Slutter ved 0 HP eller 1 hel runde uden angreb/rage." },
-        { title: "Is That All You Got?!", text: "Bliver du angrebet, kan du spendere Fury Dice for at reducere skaden med STR + DEX (4) pr. terning!" }
+        { title: "Rage (1/tur - Action)", text: "Rul en Fury Die (1d4) og læg den til side. Tilføj terningens værdi til alle dine STR-angreb! (Maks 2 Fury Dice i puljen). Rage ophører ved 0 HP, eller hvis du går 1 hel runde uden at angribe/rage." },
+        { title: "Is That All You Got?!", text: "Bliver du angrebet, kan du spendere 1 eller flere Fury Dice for at reducere skaden med STR + DEX (4) pr. terning!" }
       ],
       inventory: [
-        "Cheap Hides læderrustning (+3 Defense)", "Massiv Tohånds Bøddeløkse", "2x Kasteøkser i brystremme", "Krigsmaling, knogleamuletter",
-        "Slot 1: Læderremme & ekstra kasteøkse-stropper", "Slot 2: Tørret proviantkød (3 dagsrationer)",
-        "Slot 3: Drikkehorn med stærk dværgemjød", "Slot 4: Groft uldtæppe & flintesten"
+        "Cheap Hides læderrustning (+3 Defense)",
+        "Massiv Tohånds Bøddeløkse",
+        "2x Kasteøkser i brystremme",
+        "Krigsmaling, knogleamuletter",
+        "Slot 1: Læderremme & ekstra kasteøkse-stropper",
+        "Slot 2: Tørret proviantkød (3 dagsrationer)",
+        "Slot 3: Drikkehorn fyldt med stærk dværgemjød",
+        "Slot 4: Groft uldtæppe & flintesten"
       ],
       gold: { gp: 8, sp: 0, cp: 0 },
-      notes: "Kendetegn: Brede skuldre dækket af kampar; ler højt midt under kampen.\nPersonligt mål: Nedlægge et legendarisk monster alene."
+      notes: "Kendetegn: Brede skuldre dækket af kampar; ler højt midt under kampens hede.\nPersonligt Mål: Nedlægge et legendarisk monster alene og bringe dets kranie hjem."
     },
     {
       id: "caldra_brightward",
@@ -133,7 +146,7 @@ const NIMBLE_DATA = {
       level: 1,
       ancestry: "Dværg",
       background: "Hellig Vægter",
-      quote: "En urokkelig, tungt pansret vægter, der kanaliserer guddommelig stråleglans i sine knusende hammerslag.",
+      quote: "En urokkelig, tungt pansret vægter, der kanaliserer guddommelig stråleglans i sine knusende hammerslag og holder sit hold i live.",
       hp: 17,
       hp_max: 17,
       hit_die: "1d10",
@@ -150,19 +163,26 @@ const NIMBLE_DATA = {
       },
       attacks: [
         { name: "🔨 Stridskølle (Mace)", damage: "1d6 + 2", traits: "Nærkamp" },
-        { name: "🛡️ Træskjold (Wooden Buckler)", damage: "-", traits: "+2 Defense (medregnet i 8)" }
+        { name: "🛡️️ Træskjold (Wooden Buckler)", damage: "-", traits: "+2 Defense (allerede medregnet i de 8 Defense)" }
       ],
       class_features: [
-        { title: "Radiant Judgment", text: "Når en fjende angriber dig uden aktive Judgment Dice: Rul 2d6 Judgment Dice. Dit næste nærkampsangreb tilføjer summen som Radiant Damage!" },
-        { title: "Lay on Hands", text: "Helbredelsespulje på 5 HP (5 x Lvl). Handling: Rør en allieret og spender point for at helbrede. Genoplades ved Sikker Hvile." }
+        { title: "Radiant Judgment", text: "Hver gang en fjende angriber dig uden aktive Judgment Dice: Rul straks 2d6 Judgment Dice. Ved dit næste nærkampsangreb lægges summen direkte til som ekstra Radiant Damage!" },
+        { title: "Lay on Hands", text: "Helbredelsespulje på 5 HP (5 x Lvl). Handling (Action): Rør en allieret og spender point for at helbrede dem. Genoplades ved Sikker Hvile (Safe Rest)." }
       ],
       inventory: [
-        "Rusty Mail ringbrynje (+6 Defense)", "Træskjold med jernbeslag (+2 Defense)", "Jern-stridskølle", "Dværeggudens hammer i granit",
-        "Slot 1: Stål-håndjern med nøgle", "Slot 2: Rene linned-bandager & helende salve",
-        "Slot 3: Vievands-flaske", "Slot 4: Kraftig tømrerhammer & 4 jernkiler", "Feltrationer (3 dage), Olieflaske [ ][ ]"
+        "Rusty Mail ringbrynje (+6 Defense)",
+        "Træskjold med jernbeslag (+2 Defense)",
+        "Jern-stridskølle (Mace)",
+        "Dværeggudens hammer udskåret i granit",
+        "Slot 1: Stål-håndjern med nøgle",
+        "Slot 2: Rulle rene linned-bandager & helende salve",
+        "Slot 3: Vievands-flaske",
+        "Slot 4: Kraftig tømrerhammer & 4 jernkiler",
+        "Feltrationer: 3 dage",
+        "Olieflaske & lunte: [ ] [ ]"
       ],
       gold: { gp: 10, sp: 0, cp: 0 },
-      notes: "Kendetegn: Flettet mørkt skæg med bronzeringe; rungende stemme.\nPersonligt mål: Rense det vanhelligede bjergtempel og genoprette ordenen."
+      notes: "Kendetegn: Flettet mørkt skæg pyntet med bronzeringe; taler med fast og rungende stemme.\nPersonligt Mål: Rense det vanhelligede bjergtempel og genoprette ordenen."
     },
     {
       id: "virel_ember_eye",
@@ -190,18 +210,24 @@ const NIMBLE_DATA = {
         { name: "🧹 Egetræsstav (Staff)", damage: "1d8 - 1", traits: "Nærkamp, 2-hånds" },
         { name: "🔥 Fire Blast (Cantrip)", damage: "1d10 Ild", traits: "Range 8 felter, Crits eksploderer" },
         { name: "❄️ Frost Ray (Cantrip)", damage: "1d8 Is", traits: "Range 8 felter, -2 Speed i 1 runde" },
-        { name: "⚡ Lightning Arc (Cantrip)", damage: "1d6 Lyn", traits: "Range 8 felter, kædes automatisk til nærmeste for 1d6 Lyn" }
+        { name: "⚡ Lightning Arc (Cantrip)", damage: "1d6 Lyn", traits: "Range 8 felter, kædes automatisk til nærmeste skabning for 1d6 Lyn" }
       ],
       class_features: [
-        { title: "Elemental Spellcasting", text: "Mestrer urkræfterne. Dine cantrips koster 0 mana, kræver ingen to-hit rul og koster blot 1 handling." }
+        { title: "Elemental Spellcasting", text: "Mestrer urkræfterne. Cantrips koster 0 mana, kræver ingen to-hit rul og koster 1 handling." }
       ],
       inventory: [
-        "Adventurer's Garb kappe (+2 Defense)", "Snittet Egetræsstav med glødesten", "Bogpose, lyssten i lædersnor",
-        "Slot 1: Bog med arkane noter & formelskitse", "Slot 2: Blækhorn, 3 fjerpenne & 5 pergament",
-        "Slot 3: Magisk lyssten", "Slot 4: Duftsæbe & tørt klæde", "Mana Potion (+3 Mana) [ ][ ], Rejserationer (3 dage)"
+        "Adventurer's Garb magikerkappe (+2 Defense)",
+        "Snittet Egetræsstav med indfældet glødesten",
+        "Bogpose, lyssten i lædersnor",
+        "Slot 1: Bog med arkane noter og formelskitse",
+        "Slot 2: Blækhorn, 3 fjerpenne & 5 ark pergament",
+        "Slot 3: Magisk lyssten (lyser ved berøring)",
+        "Slot 4: Stykke fint duftsæbe & tørt klæde",
+        "Mana Potion (+3 Mana): [ ] [ ]",
+        "Rejserationer: 3 dage"
       ],
       gold: { gp: 12, sp: 0, cp: 0 },
-      notes: "Kendetegn: Ravgyldne øjne; mumler formelord.\nPersonligt mål: Bevise at elementarkræfter ikke kræver bureaukratisk kontrol."
+      notes: "Kendetegn: Ravgyldne øjne; mumler formelord under åndedrættet.\nPersonligt Mål: Bevise over for akademiet, at elementarkræfter ikke behøver bureaukratisk kontrol."
     },
     {
       id: "thorne_underbough",
@@ -210,7 +236,7 @@ const NIMBLE_DATA = {
       level: 1,
       ancestry: "Halvering",
       background: "Skovboer & Bueskytte",
-      quote: "En usvigelig sporer og bueskytte fra de dybe skove, der mærker sit bytte og nedlægger det sikkert på afstand.",
+      quote: "En usvigelig sporer og bueskytte fra de dybe skove, der mærker sit bytte og nedlægger det sikkert på lang afstand.",
       hp: 13,
       hp_max: 13,
       hit_die: "1d8",
@@ -230,16 +256,22 @@ const NIMBLE_DATA = {
         { name: "🗡️ Jægerdolk (Dagger)", damage: "1d4 + 2", traits: "Light, Thrown Range 4 felter" }
       ],
       class_features: [
-        { title: "Hunter's Mark (Action)", text: "Mærk synligt bytte i 1 dag. Kan ikke gemme sig; angreb mod det får enten Fordel eller +1 skade (vælges før angreb)." },
-        { title: "Forager", text: "Altid fordel på checks til at finde føde, rent vand og ly i vildmarken." }
+        { title: "Hunter's Mark (Action)", text: "Mærk en synlig skabning i 1 dag. Den kan ikke gemme sig; angreb mod den får enten Fordel (Advantage) eller +1 ekstra skade (vælges før hvert angreb)." },
+        { title: "Forager", text: "Altid fordel på skill checks til at finde føde, rent drikkevand og sikkert ly i vildmarken." }
       ],
       inventory: [
-        "Cheap Hides læderrustning (+3 Defense)", "Kortbue + pilekogger med 20 pile", "Jægerdolk i bæltehylster",
-        "Slot 1: Rævesaks / Jægerfælde af jern", "Slot 2: Sejlgarn & klatrereb (15 m)",
-        "Slot 3: Læder-feltflaske med vand", "Slot 4: Pelsforet tæppe & tændsæt", "Vildtkød (4 dagsrationer), Lægende urter [ ][ ]"
+        "Cheap Hides læderrustning (+3 Defense)",
+        "Kortbue + pilekogger med 20 pile",
+        "Jægerdolk i bæltehylster",
+        "Slot 1: Rævesaks / Jægerfælde af jern",
+        "Slot 2: Sejlgarn og klatrereb (15 m)",
+        "Slot 3: Feltflaske af læder (rent vand)",
+        "Slot 4: Pelsforet tæppe & tændsæt",
+        "Tørret vildtkød & nødder: 4 dagsrationer",
+        "Lægende urter (stabiliserer en såret): [ ] [ ]"
       ],
       gold: { gp: 10, sp: 0, cp: 0 },
-      notes: "Kendetegn: Piberygende; lytter til vinden.\nPersonligt mål: Opspore bæstet der drev hans klan væk fra de sydlige skove."
+      notes: "Kendetegn: Piberygende halvering; lytter altid til vinden.\nPersonligt Mål: Opspore det bæst, der drev hans klan væk fra de sydlige skove."
     },
     {
       id: "kessa_quickstep",
@@ -268,16 +300,22 @@ const NIMBLE_DATA = {
         { name: "🎯 Slynge (Sling)", damage: "1d4 + 2", traits: "Range 12 felter, Vicious" }
       ],
       class_features: [
-        { title: "Sneak Attack (1/tur)", text: "Ved Kritisk Træffer (maksimal terningværdi) tilføjes +1d6 ekstra skade." },
-        { title: "Vicious Opportunist (1/tur)", text: "Når du rammer et Distracted mål i nærkamp, bestemmer du selv skadesterningens værdi! Sæt til maks for automatisk Crit." }
+        { title: "Sneak Attack (1/tur)", text: "Når du slår en Kritisk Træffer (maksimal terningværdi), tilføjer du +1d6 ekstra skade." },
+        { title: "Vicious Opportunist (1/tur)", text: "Når du rammer et Distracted mål i nærkamp, bestemmer du selv hvad skadesterningen viser! Sæt den til maks for automatisk Crit." }
       ],
       inventory: [
-        "Cheap Hides læderrustning (+3 Defense)", "2x Ståldolke", "Læderslynge + stenpose (20 sten)", "Låsedirkesæt",
-        "Slot 1: Rebsnøre (10 m) + klatrekrog", "Slot 2: Kridt (3 stk) + lille lommespejl",
-        "Slot 3: Tændstål & tørsvamp", "Rationer (3 dage), Lille helbredelseseliksir (1d6 HP) [ ][ ]"
+        "Cheap Hides læderrustning (+3 Defense)",
+        "Ståldolk (Højre hånd) & Ståldolk (Venstre hånd)",
+        "Læderslynge + stenpose (20 sten)",
+        "Låsedirkesæt",
+        "Slot 1: Rulle tynd rebsnøre (10 m) + klatrekrog",
+        "Slot 2: Kridt (3 stykker) + lille lommespejl",
+        "Slot 3: Tændstål & tørsvamp",
+        "Rationer (Tørret frugt og brød): 3 dage",
+        "Lille helbredelseseliksir (Healer 1d6 HP): [ ] [ ]"
       ],
       gold: { gp: 15, sp: 0, cp: 0 },
-      notes: "Kendetegn: Ar over venstre bryn; går altid lydløst.\nPersonligt mål: Opklare forræderiet mod den gamle gadebande i havnekvarteret."
+      notes: "Kendetegn: Et ar over venstre øjenbryn; går altid lydløst.\nPersonligt Mål: Finde ud af hvem der forrådte den gamle gadebande i havnekvarteret."
     }
   ]
 };
