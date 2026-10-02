@@ -49,6 +49,18 @@ const NIMBLE_DATA = {
         "6 Wounds = Karakteren er død.",
         "Modtager du healing, fjernes Dying-tilstanden øjeblikkeligt!"
       ]
+    },
+    inventory: {
+      title: "6. Bæreevne & overbelastning",
+      desc: "Maksimal bæreevne er 10 + STY (STR) slots. De første 5 småting med en pris på 0 slots er gratis; hver yderligere småting tæller som 1 slot.",
+      items: [
+        "0 slots: Småting (op til 5 gratis). 100 mønter = 1 slot.",
+        "1 slot: Enhåndsvåben, skjolde, let/medium rustning, pilekogger, reb og rationer.",
+        "2 slots: Tohåndsvåben, tung rustning, telte og klatregrej.",
+        "3+ slots: Lig, store kister og monstredele.",
+        "Overbelastet (> 10 + STY slots): -2 Speed samt ulempe på alle STY- og BEV-checks og saves.",
+        "Immobiliseret (> 10 + STY + 5 slots): Speed = 0; karakteren kan ikke bevæge sig."
+      ]
     }
   },
   characters: [

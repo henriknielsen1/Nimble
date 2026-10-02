@@ -4,6 +4,9 @@ window.addEventListener('DOMContentLoaded', () => {
   populateDropdown();
   renderSavedInstancesList();
   renderRulesView();
+  ['f-gp', 'f-sp', 'f-cp'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => updateInventorySummary());
+  });
 
   const lastId = localStorage.getItem('nimble_last_active');
   if (lastId && getInstanceById(lastId)) {
@@ -87,6 +90,7 @@ function loadInstance(instanceId) {
   document.getElementById('f-defense').textContent = inst.defense;
   document.getElementById('f-defcalc').textContent = `(${inst.defense_calc})`;
   document.getElementById('f-speed').textContent = inst.speed;
+  document.getElementById('f-speed').dataset.baseSpeed = parseInt(inst.speed, 10) || 6;
   document.getElementById('f-initiative').textContent = inst.initiative;
 
   const boxes = document.querySelectorAll('.wb');
@@ -124,10 +128,12 @@ function loadInstance(instanceId) {
     featContainer.appendChild(d);
   });
 
-  document.getElementById('f-inventory').value = Array.isArray(inst.inventory) ? inst.inventory.join('\n') : inst.inventory;
+  const inventory = Array.isArray(inst.inventory) ? inst.inventory : String(inst.inventory || '').split('\n').filter(Boolean);
+  renderInventoryEditor(inventory, inst.inventory_slots, inst.stats?.STR?.rating);
   document.getElementById('f-gp').value = inst.gold ? inst.gold.gp : 0;
   document.getElementById('f-sp').value = inst.gold ? inst.gold.sp : 0;
   document.getElementById('f-cp').value = inst.gold ? inst.gold.cp : 0;
+  updateInventorySummary();
 
   document.getElementById('f-notes').value = inst.notes || '';
 
@@ -136,17 +142,130 @@ function loadInstance(instanceId) {
 }
 
 function syncPrintMirrors() {
-  const invField = document.getElementById('f-inventory');
   const notesField = document.getElementById('f-notes');
   const invPrint = document.getElementById('f-inventory-print');
   const notesPrint = document.getElementById('f-notes-print');
 
-  if (invField && invPrint) {
-    invPrint.textContent = invField.value;
-  }
   if (notesField && notesPrint) {
     notesPrint.textContent = notesField.value;
   }
+}
+
+function inferInventorySlots(item) {
+  if (/^Slot \d+:/i.test(item)) return 1;
+  if (/\b(lig|kist\w*|monsterdel\w*)\b/i.test(item)) return 3;
+  if (/\b(tohånds|two.hand|greataxe|bøddeløkse|quarterstaff|munkestav|egetræsstav|shortbow|kortbue|staff|telt|klatregrej)\b/i.test(item)) return 2;
+  if (/\b(våben|weapon|skjold|shield|rustning|armor|mail|hides|kogger|quiver|reb|rope|ration\w*|proviant|pile)\b/i.test(item)) return 1;
+  if (/\b(amulet|kridt|chalk|fjerpen|pen|mønt|coin|røgelsespind|bønnesnor)\b/i.test(item)) return 0;
+  return 1;
+}
+
+function renderInventoryEditor(items, slotCosts = [], strengthRating = '0') {
+  const container = document.getElementById('f-inventory-items');
+  if (!container) return;
+  container.replaceChildren();
+  items.forEach((item, index) => {
+    const row = document.createElement('div');
+    row.className = 'inventory-row';
+
+    const name = document.createElement('input');
+    name.type = 'text';
+    name.className = 'inventory-name';
+    name.setAttribute('aria-label', `Genstand ${index + 1}`);
+    name.value = item;
+    name.addEventListener('input', updateInventorySummary);
+
+    const slots = document.createElement('input');
+    slots.type = 'number';
+    slots.min = '0';
+    slots.step = '1';
+    slots.className = 'inventory-slots';
+    slots.setAttribute('aria-label', `Slots for genstand ${index + 1}`);
+    slots.value = Number.isInteger(slotCosts[index]) && slotCosts[index] >= 0
+      ? slotCosts[index]
+      : inferInventorySlots(item);
+    slots.addEventListener('input', updateInventorySummary);
+
+    const unit = document.createElement('span');
+    unit.textContent = 'slots';
+
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'btn btn-danger inventory-remove screen-only';
+    remove.textContent = 'Fjern';
+    remove.setAttribute('aria-label', `Fjern ${item || `genstand ${index + 1}`}`);
+    remove.addEventListener('click', () => {
+      row.remove();
+      updateInventorySummary(strengthRating);
+    });
+
+    row.append(name, slots, unit, remove);
+    container.appendChild(row);
+  });
+  container.dataset.strength = strengthRating || '0';
+  updateInventorySummary();
+}
+
+function getInventoryTotals() {
+  let assigned = 0;
+  let smallItems = 0;
+  let freeSmallItemsUsed = 0;
+  const printableItems = [];
+  document.querySelectorAll('#f-inventory-items .inventory-row').forEach(row => {
+    const name = row.querySelector('.inventory-name').value.trim();
+    const rawSlots = Number(row.querySelector('.inventory-slots').value);
+    const slots = Number.isFinite(rawSlots) ? Math.max(0, Math.floor(rawSlots)) : 0;
+    let effectiveSlots = slots;
+    if (slots === 0 && name) {
+      smallItems++;
+      if (freeSmallItemsUsed < 5) {
+        freeSmallItemsUsed++;
+      } else {
+        effectiveSlots = 1;
+      }
+    }
+    if (name) assigned += slots;
+    if (name) printableItems.push(`${name} — ${effectiveSlots} ${effectiveSlots === 1 ? 'slot' : 'slots'}`);
+  });
+  const coins = ['f-gp', 'f-sp', 'f-cp'].reduce((total, id) => total + (parseInt(document.getElementById(id)?.value, 10) || 0), 0);
+  const coinSlots = Math.ceil(Math.max(0, coins) / 100);
+  const used = assigned + Math.max(0, smallItems - 5) + coinSlots;
+  if (coins > 0) printableItems.push(`${coins} mønter — ${coinSlots} ${coinSlots === 1 ? 'slot' : 'slots'}`);
+  return { assigned, smallItems, coinSlots, used, printableItems };
+}
+
+function updateInventorySummary(strengthRating) {
+  const container = document.getElementById('f-inventory-items');
+  const strength = parseInt(strengthRating ?? container?.dataset.strength ?? '0', 10) || 0;
+  const capacity = 10 + strength;
+  const totals = getInventoryTotals();
+  const summary = document.getElementById('f-inventory-summary');
+  const print = document.getElementById('f-inventory-print');
+  if (!summary || !print) return;
+
+  let status = `Normal belastning · ${Math.max(0, capacity - totals.used)} slots tilbage`;
+  const baseSpeed = parseInt(document.getElementById('f-speed')?.dataset.baseSpeed || '6', 10);
+  if (totals.used > capacity + 5) {
+    status = `Immobiliseret · ${totals.used}/${capacity + 5} slots før immobilisering`;
+    document.getElementById('f-speed').textContent = '0 felter (Immobiliseret)';
+  } else if (totals.used > capacity) {
+    status = `Overbelastet · ${totals.used - capacity} slots over grænsen · Ulempe på STY- og BEV-checks samt saves`;
+    document.getElementById('f-speed').textContent = `${Math.max(0, baseSpeed - 2)} felter (-2, Overbelastet)`;
+  } else {
+    document.getElementById('f-speed').textContent = `${baseSpeed} felter`;
+  }
+  summary.textContent = `Bæreevne: ${capacity} slots · Belastning: ${totals.used} slots · ${status}`;
+  print.textContent = `${totals.printableItems.join('\n')}\n\nBelastning: ${totals.used}/${capacity} slots — ${status}`;
+}
+
+function addInventoryItem() {
+  const container = document.getElementById('f-inventory-items');
+  const items = Array.from(container.querySelectorAll('.inventory-name'), input => input.value);
+  const costs = Array.from(container.querySelectorAll('.inventory-slots'), input => Number(input.value));
+  items.push('');
+  costs.push(1);
+  renderInventoryEditor(items, costs, container.dataset.strength);
+  container.querySelector('.inventory-row:last-child .inventory-name').focus();
 }
 
 function handleWoundToggle(woundVal) {
@@ -178,7 +297,11 @@ function saveActiveSheet(showAlert = true) {
   document.querySelectorAll('.wb').forEach(b => { if (b.checked) checkedWounds++; });
   current.wounds = checkedWounds;
 
-  current.inventory = document.getElementById('f-inventory').value.split('\n');
+  current.inventory = Array.from(document.querySelectorAll('#f-inventory-items .inventory-name'), input => input.value);
+  current.inventory_slots = Array.from(document.querySelectorAll('#f-inventory-items .inventory-slots'), input => {
+    const slots = Number(input.value);
+    return Number.isFinite(slots) ? Math.max(0, Math.floor(slots)) : 0;
+  });
   current.gold = {
     gp: parseInt(document.getElementById('f-gp').value, 10) || 0,
     sp: parseInt(document.getElementById('f-sp').value, 10) || 0,
@@ -270,5 +393,9 @@ function renderRulesView() {
     <h3>${r.dying.title}</h3>
     <p>${r.dying.desc}</p>
     <ul>${r.dying.items.map(i => `<li>${i}</li>`).join('')}</ul>
+
+    <h3>${r.inventory.title}</h3>
+    <p>${r.inventory.desc}</p>
+    <ul>${r.inventory.items.map(i => `<li>${i}</li>`).join('')}</ul>
   `;
 }
