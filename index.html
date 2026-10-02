@@ -73,29 +73,31 @@
         <p id="f-quote" class="sheet-quote"></p>
 
         <!-- KAMP-OVERSIGT & STATS -->
-        <table class="data-table text-center">
-          <thead>
-            <tr>
-              <th>Hit Points (HP)</th>
-              <th>Hit Die</th>
-              <th>Defense</th>
-              <th>Speed</th>
-              <th>Initiative</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <input type="number" id="f-hp" class="hp-input"> / 
-                <span id="f-hp-max">10</span>
-              </td>
-              <td id="f-hitdie">1d8</td>
-              <td><strong id="f-defense">4</strong> <small id="f-defcalc" class="text-muted"></small></td>
-              <td id="f-speed">6 felter</td>
-              <td><strong id="f-initiative">+2</strong></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-scroll">
+          <table class="data-table text-center">
+            <thead>
+              <tr>
+                <th>Hit Points (HP)</th>
+                <th>Hit Die</th>
+                <th>Defense</th>
+                <th>Speed</th>
+                <th>Initiative</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input type="number" id="f-hp" class="hp-input"> /
+                  <span id="f-hp-max">10</span>
+                </td>
+                <td id="f-hitdie">1d8</td>
+                <td><strong id="f-defense">4</strong> <small id="f-defcalc" class="text-muted"></small></td>
+                <td id="f-speed">6 felter</td>
+                <td><strong id="f-initiative">+2</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <!-- WOUNDS TRACKER -->
         <div class="wounds-container avoid-break">
@@ -116,30 +118,34 @@
 
         <!-- ABILITIES & SKILLS -->
         <h3 class="section-title">🎲 Egenskaber, Saves & Færdigheder</h3>
-        <table class="data-table" id="f-stats-table">
-          <thead>
-            <tr>
-              <th style="width: 15%;">Egenskab</th>
-              <th style="width: 12%;">Rating</th>
-              <th style="width: 33%;">Save Slag</th>
-              <th>Færdigheder & Bonusser</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="table-scroll">
+          <table class="data-table" id="f-stats-table">
+            <thead>
+              <tr>
+                <th style="width: 15%;">Egenskab</th>
+                <th style="width: 12%;">Rating</th>
+                <th style="width: 33%;">Save Slag</th>
+                <th>Færdigheder & Bonusser</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
 
         <!-- ATTACKS -->
         <h3 class="section-title">⚔️ Våben & Kamp-Handlinger</h3>
-        <table class="data-table" id="f-attacks-table">
-          <thead>
-            <tr>
-              <th>Handling / Våben</th>
-              <th style="width: 20%;">Skade</th>
-              <th>Egenskaber & Rækkevidde</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="table-scroll">
+          <table class="data-table" id="f-attacks-table">
+            <thead>
+              <tr>
+                <th>Handling / Våben</th>
+                <th style="width: 20%;">Skade</th>
+                <th>Egenskaber & Rækkevidde</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
 
         <!-- CLASS FEATURES -->
         <h3 class="section-title">🌟 Klasse-Evner</h3>
