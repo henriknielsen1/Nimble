@@ -83,7 +83,7 @@ const NIMBLE_DATA = {
         { title: "Swift Fists", text: "Dine ubevæbnede angreb rammes aldrig af Ulempe ved Hasteangreb (Rushed Attacks)! Du kan angribe ubevæbnet flere gange i træk uden straf." }
       ],
       weapons: [
-        "Munkestav — Skade: 1d8 + 2; rækkevidde: nærkamp; egenskaber: 2-hånds",
+        "Afslebet Munkestav af jerntræ — Skade: 1d8 + 2; rækkevidde: nærkamp; egenskaber: 2-hånds",
         "Ubevæbnet (håndkantstød/næver) — Skade: 1d4 + 2; rækkevidde: nærkamp; egenskaber: STR"
       ],
       armor: [
@@ -133,8 +133,8 @@ const NIMBLE_DATA = {
         { title: "Is That All You Got?!", text: "Bliver du angrebet, kan du spendere 1 eller flere Fury Dice for at reducere skaden med STR + DEX (4) pr. terning!" }
       ],
       weapons: [
-        "Tohånds Bøddeløkse — Skade: 1d12 + 2; rækkevidde: nærkamp; egenskaber: 2-hånds",
-        "Kasteøkser (2 stk.) — Skade: 1d6 + 2; rækkevidde: kast 4 felter; egenskaber: Light, Thrown"
+        "Massiv Tohånds Bøddeløkse — Skade: 1d12 + 2; rækkevidde: nærkamp; egenskaber: 2-hånds",
+        "Kasteøkser (2 stk.) i brystremme — Skade: 1d6 + 2; rækkevidde: kast 4 felter; egenskaber: Light, Thrown"
       ],
       armor: [
         "Cheap Hides læderrustning — Rustningsbonus: +3 Defense; samlet Defense: 5 (rustning + DEX)"
@@ -231,7 +231,7 @@ const NIMBLE_DATA = {
         { title: "Elemental Spellcasting", text: "Mestrer urkræfterne. Cantrips koster 0 mana, kræver ingen to-hit rul og koster 1 handling." }
       ],
       weapons: [
-        "Egetræsstav — Skade: 1d8 - 1; rækkevidde: nærkamp; egenskaber: 2-hånds"
+        "Snittet Egetræsstav med indfældet glødesten — Skade: 1d8 - 1; rækkevidde: nærkamp; egenskaber: 2-hånds"
       ],
       armor: [
         "Adventurer's Garb magikerkappe — Rustningsbonus: +2 Defense; samlet Defense: 2"
@@ -280,7 +280,7 @@ const NIMBLE_DATA = {
       ],
       weapons: [
         "Kortbue — Skade: 1d6 + 2; rækkevidde: 12 felter; egenskaber: 2-hånds",
-        "Jægerdolk — Skade: 1d4 + 2; rækkevidde: kast 4 felter; egenskaber: Light, Thrown"
+        "Jægerdolk i bæltehylster — Skade: 1d4 + 2; rækkevidde: kast 4 felter; egenskaber: Light, Thrown"
       ],
       armor: [
         "Cheap Hides læderrustning — Rustningsbonus: +3 Defense; samlet Defense: 5 (rustning + DEX)"
@@ -328,7 +328,7 @@ const NIMBLE_DATA = {
         { title: "Vicious Opportunist (1/tur)", text: "Når du rammer et Distracted mål i nærkamp, bestemmer du selv hvad skadesterningen viser! Sæt den til maks for automatisk Crit." }
       ],
       weapons: [
-        "Ståldolke (2 stk.) — Skade: 1d4 + 2; rækkevidde: nærkamp / kast 4 felter; egenskaber: Light, Thrown",
+        "Ståldolk (højre hånd) & ståldolk (venstre hånd) — Skade: 1d4 + 2; rækkevidde: nærkamp / kast 4 felter; egenskaber: Light, Thrown",
         "Læderslynge — Skade: 1d4 + 2; rækkevidde: 12 felter; egenskaber: Vicious"
       ],
       armor: [

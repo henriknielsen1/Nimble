@@ -285,7 +285,6 @@ textarea {
   min-height: 120px;
 }
 
-.gear-col { flex: 3; }
 .currency-col { flex: 1; }
 
 .currency-inputs {
