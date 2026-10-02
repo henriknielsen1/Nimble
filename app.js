@@ -49,6 +49,32 @@ function getInstanceById(instId) {
   return list.find(x => x.instance_id === instId);
 }
 
+function asEquipmentList(value) {
+  if (Array.isArray(value)) return value;
+  return typeof value === 'string' ? value.split('\n') : [];
+}
+
+function getCharacterEquipment(inst) {
+  const template = NIMBLE_DATA.characters.find(character => character.id === inst.id) || {};
+  const legacyInventory = asEquipmentList(inst.inventory);
+  const hasLegacyInventory = inst.inventory !== undefined;
+  const isLegacyWeaponOrArmor = item => {
+    const normalizedItem = item.toLowerCase();
+    if (normalizedItem.includes('ingen rustning') || normalizedItem.startsWith('slot ')) return false;
+    return /rustning|armor|mail|hides|skjold|shield|bøddeløkse|kasteøkse|økse|munkestav|egetræsstav|staff|kølle|mace|kortbue|bue|bow|dolk|dagger|slynge|sling/.test(normalizedItem);
+  };
+
+  return {
+    weapons: asEquipmentList(inst.weapons ?? template.weapons),
+    armor: asEquipmentList(inst.armor ?? template.armor),
+    backpack: inst.backpack !== undefined
+      ? asEquipmentList(inst.backpack)
+      : hasLegacyInventory
+        ? legacyInventory.filter(item => !isLegacyWeaponOrArmor(item))
+        : asEquipmentList(template.backpack)
+  };
+}
+
 function cloneAndActivateCharacter() {
   const pName = document.getElementById('player-name-in').value.trim() || 'Ukendt Spiller';
   const charId = document.getElementById('char-select-in').value;
@@ -124,7 +150,10 @@ function loadInstance(instanceId) {
     featContainer.appendChild(d);
   });
 
-  document.getElementById('f-inventory').value = Array.isArray(inst.inventory) ? inst.inventory.join('\n') : inst.inventory;
+  const equipment = getCharacterEquipment(inst);
+  document.getElementById('f-weapons').value = equipment.weapons.join('\n');
+  document.getElementById('f-armor').value = equipment.armor.join('\n');
+  document.getElementById('f-backpack').value = equipment.backpack.join('\n');
   document.getElementById('f-gp').value = inst.gold ? inst.gold.gp : 0;
   document.getElementById('f-sp').value = inst.gold ? inst.gold.sp : 0;
   document.getElementById('f-cp').value = inst.gold ? inst.gold.cp : 0;
@@ -136,14 +165,13 @@ function loadInstance(instanceId) {
 }
 
 function syncPrintMirrors() {
-  const invField = document.getElementById('f-inventory');
   const notesField = document.getElementById('f-notes');
-  const invPrint = document.getElementById('f-inventory-print');
   const notesPrint = document.getElementById('f-notes-print');
 
-  if (invField && invPrint) {
-    invPrint.textContent = invField.value;
-  }
+  ['weapons', 'armor', 'backpack'].forEach(section => {
+    document.getElementById(`f-${section}-print`).textContent =
+      document.getElementById(`f-${section}`).value;
+  });
   if (notesField && notesPrint) {
     notesPrint.textContent = notesField.value;
   }
@@ -178,7 +206,10 @@ function saveActiveSheet(showAlert = true) {
   document.querySelectorAll('.wb').forEach(b => { if (b.checked) checkedWounds++; });
   current.wounds = checkedWounds;
 
-  current.inventory = document.getElementById('f-inventory').value.split('\n');
+  current.weapons = document.getElementById('f-weapons').value.split('\n');
+  current.armor = document.getElementById('f-armor').value.split('\n');
+  current.backpack = document.getElementById('f-backpack').value.split('\n');
+  delete current.inventory;
   current.gold = {
     gp: parseInt(document.getElementById('f-gp').value, 10) || 0,
     sp: parseInt(document.getElementById('f-sp').value, 10) || 0,

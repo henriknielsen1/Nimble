@@ -82,9 +82,15 @@ const NIMBLE_DATA = {
         { title: "Iron Defense", text: "Din Defense er altid lig med din DEX + STR (2 + 2 = 4), forudsat at du ikke bærer nogen form for rustning." },
         { title: "Swift Fists", text: "Dine ubevæbnede angreb rammes aldrig af Ulempe ved Hasteangreb (Rushed Attacks)! Du kan angribe ubevæbnet flere gange i træk uden straf." }
       ],
-      inventory: [
-        "Afslebet Munkestav af jerntræ",
-        "Let træningskappe og sandaler (Ingen rustning)",
+      weapons: [
+        "Munkestav — Skade: 1d8 + 2; rækkevidde: nærkamp; egenskaber: 2-hånds",
+        "Ubevæbnet (håndkantstød/næver) — Skade: 1d4 + 2; rækkevidde: nærkamp; egenskaber: STR"
+      ],
+      armor: [
+        "Ingen rustning — Rustningsbonus: +0; samlet Defense: 4 (Iron Defense: DEX + STR)"
+      ],
+      backpack: [
+        "Let træningskappe og sandaler",
         "Næver og fødder svøbt i linnedbånd",
         "Slot 1: Bønnesnor & bundt røgelsespinde",
         "Slot 2: Rulle fint linned & helende urtesalve",
@@ -126,10 +132,14 @@ const NIMBLE_DATA = {
         { title: "Rage (1/tur - Action)", text: "Rul en Fury Die (1d4) og læg den til side. Tilføj terningens værdi til alle dine STR-angreb! (Maks 2 Fury Dice i puljen). Rage ophører ved 0 HP, eller hvis du går 1 hel runde uden at angribe/rage." },
         { title: "Is That All You Got?!", text: "Bliver du angrebet, kan du spendere 1 eller flere Fury Dice for at reducere skaden med STR + DEX (4) pr. terning!" }
       ],
-      inventory: [
-        "Cheap Hides læderrustning (+3 Defense)",
-        "Massiv Tohånds Bøddeløkse",
-        "2x Kasteøkser i brystremme",
+      weapons: [
+        "Tohånds Bøddeløkse — Skade: 1d12 + 2; rækkevidde: nærkamp; egenskaber: 2-hånds",
+        "Kasteøkser (2 stk.) — Skade: 1d6 + 2; rækkevidde: kast 4 felter; egenskaber: Light, Thrown"
+      ],
+      armor: [
+        "Cheap Hides læderrustning — Rustningsbonus: +3 Defense; samlet Defense: 5 (rustning + DEX)"
+      ],
+      backpack: [
         "Krigsmaling, knogleamuletter",
         "Slot 1: Læderremme & ekstra kasteøkse-stropper",
         "Slot 2: Tørret proviantkød (3 dagsrationer)",
@@ -169,10 +179,15 @@ const NIMBLE_DATA = {
         { title: "Radiant Judgment", text: "Hver gang en fjende angriber dig uden aktive Judgment Dice: Rul straks 2d6 Judgment Dice. Ved dit næste nærkampsangreb lægges summen direkte til som ekstra Radiant Damage!" },
         { title: "Lay on Hands", text: "Helbredelsespulje på 5 HP (5 x Lvl). Handling (Action): Rør en allieret og spender point for at helbrede dem. Genoplades ved Sikker Hvile (Safe Rest)." }
       ],
-      inventory: [
-        "Rusty Mail ringbrynje (+6 Defense)",
-        "Træskjold med jernbeslag (+2 Defense)",
-        "Jern-stridskølle (Mace)",
+      weapons: [
+        "Jern-stridskølle (Mace) — Skade: 1d6 + 2; rækkevidde: nærkamp; egenskaber: —"
+      ],
+      armor: [
+        "Rusty Mail ringbrynje — Rustningsbonus: +6 Defense",
+        "Træskjold med jernbeslag — Skjoldbonus: +2 Defense",
+        "Samlet Defense: 8"
+      ],
+      backpack: [
         "Dværeggudens hammer udskåret i granit",
         "Slot 1: Stål-håndjern med nøgle",
         "Slot 2: Rulle rene linned-bandager & helende salve",
@@ -215,9 +230,13 @@ const NIMBLE_DATA = {
       class_features: [
         { title: "Elemental Spellcasting", text: "Mestrer urkræfterne. Cantrips koster 0 mana, kræver ingen to-hit rul og koster 1 handling." }
       ],
-      inventory: [
-        "Adventurer's Garb magikerkappe (+2 Defense)",
-        "Snittet Egetræsstav med indfældet glødesten",
+      weapons: [
+        "Egetræsstav — Skade: 1d8 - 1; rækkevidde: nærkamp; egenskaber: 2-hånds"
+      ],
+      armor: [
+        "Adventurer's Garb magikerkappe — Rustningsbonus: +2 Defense; samlet Defense: 2"
+      ],
+      backpack: [
         "Bogpose, lyssten i lædersnor",
         "Slot 1: Bog med arkane noter og formelskitse",
         "Slot 2: Blækhorn, 3 fjerpenne & 5 ark pergament",
@@ -259,10 +278,15 @@ const NIMBLE_DATA = {
         { title: "Hunter's Mark (Action)", text: "Mærk en synlig skabning i 1 dag. Den kan ikke gemme sig; angreb mod den får enten Fordel (Advantage) eller +1 ekstra skade (vælges før hvert angreb)." },
         { title: "Forager", text: "Altid fordel på skill checks til at finde føde, rent drikkevand og sikkert ly i vildmarken." }
       ],
-      inventory: [
-        "Cheap Hides læderrustning (+3 Defense)",
-        "Kortbue + pilekogger med 20 pile",
-        "Jægerdolk i bæltehylster",
+      weapons: [
+        "Kortbue — Skade: 1d6 + 2; rækkevidde: 12 felter; egenskaber: 2-hånds",
+        "Jægerdolk — Skade: 1d4 + 2; rækkevidde: kast 4 felter; egenskaber: Light, Thrown"
+      ],
+      armor: [
+        "Cheap Hides læderrustning — Rustningsbonus: +3 Defense; samlet Defense: 5 (rustning + DEX)"
+      ],
+      backpack: [
+        "Pilekogger med 20 pile",
         "Slot 1: Rævesaks / Jægerfælde af jern",
         "Slot 2: Sejlgarn og klatrereb (15 m)",
         "Slot 3: Feltflaske af læder (rent vand)",
@@ -303,10 +327,15 @@ const NIMBLE_DATA = {
         { title: "Sneak Attack (1/tur)", text: "Når du slår en Kritisk Træffer (maksimal terningværdi), tilføjer du +1d6 ekstra skade." },
         { title: "Vicious Opportunist (1/tur)", text: "Når du rammer et Distracted mål i nærkamp, bestemmer du selv hvad skadesterningen viser! Sæt den til maks for automatisk Crit." }
       ],
-      inventory: [
-        "Cheap Hides læderrustning (+3 Defense)",
-        "Ståldolk (Højre hånd) & Ståldolk (Venstre hånd)",
-        "Læderslynge + stenpose (20 sten)",
+      weapons: [
+        "Ståldolke (2 stk.) — Skade: 1d4 + 2; rækkevidde: nærkamp / kast 4 felter; egenskaber: Light, Thrown",
+        "Læderslynge — Skade: 1d4 + 2; rækkevidde: 12 felter; egenskaber: Vicious"
+      ],
+      armor: [
+        "Cheap Hides læderrustning — Rustningsbonus: +3 Defense; samlet Defense: 5 (rustning + DEX)"
+      ],
+      backpack: [
+        "Stenpose med 20 sten",
         "Låsedirkesæt",
         "Slot 1: Rulle tynd rebsnøre (10 m) + klatrekrog",
         "Slot 2: Kridt (3 stykker) + lille lommespejl",

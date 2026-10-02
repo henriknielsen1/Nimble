@@ -145,13 +145,26 @@
         <h3 class="section-title">🌟 Klasse-Evner</h3>
         <div id="f-features" class="features-list avoid-break"></div>
 
-        <!-- GEAR & CURRENCY -->
-        <div class="gear-currency-wrapper avoid-break">
-          <div class="gear-col">
-            <label for="f-inventory">🎒 Udstyr & Rygsæk (Slots):</label>
-            <textarea id="f-inventory" class="screen-only" oninput="syncPrintMirrors()"></textarea>
-            <div id="f-inventory-print" class="print-mirror"></div>
+        <!-- EQUIPMENT & CURRENCY -->
+        <h3 class="section-title">🎒 Udstyr</h3>
+        <div class="equipment-grid avoid-break">
+          <div class="equipment-col">
+            <label for="f-weapons">⚔️ Våben (Skade, rækkevidde & egenskaber):</label>
+            <textarea id="f-weapons" class="screen-only" oninput="syncPrintMirrors()"></textarea>
+            <div id="f-weapons-print" class="print-mirror"></div>
           </div>
+          <div class="equipment-col">
+            <label for="f-armor">🛡️ Rustning (Defense-bonus & type):</label>
+            <textarea id="f-armor" class="screen-only" oninput="syncPrintMirrors()"></textarea>
+            <div id="f-armor-print" class="print-mirror"></div>
+          </div>
+          <div class="equipment-col">
+            <label for="f-backpack">🎒 Rygsæk (Slots & øvrigt udstyr):</label>
+            <textarea id="f-backpack" class="screen-only" oninput="syncPrintMirrors()"></textarea>
+            <div id="f-backpack-print" class="print-mirror"></div>
+          </div>
+        </div>
+        <div class="gear-currency-wrapper avoid-break">
           <div class="currency-col">
             <label>💰 Møntpung:</label>
             <div class="currency-inputs">
