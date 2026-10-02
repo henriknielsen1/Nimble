@@ -4,8 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
   populateDropdown();
   renderSavedInstancesList();
   renderRulesView();
-  
-  // Hent senest redigerede karakter hvis muligt
+
   const lastId = localStorage.getItem('nimble_last_active');
   if (lastId && getInstanceById(lastId)) {
     loadInstance(lastId);
@@ -77,7 +76,6 @@ function loadInstance(instanceId) {
   activeInstanceId = instanceId;
   localStorage.setItem('nimble_last_active', instanceId);
 
-  // Render formularfelter
   document.getElementById('f-name').textContent = inst.character_name;
   document.getElementById('f-class-meta').textContent = `Level ${inst.level} ${inst.class} | ${inst.ancestry} | ${inst.background}`;
   document.getElementById('f-quote').textContent = `"${inst.quote}"`;
@@ -91,19 +89,17 @@ function loadInstance(instanceId) {
   document.getElementById('f-speed').textContent = inst.speed;
   document.getElementById('f-initiative').textContent = inst.initiative;
 
-  // Wounds
   const boxes = document.querySelectorAll('.wb');
   boxes.forEach((b, idx) => {
     b.checked = (idx + 1) <= (inst.wounds || 0);
   });
 
-  // Stats
   const statsBody = document.querySelector('#f-stats-table tbody');
   statsBody.innerHTML = '';
   for (const [key, val] of Object.entries(inst.stats)) {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><strong>${key}</strong> ${val.key ? '<em style="color:var(--primary);">(Key)</em>' : ''}</td>
+      <td><strong>${key}</strong> ${val.key ? '<em style="color:var(--primary); font-size:0.8rem;">(Key)</em>' : ''}</td>
       <td><strong>${val.rating}</strong></td>
       <td>${val.save}</td>
       <td>${val.skills}</td>
@@ -111,7 +107,6 @@ function loadInstance(instanceId) {
     statsBody.appendChild(tr);
   }
 
-  // Attacks
   const attacksBody = document.querySelector('#f-attacks-table tbody');
   attacksBody.innerHTML = '';
   inst.attacks.forEach(att => {
@@ -120,26 +115,38 @@ function loadInstance(instanceId) {
     attacksBody.appendChild(tr);
   });
 
-  // Features
   const featContainer = document.getElementById('f-features');
   featContainer.innerHTML = '';
   inst.class_features.forEach(f => {
     const d = document.createElement('div');
-    d.style.marginBottom = '0.35rem';
+    d.className = 'feature-item';
     d.innerHTML = `<strong>${f.title}:</strong> ${f.text}`;
     featContainer.appendChild(d);
   });
 
-  // Gear & Gold
   document.getElementById('f-inventory').value = Array.isArray(inst.inventory) ? inst.inventory.join('\n') : inst.inventory;
   document.getElementById('f-gp').value = inst.gold ? inst.gold.gp : 0;
   document.getElementById('f-sp').value = inst.gold ? inst.gold.sp : 0;
   document.getElementById('f-cp').value = inst.gold ? inst.gold.cp : 0;
 
-  // Notes
   document.getElementById('f-notes').value = inst.notes || '';
 
+  syncPrintMirrors();
   switchView('sheet');
+}
+
+function syncPrintMirrors() {
+  const invField = document.getElementById('f-inventory');
+  const notesField = document.getElementById('f-notes');
+  const invPrint = document.getElementById('f-inventory-print');
+  const notesPrint = document.getElementById('f-notes-print');
+
+  if (invField && invPrint) {
+    invPrint.textContent = invField.value;
+  }
+  if (notesField && notesPrint) {
+    notesPrint.textContent = notesField.value;
+  }
 }
 
 function handleWoundToggle(woundVal) {
@@ -156,6 +163,8 @@ function handleWoundToggle(woundVal) {
 
 function saveActiveSheet(showAlert = true) {
   if (!activeInstanceId) return;
+
+  syncPrintMirrors();
 
   const list = getAllInstances();
   const idx = list.findIndex(x => x.instance_id === activeInstanceId);
@@ -181,7 +190,7 @@ function saveActiveSheet(showAlert = true) {
   saveAllInstances(list);
   renderSavedInstancesList();
 
-  if (showAlert) alert("Ændringer gemt lokalt!");
+  if (showAlert) alert("Data gemt lokalt!");
 }
 
 function renderSavedInstancesList() {
@@ -190,18 +199,18 @@ function renderSavedInstancesList() {
   container.innerHTML = '';
 
   if (list.length === 0) {
-    container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">Ingen aktive kopier gemt i browseren.</p>';
+    container.innerHTML = '<p class="text-muted text-small">Ingen aktive karakterer oprettet i denne browser endnu.</p>';
     return;
   }
 
   const ul = document.createElement('ul');
-  ul.style.paddingLeft = '1.25rem';
+  ul.style.paddingLeft = '1.2rem';
   list.forEach(item => {
     const li = document.createElement('li');
     li.style.marginBottom = '0.5rem';
     li.innerHTML = `
       <strong>${item.player_name}</strong> - ${item.character_name} (${item.class})
-      <button class="btn btn-secondary" style="padding:2px 8px; font-size:0.75rem; margin-left:8px;" onclick="loadInstance('${item.instance_id}')">Åbn</button>
+      <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.75rem; margin-left: 8px;" onclick="loadInstance('${item.instance_id}')">Åbn</button>
     `;
     ul.appendChild(li);
   });
@@ -210,7 +219,7 @@ function renderSavedInstancesList() {
 
 function deleteCurrentInstance() {
   if (!activeInstanceId) return;
-  if (!confirm("Er du sikker på, at du vil slette denne karakterkopi?")) return;
+  if (!confirm("Vil du slette denne karakterkopi permanent?")) return;
 
   let list = getAllInstances();
   list = list.filter(x => x.instance_id !== activeInstanceId);
@@ -229,7 +238,7 @@ function exportCurrentInstance() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `${inst.character_name.toLowerCase().replace(/\s+/g, '_')}_backup.json`;
+  a.download = `${inst.character_name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_kopi.json`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -242,11 +251,12 @@ function renderRulesView() {
     <h3>${r.actions.title}</h3>
     <p>${r.actions.desc}</p>
     <ul>${r.actions.items.map(i => `<li>${i}</li>`).join('')}</ul>
-    <div style="background:var(--accent-tint); border-left:3px solid var(--primary); padding:0.5rem; margin:0.5rem 0;">
-      <em>${r.actions.refreshNote}</em>
+    <div class="rules-box">
+      <strong>${r.actions.refreshNote}</strong>
     </div>
 
     <h3>${r.attacks.title}</h3>
+    <p>${r.attacks.desc}</p>
     <ul>${r.attacks.items.map(i => `<li>${i}</li>`).join('')}</ul>
 
     <h3>${r.defense.title}</h3>
@@ -254,9 +264,11 @@ function renderRulesView() {
     <ul>${r.defense.items.map(i => `<li>${i}</li>`).join('')}</ul>
 
     <h3>${r.saves.title}</h3>
+    <p>${r.saves.desc}</p>
     <ul>${r.saves.items.map(i => `<li>${i}</li>`).join('')}</ul>
 
     <h3>${r.dying.title}</h3>
+    <p>${r.dying.desc}</p>
     <ul>${r.dying.items.map(i => `<li>${i}</li>`).join('')}</ul>
   `;
 }
