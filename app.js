@@ -1,0 +1,262 @@
+let activeInstanceId = null;
+
+window.addEventListener('DOMContentLoaded', () => {
+  populateDropdown();
+  renderSavedInstancesList();
+  renderRulesView();
+  
+  // Hent senest redigerede karakter hvis muligt
+  const lastId = localStorage.getItem('nimble_last_active');
+  if (lastId && getInstanceById(lastId)) {
+    loadInstance(lastId);
+  }
+});
+
+function switchView(viewName) {
+  document.getElementById('view-select').style.display = viewName === 'select' ? 'block' : 'none';
+  document.getElementById('view-sheet').style.display = viewName === 'sheet' ? 'block' : 'none';
+  document.getElementById('view-rules').style.display = viewName === 'rules' ? 'block' : 'none';
+
+  document.getElementById('tab-btn-select').classList.toggle('active', viewName === 'select');
+  document.getElementById('tab-btn-sheet').classList.toggle('active', viewName === 'sheet');
+  document.getElementById('tab-btn-rules').classList.toggle('active', viewName === 'rules');
+}
+
+function populateDropdown() {
+  const select = document.getElementById('char-select-in');
+  select.innerHTML = '';
+  NIMBLE_DATA.characters.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = `${c.character_name} - ${c.class} (${c.ancestry})`;
+    select.appendChild(opt);
+  });
+}
+
+function getAllInstances() {
+  try {
+    return JSON.parse(localStorage.getItem('nimble_instances') || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveAllInstances(list) {
+  localStorage.setItem('nimble_instances', JSON.stringify(list));
+}
+
+function getInstanceById(instId) {
+  const list = getAllInstances();
+  return list.find(x => x.instance_id === instId);
+}
+
+function cloneAndActivateCharacter() {
+  const pName = document.getElementById('player-name-in').value.trim() || 'Ukendt Spiller';
+  const charId = document.getElementById('char-select-in').value;
+  const template = NIMBLE_DATA.characters.find(c => c.id === charId);
+
+  if (!template) return;
+
+  const instanceId = 'inst_' + Date.now();
+  const newInst = JSON.parse(JSON.stringify(template));
+  newInst.instance_id = instanceId;
+  newInst.player_name = pName;
+
+  const list = getAllInstances();
+  list.push(newInst);
+  saveAllInstances(list);
+
+  renderSavedInstancesList();
+  loadInstance(instanceId);
+}
+
+function loadInstance(instanceId) {
+  const inst = getInstanceById(instanceId);
+  if (!inst) return;
+
+  activeInstanceId = instanceId;
+  localStorage.setItem('nimble_last_active', instanceId);
+
+  // Render formularfelter
+  document.getElementById('f-name').textContent = inst.character_name;
+  document.getElementById('f-class-meta').textContent = `Level ${inst.level} ${inst.class} | ${inst.ancestry} | ${inst.background}`;
+  document.getElementById('f-quote').textContent = `"${inst.quote}"`;
+  document.getElementById('f-player').value = inst.player_name || '';
+
+  document.getElementById('f-hp').value = inst.hp;
+  document.getElementById('f-hp-max').textContent = inst.hp_max;
+  document.getElementById('f-hitdie').textContent = inst.hit_die;
+  document.getElementById('f-defense').textContent = inst.defense;
+  document.getElementById('f-defcalc').textContent = `(${inst.defense_calc})`;
+  document.getElementById('f-speed').textContent = inst.speed;
+  document.getElementById('f-initiative').textContent = inst.initiative;
+
+  // Wounds
+  const boxes = document.querySelectorAll('.wb');
+  boxes.forEach((b, idx) => {
+    b.checked = (idx + 1) <= (inst.wounds || 0);
+  });
+
+  // Stats
+  const statsBody = document.querySelector('#f-stats-table tbody');
+  statsBody.innerHTML = '';
+  for (const [key, val] of Object.entries(inst.stats)) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${key}</strong> ${val.key ? '<em style="color:var(--primary);">(Key)</em>' : ''}</td>
+      <td><strong>${val.rating}</strong></td>
+      <td>${val.save}</td>
+      <td>${val.skills}</td>
+    `;
+    statsBody.appendChild(tr);
+  }
+
+  // Attacks
+  const attacksBody = document.querySelector('#f-attacks-table tbody');
+  attacksBody.innerHTML = '';
+  inst.attacks.forEach(att => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><strong>${att.name}</strong></td><td>${att.damage}</td><td>${att.traits}</td>`;
+    attacksBody.appendChild(tr);
+  });
+
+  // Features
+  const featContainer = document.getElementById('f-features');
+  featContainer.innerHTML = '';
+  inst.class_features.forEach(f => {
+    const d = document.createElement('div');
+    d.style.marginBottom = '0.35rem';
+    d.innerHTML = `<strong>${f.title}:</strong> ${f.text}`;
+    featContainer.appendChild(d);
+  });
+
+  // Gear & Gold
+  document.getElementById('f-inventory').value = Array.isArray(inst.inventory) ? inst.inventory.join('\n') : inst.inventory;
+  document.getElementById('f-gp').value = inst.gold ? inst.gold.gp : 0;
+  document.getElementById('f-sp').value = inst.gold ? inst.gold.sp : 0;
+  document.getElementById('f-cp').value = inst.gold ? inst.gold.cp : 0;
+
+  // Notes
+  document.getElementById('f-notes').value = inst.notes || '';
+
+  switchView('sheet');
+}
+
+function handleWoundToggle(woundVal) {
+  const boxes = document.querySelectorAll('.wb');
+  let newCount = woundVal;
+  if (boxes[woundVal - 1].checked === false) {
+    newCount = woundVal - 1;
+  }
+  boxes.forEach((b, idx) => {
+    b.checked = (idx + 1) <= newCount;
+  });
+  saveActiveSheet(false);
+}
+
+function saveActiveSheet(showAlert = true) {
+  if (!activeInstanceId) return;
+
+  const list = getAllInstances();
+  const idx = list.findIndex(x => x.instance_id === activeInstanceId);
+  if (idx === -1) return;
+
+  const current = list[idx];
+  current.player_name = document.getElementById('f-player').value.trim();
+  current.hp = parseInt(document.getElementById('f-hp').value, 10) || 0;
+
+  let checkedWounds = 0;
+  document.querySelectorAll('.wb').forEach(b => { if (b.checked) checkedWounds++; });
+  current.wounds = checkedWounds;
+
+  current.inventory = document.getElementById('f-inventory').value.split('\n');
+  current.gold = {
+    gp: parseInt(document.getElementById('f-gp').value, 10) || 0,
+    sp: parseInt(document.getElementById('f-sp').value, 10) || 0,
+    cp: parseInt(document.getElementById('f-cp').value, 10) || 0
+  };
+  current.notes = document.getElementById('f-notes').value;
+
+  list[idx] = current;
+  saveAllInstances(list);
+  renderSavedInstancesList();
+
+  if (showAlert) alert("Ændringer gemt lokalt!");
+}
+
+function renderSavedInstancesList() {
+  const container = document.getElementById('saved-instances-list');
+  const list = getAllInstances();
+  container.innerHTML = '';
+
+  if (list.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">Ingen aktive kopier gemt i browseren.</p>';
+    return;
+  }
+
+  const ul = document.createElement('ul');
+  ul.style.paddingLeft = '1.25rem';
+  list.forEach(item => {
+    const li = document.createElement('li');
+    li.style.marginBottom = '0.5rem';
+    li.innerHTML = `
+      <strong>${item.player_name}</strong> - ${item.character_name} (${item.class})
+      <button class="btn btn-secondary" style="padding:2px 8px; font-size:0.75rem; margin-left:8px;" onclick="loadInstance('${item.instance_id}')">Åbn</button>
+    `;
+    ul.appendChild(li);
+  });
+  container.appendChild(ul);
+}
+
+function deleteCurrentInstance() {
+  if (!activeInstanceId) return;
+  if (!confirm("Er du sikker på, at du vil slette denne karakterkopi?")) return;
+
+  let list = getAllInstances();
+  list = list.filter(x => x.instance_id !== activeInstanceId);
+  saveAllInstances(list);
+  activeInstanceId = null;
+  localStorage.removeItem('nimble_last_active');
+
+  renderSavedInstancesList();
+  switchView('select');
+}
+
+function exportCurrentInstance() {
+  const inst = getInstanceById(activeInstanceId);
+  if (!inst) return;
+  const blob = new Blob([JSON.stringify(inst, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${inst.character_name.toLowerCase().replace(/\s+/g, '_')}_backup.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function renderRulesView() {
+  const container = document.getElementById('rules-content');
+  const r = NIMBLE_DATA.rules;
+
+  container.innerHTML = `
+    <h3>${r.actions.title}</h3>
+    <p>${r.actions.desc}</p>
+    <ul>${r.actions.items.map(i => `<li>${i}</li>`).join('')}</ul>
+    <div style="background:var(--accent-tint); border-left:3px solid var(--primary); padding:0.5rem; margin:0.5rem 0;">
+      <em>${r.actions.refreshNote}</em>
+    </div>
+
+    <h3>${r.attacks.title}</h3>
+    <ul>${r.attacks.items.map(i => `<li>${i}</li>`).join('')}</ul>
+
+    <h3>${r.defense.title}</h3>
+    <p>${r.defense.desc}</p>
+    <ul>${r.defense.items.map(i => `<li>${i}</li>`).join('')}</ul>
+
+    <h3>${r.saves.title}</h3>
+    <ul>${r.saves.items.map(i => `<li>${i}</li>`).join('')}</ul>
+
+    <h3>${r.dying.title}</h3>
+    <ul>${r.dying.items.map(i => `<li>${i}</li>`).join('')}</ul>
+  `;
+}
