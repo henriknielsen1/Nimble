@@ -1,1 +1,191 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <title>Nimble 2.0 Web Hub</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+  <header class="no-print">
+    <h1>⚔️ Nimble 2.0 Spillerportal</h1>
+    <div class="nav-tabs">
+      <button class="nav-btn active" id="tab-btn-select" onclick="switchView('select')">1. Karakterkatalog</button>
+      <button class="nav-btn" id="tab-btn-sheet" onclick="switchView('sheet')">2. Aktivt Karakterark</button>
+      <button class="nav-btn" id="tab-btn-rules" onclick="switchView('rules')">3. Spillerguide (Regler)</button>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- VIEW 1: VÆLG / KLON -->
+    <div id="view-select">
+      <div class="panel">
+        <h2 style="margin-top:0;">Vælg en Karakter</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">
+          Vælg en prædefineret arketype og indtast dit spillernavn. Dette opretter en uafhængig kopi, 
+          der gemmes lokalt i din browser og kan redigeres frit.
+        </p>
+
+        <label for="player-name-in">Dit Spillernavn:</label>
+        <input type="text" id="player-name-in" placeholder="F.eks. Mathias">
+
+        <label for="char-select-in">Vælg Karakter-skabelon:</label>
+        <select id="char-select-in"></select>
+
+        <button class="btn" onclick="cloneAndActivateCharacter()">Klon & Åbn Karakter</button>
+      </div>
+
+      <div class="panel">
+        <h3 style="margin-top:0;">Gemte Spillerark i denne Browser</h3>
+        <div id="saved-instances-list"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: KARAKTERARK -->
+    <div id="view-sheet" style="display:none;">
+      <div class="no-print" style="margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <button class="btn btn-secondary" onclick="exportCurrentInstance()">Eksportér JSON</button>
+          <button class="btn btn-danger" onclick="deleteCurrentInstance()">Slet Kopi</button>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <button class="btn btn-secondary" onclick="window.print()">🖨️ Udskriv Karakterark (A4)</button>
+          <button class="btn" onclick="saveActiveSheet(true)">💾 Gem Data</button>
+        </div>
+      </div>
+
+      <div class="panel print-page" style="border: 2px solid var(--border-strong); padding: 1.25rem;">
+        
+        <!-- HEADER INFO -->
+        <div style="display:flex; justify-content:space-between; border-bottom:2px solid var(--border-strong); padding-bottom:0.5rem; margin-bottom:0.75rem;">
+          <div>
+            <h1 id="f-name" style="margin:0; font-size:1.5rem;">Karakternavn</h1>
+            <div id="f-class-meta" style="color:var(--text-muted); font-size:0.9rem; font-weight:600;">Level 1 | Klasse</div>
+          </div>
+          <div style="text-align:right;">
+            <div><strong>Spiller:</strong> <input type="text" id="f-player" style="width:140px; display:inline; text-align:right;" /></div>
+            <div style="font-size:0.8rem; color:var(--text-muted);">Nimble 2.0 System</div>
+          </div>
+        </div>
+
+        <div id="f-quote" style="font-style:italic; font-size:0.85rem; margin-bottom:0.75rem; color:#334155;"></div>
+
+        <!-- STATS TABLE -->
+        <table style="text-align:center; margin-bottom:0.75rem;">
+          <thead>
+            <tr>
+              <th>Hit Points (HP)</th>
+              <th>Hit Die</th>
+              <th>Defense</th>
+              <th>Speed</th>
+              <th>Initiative</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input type="number" id="f-hp" style="width:50px; text-align:center; font-weight:bold;" /> / 
+                <span id="f-hp-max">10</span>
+              </td>
+              <td id="f-hitdie">1d8</td>
+              <td><strong id="f-defense">4</strong> <small id="f-defcalc" style="color:var(--text-muted);"></small></td>
+              <td id="f-speed">6 felter</td>
+              <td><strong id="f-initiative">+2</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- WOUNDS TRACKER -->
+        <div class="wounds-container avoid-break">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="color:var(--danger); font-size:0.85rem;">WOUNDS TRACKER (Dying ved 0 HP)</strong>
+            <small style="color:var(--text-muted); font-size:0.75rem;">6 Wounds = Død</small>
+          </div>
+          <div class="wounds-boxes">
+            <label class="wound-box"><input type="checkbox" class="wb" onchange="handleWoundToggle(1)"> 1</label>
+            <label class="wound-box"><input type="checkbox" class="wb" onchange="handleWoundToggle(2)"> 2</label>
+            <label class="wound-box"><input type="checkbox" class="wb" onchange="handleWoundToggle(3)"> 3</label>
+            <label class="wound-box"><input type="checkbox" class="wb" onchange="handleWoundToggle(4)"> 4</label>
+            <label class="wound-box"><input type="checkbox" class="wb" onchange="handleWoundToggle(5)"> 5</label>
+            <label class="wound-box" style="color:var(--danger);"><input type="checkbox" class="wb" onchange="handleWoundToggle(6)"> ☠️ 6 (DØD)</label>
+          </div>
+        </div>
+
+        <!-- ABILITIES & SKILLS -->
+        <h4 style="margin:0.5rem 0; font-size:0.9rem;">Egenskaber, Saves & Færdigheder</h4>
+        <table id="f-stats-table" style="margin-bottom:0.75rem;">
+          <thead>
+            <tr>
+              <th style="width:15%;">Egenskab</th>
+              <th style="width:12%;">Rating</th>
+              <th style="width:28%;">Save Slag</th>
+              <th>Færdigheder & Bonusser</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <!-- ATTACKS -->
+        <h4 style="margin:0.5rem 0; font-size:0.9rem;">Våben & Kamp-Handlinger</h4>
+        <table id="f-attacks-table" style="margin-bottom:0.75rem;">
+          <thead>
+            <tr>
+              <th>Handling / Våben</th>
+              <th style="width:20%;">Skade</th>
+              <th>Egenskaber</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <!-- CLASS FEATURES -->
+        <h4 style="margin:0.5rem 0; font-size:0.9rem;">Klasse-Evner</h4>
+        <div id="f-features" class="avoid-break" style="font-size:0.85rem; margin-bottom:0.75rem;"></div>
+
+        <!-- GEAR & CURRENCY -->
+        <div class="avoid-break" style="display:flex; gap:1rem; margin-bottom:0.5rem;">
+          <div style="flex:2;">
+            <label>Udstyr & Rygsæk (Slots):</label>
+            <textarea id="f-inventory" style="height:90px;"></textarea>
+          </div>
+          <div style="flex:1;">
+            <label>Møntpung:</label>
+            <div style="display:flex; flex-direction:column; gap:0.25rem;">
+              <div>GP: <input type="number" id="f-gp" style="width:60px;" /></div>
+              <div>SP: <input type="number" id="f-sp" style="width:60px;" /></div>
+              <div>CP: <input type="number" id="f-cp" style="width:60px;" /></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NOTES -->
+        <div class="avoid-break">
+          <label>Noter, Træk & Mål:</label>
+          <textarea id="f-notes" style="height:70px;"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VIEW 3: SPILLERGUIDE (REGLER) -->
+    <div id="view-rules" style="display:none;">
+      <div class="no-print" style="margin-bottom:1rem; text-align:right;">
+        <button class="btn btn-secondary" onclick="window.print()">🖨️ Udskriv Spillerguide (A4)</button>
+      </div>
+
+      <div class="panel print-page" style="border: 2px solid var(--border-strong);">
+        <h1 style="margin-top:0; font-size:1.4rem; border-bottom:2px solid var(--border-strong); padding-bottom:0.5rem;">
+          📜 Nimble 2.0: Spillerguide (1-Pager Hurtig-regler)
+        </h1>
+        
+        <div id="rules-content" style="font-size:0.9rem;"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
