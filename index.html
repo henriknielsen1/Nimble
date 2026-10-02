@@ -148,8 +148,10 @@
         <!-- GEAR & CURRENCY -->
         <div class="gear-currency-wrapper avoid-break">
           <div class="gear-col">
-            <label for="f-inventory">🎒 Udstyr & Rygsæk (Slots):</label>
-            <textarea id="f-inventory" class="screen-only" oninput="syncPrintMirrors()"></textarea>
+            <label>🎒 Udstyr & Rygsæk (Slots):</label>
+            <div id="f-inventory-items" class="screen-only"></div>
+            <button type="button" class="btn btn-secondary screen-only inventory-add" onclick="addInventoryItem()">Tilføj genstand</button>
+            <p id="f-inventory-summary" class="inventory-summary screen-only" aria-live="polite"></p>
             <div id="f-inventory-print" class="print-mirror"></div>
           </div>
           <div class="currency-col">

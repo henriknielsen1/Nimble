@@ -277,6 +277,38 @@ textarea {
 .gear-col { flex: 3; }
 .currency-col { flex: 1; }
 
+.inventory-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 58px auto auto;
+  gap: 0.35rem;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.inventory-row input {
+  margin: 0;
+}
+
+.inventory-row .inventory-slots {
+  width: 58px;
+  padding: 0.35rem;
+}
+
+.inventory-row .inventory-remove {
+  padding: 0.3rem 0.45rem;
+  font-size: 0.75rem;
+}
+
+.inventory-add {
+  margin-bottom: 0.5rem;
+  padding: 0.35rem 0.6rem;
+}
+
+.inventory-summary {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
 .currency-inputs {
   display: flex;
   flex-direction: column;
