@@ -326,6 +326,232 @@ const NIMBLE_DATA = {
       ],
       gold: { gp: 15, sp: 0, cp: 0 },
       notes: "Kendetegn: Et tyndt ar over venstre øjenbryn; træder altid blødt og uden lyd.\nPersonligt Mål: Afsløre hvem der forrådte den gamle gadebande i havnekvarteret."
+    },
+    {
+      id: "valen_ironcrest",
+      character_name: "Valen Jernmanke",
+      class: "The Commander (Fighter / Warlord)",
+      level: 1,
+      ancestry: "Menneske",
+      background: "Kamphærdet Kaptajn",
+      quote: "En frygtløs hærfører og våbenmester, der koordinerer holdets angreb med militær præcision og tvinger modstanderne til at begå fatale fejl.",
+      hp: 17,
+      hp_max: 17,
+      hit_die: "1d10",
+      defense: 8,
+      defense_calc: "6 Rustning + 2 Skjold",
+      speed: "6 felter",
+      initiative: "0",
+      wounds: 0,
+      stats: {
+        STR: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Might (+4)" },
+        DEX: { rating: "0", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Finesse (0)" },
+        INT: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Examination (+3), Lore (Taktik) (+3)" },
+        WIL: { rating: "-1", key: false, save: "Neutral (1d20)", skills: "Influence (+1)" }
+      },
+      attacks: [
+        { name: "Hærdet Langsværd", damage: "1d8 + 2", traits: "Nærkamp, Versatile 1d10, Martial" },
+        { name: "Tungt Jernskjold", damage: "-", traits: "Skjold, +2 Defense, Blokerer slag" },
+        { name: "Kaste-Spyd (3 stk.)", damage: "1d6 + 2", traits: "Kast, Rækkevidde 6 felter" }
+      ],
+      class_features: [
+        { title: "Combat Tactics (1d8 Combat Die)", text: "Brug en d8 Combat Die for at tilføje en specialtaktik: Heavy Strike skubber fjenden 2 felter og tilføjer terningens værdi som skade; Inerrant Strike lader dig rulle et misset angreb om og lægge terningen oveni; Lunging Strike giver +1 rækkevidde og tilføjer dobbelt terningens værdi i skade. (1/angreb)" },
+        { title: "Coordinated Strike!", text: "2 gange pr. Safe Rest kan du beordre et lynangreb: Du og én allieret inden for 6 felter udfører begge øjeblikkeligt et gratis våbenangreb eller kaster en cantrip." },
+        { title: "Commander's Order: Hold the Line!", text: "Én gang pr. encounter kan du som reaktion forhindre en allieret inden for synsvidde i at falde til 0 HP: Sæt straks deres HP til 3 x dit niveau." }
+      ],
+      inventory: [
+        "Rusty Mail ringbrynje (+6 Defense)",
+        "Tungt jernskjold (+2 Defense)",
+        "Langsværd i bælteskede",
+        "3x Kaste-spyd over ryggen",
+        "Taktisk feltoversigtskort",
+        "Signalhorn af messing",
+        "Feltkirurgisk nål & tråd",
+        "Vokslys & kridt",
+        "3 dages tørrede feltrationer"
+      ],
+      gold: { gp: 12, sp: 0, cp: 0 },
+      notes: "Kendetegn: Taler med myndig baryton; vurderer instinktivt flugtveje og chokepoints i ethvert rum.\nPersonligt Mål: Genopbygge en faldet legion og bevise over for riget, at ægte sejr vindes gennem kammeratskab.\nAllierede: Garnisonsmesteren i grænsefæstningen; en gammel våbensmed der skylder ham sit liv."
+    },
+    {
+      id: "morwen_duskwhisper",
+      character_name: "Morwen Skæbnespind",
+      class: "The Shadowmancer (Warlock / Minionmancer)",
+      level: 1,
+      ancestry: "Mørkelver",
+      background: "Pagtsøgende Kætterskriver",
+      quote: "En gådefuld okkultist, der har indgået en pagt med en ældgammel rædsel og fremmaner horder af loyale skyggeminions som kødskjold og bødler.",
+      hp: 13,
+      hp_max: 13,
+      hit_die: "1d8",
+      defense: 4,
+      defense_calc: "2 Adventurer's Garb + 2 DEX",
+      speed: "6 felter",
+      initiative: "+2",
+      wounds: 0,
+      stats: {
+        STR: { rating: "-1", key: false, save: "Neutral (1d20)", skills: "" },
+        DEX: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Stealth (+4), Finesse (+2)" },
+        INT: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Arcana (+4), Examination (+3), Lore (Det Okkulte) (+3)" },
+        WIL: { rating: "0", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "" }
+      },
+      attacks: [
+        { name: "Shadow Blast (Cantrip)", damage: "1d12 + 2 Nekrotisk", traits: "Magi, Rækkevidde 8 felter, 1/tur, Crits eksploderer" },
+        { name: "Skygge-Kommando (Minions)", damage: "1d12 Nekrotisk pr. minion", traits: "Magi/Minion, Rækkevidde 1, 1 HP pr. minion, ingen crits eller hasteangrebsstraf" },
+        { name: "Forgyldt Ritualdolk", damage: "1d4 + 2", traits: "Nærkamp, Finesse, Light" }
+      ],
+      class_features: [
+        { title: "Summon Shadows (Nekrotisk Cantrip)", text: "Fremman en Skyggeminion inden for 1 felt. Du kan have op til din INT (2 minions) aktive ad gangen. Minions har 1 HP, bevæger sig 6 felter og forsvinder, når kampen slutter." },
+        { title: "Command the Horde", text: "Beordr alle dine skyggeminions på én gang til at bevæge sig op til 6 felter og udføre et 1d12 nekrotisk angreb. Minionernes angreb tæller ikke som et hasteangreb for dig selv. (1/tur)" },
+        { title: "Abhorrent Whispers", text: "Du kan tale flydende med udøde, dæmoner og aberrationer. Ingen afskyer fra skyggeriget kan overraske dig i mørke." }
+      ],
+      inventory: [
+        "Adventurer's Garb kappe med ravnefjer (+2 Defense)",
+        "Forgyldt krum ritualdolk",
+        "Sort glaskugle (Okkult Fokus)",
+        "Krukke med sort påkaldelsesblæk",
+        "Bog indbundet i koldt skind",
+        "3x Sort kridt til beskyttelsescirkler",
+        "Død ravnefod som amulet",
+        "3 dages tørrede svampe og brød"
+      ],
+      gold: { gp: 11, sp: 0, cp: 0 },
+      notes: "Kendetegn: Bleg hud og kulsorte øjne; taler ofte lavmælt til skyggerne i krogene, som var de gamle venner.\nPersonligt Mål: Afdække sin patrons sande navn og bryde den forbandelse, der plager hendes slægt.\nAllierede: En lyssky antikvar i havnebyen; en forvist nekromantiker der kender de gamle ritualer."
+    },
+    {
+      id: "gareth_sunheart",
+      character_name: "Broder Gareth Solhjerte",
+      class: "The Shepherd (Cleric / Spirit Guide)",
+      level: 1,
+      ancestry: "Menneske",
+      background: "Klosterlæge & Feltpræst",
+      quote: "En barmhjertig og standhaftig sjælehyrde, der mestrer balancen mellem liv og død, altid ledsaget af en lysende åndefælle (Lifebinding Spirit).",
+      hp: 17,
+      hp_max: 17,
+      hit_die: "1d10",
+      defense: 8,
+      defense_calc: "6 Rustning + 2 Skjold",
+      speed: "6 felter",
+      initiative: "0",
+      wounds: 0,
+      stats: {
+        STR: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Might (+3)" },
+        DEX: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "" },
+        INT: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Examination (Medicin) (+2)" },
+        WIL: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Insight (+4), Influence (+3), Perception (+3)" }
+      },
+      attacks: [
+        { name: "Velsignet Stridskølle", damage: "1d6 + 2", traits: "Nærkamp, STR-våben" },
+        { name: "Træskjold med Solhjul", damage: "-", traits: "Skjold, +2 Defense" },
+        { name: "Sacred Flame (Cantrip)", damage: "1d8 Radiant", traits: "Magi, Rækkevidde 6 felter, Ignorerer dække" },
+        { name: "Chill Touch (Cantrip)", damage: "1d6 Nekrotisk", traits: "Magi, Rækkevidde 6 felter, Forhindrer HP-regen" }
+      ],
+      class_features: [
+        { title: "Searing Light", text: "To gange pr. Safe Rest kan du bruge en handling på rækkevidde 6 felter til enten at helbrede 2d8 HP på en Døende eller allieret på 0 HP eller give 2d8 Radiant-skade til en udød eller Blodig fjende." },
+        { title: "Keeper of Life & Death", text: "Du kender både Radiant- og Necrotic-magi. Du kan stabilisere faldne helte gratis uden medicin-tjek." }
+      ],
+      inventory: [
+        "Rusty Mail ringbrynje (+6 Defense)",
+        "Træskjold (+2 Defense)",
+        "Stridskølle",
+        "Sølvkæde med solsymbol",
+        "Feltlægetaske med linnedruller og kniv",
+        "Flakon med velsignet salvingsolie",
+        "Rensende urtesalve",
+        "Træske & messingtallerken",
+        "3 dages brød og ost"
+      ],
+      gold: { gp: 10, sp: 0, cp: 0 },
+      notes: "Kendetegn: Venligt ansigt med dybe smilerynker; lægger altid en trøstende hånd på skulderen af folk i nød.\nPersonligt Mål: Lindre lidelserne i de krigshærgede grænselande og bygge et hospice for de sårede.\nAllierede: En abbedisse ved bjergklosteret; en helbredt landevejsrøver der har svoret troskab."
+    },
+    {
+      id: "lyra_silverchord",
+      character_name: "Lyra Sølvstreng",
+      class: "The Songweaver (Bard / Skjald)",
+      level: 1,
+      ancestry: "Halvelver",
+      background: "Hofmusiker & Rejsende Visefortæller",
+      quote: "En karismatisk troubadour med en lynsnild tunge, der inspirerer helte til umulige bedrifter og efterlader fjender forvirrede med spydige vers.",
+      hp: 13,
+      hp_max: 13,
+      hit_die: "1d8",
+      defense: 5,
+      defense_calc: "3 Rustning + 2 DEX",
+      speed: "6 felter",
+      initiative: "+2",
+      wounds: 0,
+      stats: {
+        STR: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "" },
+        DEX: { rating: "+2", key: false, save: "Neutral (1d20)", skills: "Finesse (+3)" },
+        INT: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Lore (Ballader & Sagn) (+4)" },
+        WIL: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Influence (Optræden/Tale) (+4), Insight (+3), Perception (+2)" }
+      },
+      attacks: [
+        { name: "Vicious Mockery (Cantrip)", damage: "1d4 + 2 Psykisk", traits: "Magi, Rækkevidde 12 felter, Ignorerer rustning, Taunted i næste tur" },
+        { name: "Razor Wind (Cantrip)", damage: "1d4 Slashing", traits: "Magi, Rækkevidde 8 felter, Ruller 2 terninger ved Crit" },
+        { name: "Breath of Life (Cantrip)", damage: "-", traits: "Magi/Healing, Rækkevidde 1 felt, Giver 1 HP til en Dying helt og fjerner Dying" },
+        { name: "Finslebet Kårde (Rapier)", damage: "1d6 + 2", traits: "Nærkamp, Finesse, DEX" }
+      ],
+      class_features: [
+        { title: "Songweaver's Inspiration", text: "Fire gange pr. Safe Rest kan du som fri reaktion synge en opmuntrende strofe, når en allieret slår fejl på et angreb eller redningsslag, så de straks kan omrulle terningen." },
+        { title: "Vicious Mockery", text: "Brug en handling på rækkevidde 12 felter til at give 1d4 + INT (2) psykisk skade, der ignorerer målets Defense. Målet bliver Taunted og tvunget til at fokusere på dig i sin næste tur." }
+      ],
+      inventory: [
+        "Cheap Hides læderrustning (+3 Defense)",
+        "Håndbygget kirsebærtræs-lut med sølvstrenge",
+        "Slank kårde i lakeret læderskede",
+        "Læderetui med nodepapir og fjerpen",
+        "Fløjlspung til drikkepenge",
+        "3 flasker god elvervin",
+        "Spillekort og terninger",
+        "3 dages fine rejserationer"
+      ],
+      gold: { gp: 14, sp: 0, cp: 0 },
+      notes: "Kendetegn: Altid et glimt i øjet og et vittigt modsvar på læben; kan ikke modstå et godt væddemål eller en god historie.\nPersonligt Mål: Komponere det store epos om denne gruppes heltegerninger og synge det for højkongebordet.\nAllierede: En berømt teaterdirektør i hovedstaden; kroværter langs alle store kongeveje."
+    },
+    {
+      id: "kieran_stormstrider",
+      character_name: "Kieran Stormkald",
+      class: "The Stormshifter (Druid / Formskifter)",
+      level: 1,
+      ancestry: "Skovelver",
+      background: "Eremit & Stormvogter",
+      quote: "En uforudsigelig naturpræst, der behersker lyn og tordenskyer på afstand og forvandler sig til en frygtindgydende rovdyrsform i kampens midte.",
+      hp: 13,
+      hp_max: 13,
+      hit_die: "1d8",
+      defense: 5,
+      defense_calc: "3 Rustning + 2 DEX",
+      speed: "6 felter",
+      initiative: "+2",
+      wounds: 0,
+      stats: {
+        STR: { rating: "0", key: false, save: "Neutral (1d20)", skills: "" },
+        DEX: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Stealth (+3), Finesse (+2)" },
+        INT: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "" },
+        WIL: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Naturecraft (+4), Perception (+4), Insight (+2)" }
+      },
+      attacks: [
+        { name: "Shocking Grasp (Lyn-cantrip)", damage: "1d8 Lyn", traits: "Magi, Rækkevidde 8 felter, Elektrificerer målet ved Crit" },
+        { name: "Gale Blast (Vind-cantrip)", damage: "1d6 Slag", traits: "Magi, Rækkevidde 6 felter, Skubber målet 2 felter tilbage" },
+        { name: "Asketræspyd", damage: "1d6 + 2", traits: "Nærkamp/Kast, Rækkevidde 6 felter, Versatile 1d8" }
+      ],
+      class_features: [
+        { title: "Beastshift (Formskifte)", text: "To gange pr. Safe Rest kan du bruge en handling på frit at forvandle dig til et harmløst dyr (ugle, falk, mår, egern eller odder). Du kan tale med alle dyr, beholder din forstand og kan snige dig overalt. Formen varer indtil 0 HP, spellcast eller frivillig afbrydelse." },
+        { title: "Master of Storms", text: "Du kender elementære cantrips fra Lyn- og Vind-skolerne. Du kan manipulere vindstød til at slukke fakler eller sprede røg." }
+      ],
+      inventory: [
+        "Cheap Hides læderrustning (+3 Defense)",
+        "Asketræspyd med flinteod",
+        "Halskæde af rovfuglekløer (Naturfokus)",
+        "Pose med tørrede tordengræsfrø",
+        "Snittet knoglefløjte",
+        "Læder-vandblære",
+        "Uldent regnslag",
+        "3 dages tørrede bær og nødder"
+      ],
+      gold: { gp: 11, sp: 0, cp: 0 },
+      notes: "Kendetegn: Vågent blik og lugtesans som en ulv; sidder helst på hug og trives bedst under åben himmel.\nPersonligt Mål: Bringe balance tilbage til skoven efter at en mørk korruption har forgiftet dyrene.\nAllierede: En gammel kæmpeugle i kronetræerne; eneboer-druiden i Tågedalen."
     }
   ]
 };
