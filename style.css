@@ -312,6 +312,18 @@ textarea {
   font-size: 0.85rem;
 }
 
+/* Slot-oversigt */
+.slots-summary {
+  border: 1px solid #94a3b8;
+  border-radius: 3px;
+  padding: 0.35rem 0.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.85rem;
+}
+.slots-summary.slots-bad { border-color: #b91c1c; color: #b91c1c; }
+.slots-boxes { letter-spacing: 2px; font-size: 1rem; }
+.slots-help { font-size: 0.72rem; color: #64748b; margin-top: 0.2rem; }
+
 /* Print Mirror skjult på skærm */
 .print-mirror {
   display: none;
@@ -367,6 +379,9 @@ textarea {
   .screen-only {
     display: none !important;
   }
+
+  .slots-summary { font-size: 8.5pt !important; padding: 0.2rem 0.4rem !important; margin-bottom: 0.2rem !important; }
+  .slots-help { font-size: 7pt !important; color: #333 !important; }
 
   /* Aktiver fuld tekstblok i stedet for afskåret textarea */
   .print-mirror {

@@ -144,6 +144,7 @@ function syncPrintMirrors() {
   if (invField && invPrint) {
     invPrint.textContent = invField.value;
   }
+  updateSlotSummary();
   if (notesField && notesPrint) {
     notesPrint.textContent = notesField.value;
   }
@@ -267,8 +268,48 @@ function renderRulesView() {
     <p>${r.saves.desc}</p>
     <ul>${r.saves.items.map(i => `<li>${i}</li>`).join('')}</ul>
 
+    <h3>${r.inventory.title}</h3>
+    <p>${r.inventory.desc}</p>
+    <ul>${r.inventory.items.map(i => `<li>${i}</li>`).join('')}</ul>
+
     <h3>${r.dying.title}</h3>
     <p>${r.dying.desc}</p>
     <ul>${r.dying.items.map(i => `<li>${i}</li>`).join('')}</ul>
+  `;
+}
+
+function updateSlotSummary() {
+  const el = document.getElementById('f-slots');
+  const invField = document.getElementById('f-inventory');
+  if (!el || !invField) return;
+
+  const inst = getInstanceById(activeInstanceId);
+  const str = inst && inst.stats && inst.stats.STR ? (parseInt(inst.stats.STR.rating, 10) || 0) : 0;
+  const capacity = 10 + str;
+
+  let used = 0;
+  invField.value.split('\n').forEach(line => {
+    const m = line.match(/^\s*\[(\d+)\]/);
+    if (m) used += parseInt(m[1], 10);
+  });
+
+  const free = capacity - used;
+  let status = '✅ Normal vægt – ingen straf';
+  let cls = 'slots-ok';
+  if (used > capacity + 5) {
+    status = '⛔ IMMOBILISERET – Speed 0';
+    cls = 'slots-bad';
+  } else if (used > capacity) {
+    status = '⚠️ OVERBELASTET – Speed -2 og Ulempe på STR/DEX';
+    cls = 'slots-bad';
+  }
+
+  const boxes = '■'.repeat(Math.min(used, capacity)) + '□'.repeat(Math.max(free, 0));
+  el.className = 'slots-summary ' + cls;
+  el.innerHTML = `
+    <div><strong>Slots: ${used} / ${capacity}</strong> (10 + STR ${str >= 0 ? '+' : ''}${str}) &nbsp;|&nbsp; <strong>Ledige: ${Math.max(free, 0)}</strong></div>
+    <div class="slots-boxes">${boxes}</div>
+    <div>${status}</div>
+    <div class="slots-help">Skriv slot-prisen først på hver linje: [0] småting, [1] standard (inkl. let/mellemtung rustning, enhåndsvåben), [2] tung (tohåndsvåben, pladerustning). Rustning og våben tæller med.</div>
   `;
 }
