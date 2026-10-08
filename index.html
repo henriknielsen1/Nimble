@@ -12,8 +12,8 @@
     <h1>⚔️ Nimble 2.0 Web Portal</h1>
     <nav class="nav-tabs">
       <button class="nav-btn active" id="tab-btn-select" onclick="switchView('select')">1. Karakterkatalog</button>
-      <button class="nav-btn" id="tab-btn-sheet" onclick="switchView('sheet')">2. Aktivt Karakterark</button>
-      <button class="nav-btn" id="tab-btn-rules" onclick="switchView('rules')">3. Spillerguide (Regler)</button>
+      <button class="nav-btn" id="tab-btn-sheet" onclick="switchView('sheet')">2. Aktivt karakterark</button>
+      <button class="nav-btn" id="tab-btn-rules" onclick="switchView('rules')">3. Spillerguide</button>
     </nav>
   </header>
 
@@ -22,23 +22,23 @@
     <!-- VIEW 1: VÆLG & KLON KARAKTER -->
     <section id="view-select">
       <div class="panel">
-        <h2>Vælg en Karakter</h2>
+        <h2>Vælg en karakter</h2>
         <p class="text-muted">
-          Vælg en af de elleve foruddefinerede karakterer og indtast dit navn. Der oprettes en uafhængig kopi,
-          som gemmes lokalt i din browser og kan redigeres og udskrives.
+          Vælg en af de elleve færdige karakterer, og skriv dit navn. Der oprettes en uafhængig kopi,
+          som gemmes i din browser og kan redigeres og udskrives.
         </p>
 
-        <label for="player-name-in">Dit Spillernavn:</label>
+        <label for="player-name-in">Dit spillernavn:</label>
         <input type="text" id="player-name-in" placeholder="F.eks. Mathias">
 
-        <label for="char-select-in">Vælg Karakter-skabelon:</label>
+        <label for="char-select-in">Vælg karakterskabelon:</label>
         <select id="char-select-in"></select>
 
-        <button class="btn" onclick="cloneAndActivateCharacter()">Klon & Åbn Karakter</button>
+        <button class="btn" onclick="cloneAndActivateCharacter()">Opret &amp; åbn karakter</button>
       </div>
 
       <div class="panel">
-        <h3>Gemte Karakterer i denne Browser</h3>
+        <h3>Gemte karakterer i denne browser</h3>
         <div id="saved-instances-list"></div>
       </div>
     </section>
@@ -47,11 +47,11 @@
     <section id="view-sheet" style="display:none;">
       <div class="action-bar no-print">
         <div class="button-group">
-          <button class="btn btn-danger" onclick="deleteCurrentInstance()">Slet Kopi</button>
+          <button class="btn btn-danger" onclick="deleteCurrentInstance()">Slet kopi</button>
         </div>
         <div class="button-group">
-          <button class="btn btn-secondary" onclick="window.print()">🖨️ Udskriv Karakterark (A4)</button>
-          <button class="btn" onclick="saveActiveSheet(true)">💾 Gem Data</button>
+          <button class="btn btn-secondary" onclick="window.print()">🖨️ Udskriv karakterark (A4)</button>
+          <button class="btn" onclick="saveActiveSheet(true)">💾 Gem</button>
         </div>
       </div>
 
@@ -101,7 +101,7 @@
         <!-- WOUNDS TRACKER -->
         <div class="wounds-container avoid-break">
           <div class="wounds-header">
-            <strong>⚠️ Wounds Tracker (Dying ved 0 HP)</strong>
+            <strong>⚠️ Wounds (Dying ved 0 HP)</strong>
             <small class="text-muted">6 Wounds = Død</small>
           </div>
           <div class="wounds-boxes">
@@ -112,19 +112,19 @@
             <label class="wound-box"><input type="checkbox" class="wb" onchange="handleWoundToggle(5)"> 5</label>
             <label class="wound-box wound-dead"><input type="checkbox" class="wb" onchange="handleWoundToggle(6)"> ☠️ 6 (DØD)</label>
           </div>
-          <p class="wounds-note">Ved 0 HP: 1 handling/tur, DC 10 STR-save for at angribe/kaste magi. Tag skade = +2 Wounds (+3 ved Crit).</p>
+          <p class="wounds-note">Ved 0 HP får du 1 Wound og bliver Dying: kun 1 handling pr. tur. Angriber du, får du 1 ekstra Wound, medmindre du består et DC 10 STR-save. Tager du skade som Dying, får du 2 Wounds (3 ved Crit).</p>
         </div>
 
         <!-- ABILITIES & SKILLS -->
-        <h3 class="section-title">🎲 Egenskaber, Saves & Færdigheder</h3>
+        <h3 class="section-title">🎲 Egenskaber, saves &amp; færdigheder</h3>
         <div class="table-scroll">
           <table class="data-table" id="f-stats-table">
             <thead>
               <tr>
                 <th style="width: 15%;">Egenskab</th>
                 <th style="width: 12%;">Rating</th>
-                <th style="width: 33%;">Save Slag</th>
-                <th>Færdigheder & Bonusser</th>
+                <th style="width: 33%;">Save-slag</th>
+                <th>Færdigheder &amp; bonusser</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -132,14 +132,14 @@
         </div>
 
         <!-- ATTACKS -->
-        <h3 class="section-title">⚔️ Våben & Kamp-Handlinger</h3>
+        <h3 class="section-title">⚔️ Våben &amp; kamphandlinger</h3>
         <div class="table-scroll">
           <table class="data-table" id="f-attacks-table">
             <thead>
               <tr>
-                <th>Handling / Våben</th>
+                <th>Handling / våben</th>
                 <th style="width: 20%;">Skade</th>
-                <th>Egenskaber & Rækkevidde</th>
+                <th>Egenskaber &amp; rækkevidde</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -147,13 +147,13 @@
         </div>
 
         <!-- CLASS FEATURES -->
-        <h3 class="section-title">🌟 Klasse-Evner</h3>
+        <h3 class="section-title">🌟 Klasseevner</h3>
         <div id="f-features" class="features-list avoid-break"></div>
 
         <!-- GEAR & CURRENCY -->
         <div class="gear-currency-wrapper avoid-break">
           <div class="gear-col">
-            <label>🎒 Udstyr & Rygsæk (Slots):</label>
+            <label>🎒 Udstyr &amp; rygsæk (slots):</label>
             <div id="f-inventory-items" class="screen-only"></div>
             <button type="button" class="btn btn-secondary screen-only inventory-add" onclick="addInventoryItem()">Tilføj genstand</button>
             <p id="f-inventory-summary" class="inventory-summary screen-only" aria-live="polite"></p>
@@ -171,7 +171,7 @@
 
         <!-- NOTES -->
         <div class="avoid-break notes-wrapper">
-          <label for="f-notes">📝 Noter, Træk & Mål:</label>
+          <label for="f-notes">📝 Noter, kendetegn &amp; mål:</label>
           <textarea id="f-notes" class="screen-only" oninput="syncPrintMirrors()"></textarea>
           <div id="f-notes-print" class="print-mirror"></div>
         </div>
@@ -187,11 +187,11 @@
     <section id="view-rules" style="display:none;">
       <div class="action-bar no-print">
         <span></span>
-        <button class="btn btn-secondary" onclick="window.print()">🖨️ Udskriv Spillerguide (A4)</button>
+        <button class="btn btn-secondary" onclick="window.print()">🖨️ Udskriv spillerguide (A4)</button>
       </div>
 
       <article class="panel print-page">
-        <h1 class="rules-main-title">📜 Nimble 2.0: Spillerguide (1-Pager Hurtig-regler)</h1>
+        <h1 class="rules-main-title">📜 Nimble 2.0: Spillerguide med hurtige regler</h1>
         <div id="rules-content"></div>
       </article>
     </section>
