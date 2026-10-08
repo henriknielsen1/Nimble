@@ -1,14 +1,15 @@
 :root {
-  --bg-app: #f1f5f9;
-  --surface: #ffffff;
-  --border: #cbd5e1;
-  --border-strong: #334155;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --primary: #0284c7;
-  --primary-hover: #0369a1;
-  --danger: #b91c1c;
-  --accent: #f8fafc;
+  --bg-app: #f3efe5;
+  --surface: #fffdf8;
+  --border: #ded6c7;
+  --border-strong: #315346;
+  --text-main: #27312c;
+  --text-muted: #69756d;
+  --primary: #315f4d;
+  --primary-hover: #25483b;
+  --danger: #a34438;
+  --accent: #f5f0e6;
+  --gold: #c0924c;
 }
 
 * {
@@ -25,7 +26,7 @@ body {
 }
 
 header.no-print {
-  background: #0f172a;
+  background: linear-gradient(110deg, #203b32, #315346);
   color: white;
   padding: 0.75rem 1.5rem;
   display: flex;
@@ -34,12 +35,16 @@ header.no-print {
   position: sticky;
   top: 0;
   z-index: 100;
+  border-bottom: 2px solid var(--gold);
+  box-shadow: 0 3px 12px rgba(30, 47, 39, 0.18);
 }
 
 header.no-print h1 {
   margin: 0;
-  font-size: 1.15rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.3rem;
   font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 .nav-tabs {
@@ -48,33 +53,45 @@ header.no-print h1 {
 }
 
 .nav-btn {
-  background: #334155;
-  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fffdf8;
   border: none;
   padding: 0.45rem 0.9rem;
-  border-radius: 4px;
+  border-radius: 7px;
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: 600;
+  transition: background-color 150ms ease, transform 150ms ease;
 }
 
+.nav-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
 .nav-btn.active {
-  background: var(--primary);
+  background: #c0924c;
+  color: #20382f;
 }
 
 .container {
-  max-width: 920px;
-  margin: 1.5rem auto;
+  max-width: 1040px;
+  margin: 1.75rem auto;
   padding: 0 1rem;
 }
 
 .panel {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 12px;
   padding: 1.25rem 1.5rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  box-shadow: 0 5px 18px rgba(50, 59, 48, 0.06);
+}
+
+.panel h2,
+.panel h3,
+.rules-main-title,
+.sheet-header h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--border-strong);
 }
 
 .action-bar {
@@ -103,10 +120,20 @@ textarea {
   width: 100%;
   padding: 0.45rem 0.6rem;
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 7px;
   font-size: 0.9rem;
   margin-bottom: 0.75rem;
   font-family: inherit;
+  color: var(--text-main);
+  background-color: #fffefa;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid rgba(192, 146, 76, 0.28);
+  border-color: var(--gold);
 }
 
 textarea {
@@ -135,17 +162,25 @@ textarea {
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: 4px;
+  border-radius: 7px;
   cursor: pointer;
   font-weight: 600;
   font-size: 0.85rem;
+  transition: background-color 150ms ease, transform 150ms ease;
 }
 
 .btn:hover { background: var(--primary-hover); }
+.btn:active,
+.nav-btn:active { transform: translateY(1px); }
+.btn:focus-visible,
+.nav-btn:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
 .btn-secondary { background: #64748b; }
 .btn-secondary:hover { background: #475569; }
 .btn-danger { background: var(--danger); }
-.btn-danger:hover { background: #991b1b; }
+.btn-danger:hover { background: #84362d; }
 
 .data-table {
   width: 100%;
@@ -168,6 +203,7 @@ textarea {
 .data-table th {
   background: var(--accent);
   font-weight: 600;
+  color: var(--border-strong);
 }
 
 .text-center th,
@@ -181,7 +217,7 @@ textarea {
 .sheet-header {
   display: flex;
   justify-content: space-between;
-  border-bottom: 2px solid var(--border-strong);
+  border-bottom: 2px solid var(--gold);
   padding-bottom: 0.5rem;
   margin-bottom: 0.5rem;
 }
@@ -210,7 +246,7 @@ textarea {
 
 .wounds-container {
   border: 1.5px solid var(--danger);
-  border-radius: 4px;
+  border-radius: 9px;
   padding: 0.6rem 0.75rem;
   margin-bottom: 0.85rem;
   background: #fef2f2;
@@ -259,7 +295,7 @@ textarea {
 .section-title {
   margin: 0.75rem 0 0.35rem 0;
   font-size: 0.92rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--gold);
   padding-bottom: 0.2rem;
 }
 
@@ -342,10 +378,27 @@ textarea {
 
 .rules-box {
   background: var(--accent);
-  border-left: 3px solid var(--primary);
+  border-left: 3px solid var(--gold);
   padding: 0.5rem 0.75rem;
   margin: 0.5rem 0;
   font-size: 0.85rem;
+}
+
+.sheet-utility-actions {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border);
+  margin-top: 1.25rem;
+  padding-top: 0.75rem;
+}
+
+.sheet-utility-actions .btn {
+  background: #64736a;
+  font-size: 0.78rem;
+}
+
+.sheet-utility-actions .btn:hover {
+  background: #4c5b52;
 }
 
 /* Print Mirror skjult på skærm */
@@ -359,6 +412,7 @@ textarea {
     flex-direction: column;
     gap: 0.75rem;
     padding: 0.75rem max(0.75rem, env(safe-area-inset-right)) 0.75rem max(0.75rem, env(safe-area-inset-left));
+    position: static;
   }
 
   header.no-print h1 {
@@ -381,11 +435,11 @@ textarea {
 
   .container {
     margin: 0.75rem auto;
-    padding: 0 0.65rem;
+    padding: 0 0.5rem;
   }
 
   .panel {
-    padding: 1rem;
+    padding: 0.9rem;
     margin-bottom: 0.75rem;
   }
 
@@ -422,21 +476,117 @@ textarea {
 
   .table-scroll {
     max-width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: visible;
   }
 
   .data-table {
-    min-width: 600px;
+    min-width: 0;
+    display: block;
+    border-collapse: separate;
   }
 
-  .data-table th,
-  .data-table td {
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table tbody {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .data-table tbody tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface);
+    box-shadow: 0 2px 8px rgba(50, 59, 48, 0.05);
+  }
+
+  .data-table tbody td {
+    min-width: 0;
+    padding: 0.55rem 0.65rem;
+    border: 0;
+    border-bottom: 1px solid #eee8dc;
     vertical-align: top;
+    overflow-wrap: anywhere;
   }
 
-  .text-center.data-table {
-    min-width: 540px;
+  .data-table tbody td::before {
+    display: block;
+    margin-bottom: 0.15rem;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .data-table tbody tr td:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  .combat-table tbody {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .combat-table tbody tr {
+    display: contents;
+  }
+
+  .combat-table tbody td {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: 0 2px 8px rgba(50, 59, 48, 0.05);
+  }
+
+  .combat-table tbody td::before {
+    text-align: center;
+  }
+
+  .combat-table tbody td:nth-child(1)::before { content: "Hit Points"; }
+  .combat-table tbody td:nth-child(2)::before { content: "Hit Die"; }
+  .combat-table tbody td:nth-child(3)::before { content: "Defense"; }
+  .combat-table tbody td:nth-child(4)::before { content: "Speed"; }
+  .combat-table tbody td:nth-child(5)::before { content: "Initiative"; }
+
+  #f-stats-table tbody tr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #f-stats-table tbody td:first-child {
+    grid-column: 1 / -1;
+    border-bottom: 1px solid var(--border);
+    background: var(--accent);
+    font-size: 1rem;
+  }
+
+  #f-stats-table tbody td:first-child::before { content: "Egenskab"; }
+  #f-stats-table tbody td:nth-child(2)::before { content: "Rating"; }
+  #f-stats-table tbody td:nth-child(3)::before { content: "Save slag"; }
+  #f-stats-table tbody td:nth-child(4)::before { content: "Færdigheder & bonusser"; }
+
+  #f-attacks-table tbody tr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #f-attacks-table tbody td:first-child {
+    grid-column: 1 / -1;
+    border-bottom: 1px solid var(--border);
+    background: var(--accent);
+  }
+
+  #f-attacks-table tbody td:nth-child(1)::before { content: "Handling / våben"; }
+  #f-attacks-table tbody td:nth-child(2)::before { content: "Skade"; }
+  #f-attacks-table tbody td:nth-child(3)::before { content: "Egenskaber & rækkevidde"; }
+
+  .combat-table tbody td,
+  #f-stats-table tbody td,
+  #f-attacks-table tbody td {
+    text-align: left;
   }
 
   .wounds-boxes {
@@ -470,18 +620,18 @@ textarea {
   }
 
   .inventory-row {
-    grid-template-columns: minmax(0, 1fr) 52px auto;
+    grid-template-columns: minmax(0, 1fr) 48px auto auto;
     gap: 0.3rem;
   }
 
   .inventory-row .inventory-remove {
-    grid-column: 1 / -1;
-    justify-self: end;
-    min-height: 40px;
+    min-height: 44px;
+    padding: 0.3rem;
+    font-size: 0.7rem;
   }
 
   .inventory-row .inventory-slots {
-    width: 52px;
+    width: 48px;
     min-height: 44px;
   }
 
@@ -511,6 +661,22 @@ textarea {
   .features-list,
   .sheet-quote {
     overflow-wrap: anywhere;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .nav-btn {
+    font-size: 0.69rem;
+  }
+
+  .combat-table tbody {
+    grid-template-columns: 1fr;
+  }
+
+  .wounds-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.2rem;
   }
 }
 
@@ -560,6 +726,11 @@ textarea {
     break-inside: avoid;
   }
 
+  .gear-currency-wrapper {
+    page-break-before: always;
+    break-before: page;
+  }
+
   /* Skjul browser controls under print */
   .screen-only {
     display: none !important;
@@ -580,6 +751,31 @@ textarea {
     color: black !important;
   }
 
+  #f-inventory-print::after,
+  #f-notes-print::after {
+    content: "";
+    display: block;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(6mm - 1px),
+      #d6dce2 calc(6mm - 1px),
+      #d6dce2 6mm
+    );
+  }
+
+  #f-inventory-print::after {
+    height: 32mm;
+  }
+
+  #f-notes-print::after {
+    height: 55mm;
+  }
+
+  .notes-wrapper {
+    margin-top: 8mm;
+  }
+
   input, select {
     border: none !important;
     background: transparent !important;
@@ -597,9 +793,35 @@ textarea {
   .wounds-container {
     background: transparent !important;
     border: 1.5px solid black !important;
+    padding: 0.4rem 0.6rem;
+    margin-bottom: 0.5rem;
   }
 
   .wounds-header, .wound-dead {
     color: black !important;
+  }
+
+  .data-table {
+    font-size: 8.5pt;
+    margin-bottom: 0.4rem;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 0.2rem 0.4rem;
+  }
+
+  .features-list {
+    font-size: 8.5pt;
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+  }
+
+  .section-title {
+    margin: 0.5rem 0 0.25rem;
+  }
+
+  .sheet-quote {
+    margin-bottom: 0.4rem;
   }
 }

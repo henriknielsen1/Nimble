@@ -249,7 +249,7 @@ function updateInventorySummary(strengthRating) {
     status = `Immobiliseret · ${totals.used}/${capacity + 5} slots før immobilisering`;
     document.getElementById('f-speed').textContent = '0 felter (Immobiliseret)';
   } else if (totals.used > capacity) {
-    status = `Overbelastet · ${totals.used - capacity} slots over grænsen · Ulempe på STY- og BEV-checks samt saves`;
+    status = `Overbelastet · ${totals.used - capacity} slots over grænsen · Ulempe på STR- og DEX-tjek samt saves`;
     document.getElementById('f-speed').textContent = `${Math.max(0, baseSpeed - 2)} felter (-2, Overbelastet)`;
   } else {
     document.getElementById('f-speed').textContent = `${baseSpeed} felter`;

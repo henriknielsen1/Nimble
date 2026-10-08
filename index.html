@@ -47,7 +47,6 @@
     <section id="view-sheet" style="display:none;">
       <div class="action-bar no-print">
         <div class="button-group">
-          <button class="btn btn-secondary" onclick="exportCurrentInstance()">Eksportér JSON</button>
           <button class="btn btn-danger" onclick="deleteCurrentInstance()">Slet Kopi</button>
         </div>
         <div class="button-group">
@@ -74,7 +73,7 @@
 
         <!-- KAMP-OVERSIGT & STATS -->
         <div class="table-scroll">
-          <table class="data-table text-center">
+          <table class="data-table combat-table text-center">
             <thead>
               <tr>
                 <th>Hit Points (HP)</th>
@@ -175,6 +174,10 @@
           <label for="f-notes">📝 Noter, Træk & Mål:</label>
           <textarea id="f-notes" class="screen-only" oninput="syncPrintMirrors()"></textarea>
           <div id="f-notes-print" class="print-mirror"></div>
+        </div>
+
+        <div class="sheet-utility-actions screen-only">
+          <button class="btn btn-secondary" onclick="exportCurrentInstance()">Eksportér sikkerhedskopi (JSON)</button>
         </div>
 
       </article>
