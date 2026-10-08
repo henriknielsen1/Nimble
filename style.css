@@ -566,7 +566,7 @@ textarea {
 
   #f-stats-table tbody td:first-child::before { content: "Egenskab"; }
   #f-stats-table tbody td:nth-child(2)::before { content: "Rating"; }
-  #f-stats-table tbody td:nth-child(3)::before { content: "Save slag"; }
+  #f-stats-table tbody td:nth-child(3)::before { content: "Save-slag"; }
   #f-stats-table tbody td:nth-child(4)::before { content: "Færdigheder & bonusser"; }
 
   #f-attacks-table tbody tr {

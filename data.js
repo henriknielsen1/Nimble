@@ -1,7 +1,7 @@
 const NIMBLE_DATA = {
   rules: {
     actions: {
-      title: "1. Dine 3 Handlinger (Actions)",
+      title: "1. Dine 3 handlinger (Actions)",
       desc: "På din tur har du 3 handlinger til fri fordeling. Det meste i kamp koster 1 handling; særligt stærke evner og formularer kan koste flere:",
       items: [
         "Initiativ: Rul 1d20 + din Initiative (typisk DEX). Ét ciffer = 1 handling i første runde, to cifre = 2 handlinger, 20+ (eller en naturlig 20) = alle 3.",
@@ -14,8 +14,8 @@ const NIMBLE_DATA = {
       refreshNote: "Action Refresh (Nulstilling): Alle 3 handlinger genoplades, når din tur SLUTTER – gem dem aldrig. Bruger du handlinger på reaktioner uden for din tur, starter du din næste tur med færre."
     },
     attacks: {
-      title: "2. Sådan Angriber Du (Ingen 'Rul for at Ramme')",
-      desc: "I Nimble ruller du ikke for at ramme. Du ruller direkte skadesterningerne for dit våben eller din formel. Terningen længst til venstre er din Primary Die og afgør, om angrebet rammer:",
+      title: "2. Sådan angriber du (ingen 'rul for at ramme')",
+      desc: "I Nimble ruller du ikke for at ramme. Du ruller direkte skadesterningerne for dit våben eller din formel. Terningen længst til venstre er din Primary Die (primærterning) og afgør, om angrebet rammer:",
       items: [
         "1 på Primary Die = Fejlskud (Miss): Angrebet har ingen effekt.",
         "Maks. på Primary Die = Kritisk træffer (Crit): Rul Primary Die igen og læg tallet oveni. Slår du maks. igen, så rul igen – uden loft! Crits ignorerer rustning på begge sider: monstres Armor og din egen Defense, når du forsvarer dig.",
@@ -23,11 +23,11 @@ const NIMBLE_DATA = {
         "Hasteangreb (Rushed Attacks): Hvert angreb efter det første i samme tur får kumulativ Ulempe – 2. angreb Ulempe 1, 3. angreb Ulempe 2.",
         "Fordel/Ulempe (Advantage/Disadvantage): Fordel = rul 1 ekstra terning og fjern den laveste. Ulempe = rul 1 ekstra terning og fjern den højeste. Hver Fordel ophæver én Ulempe.",
         "Afstandsangreb: Står en fjende ved siden af dig, har dine afstandsangreb Ulempe. Du kan tage 1 Ulempe for +2 Range (maks. +6).",
-        "Rustede monstre: Medium Armor trækker 10 skade fra hvert angreb, Heavy Armor 20 skade. Crits ignorerer det."
+        "Pansrede monstre: Medium Armor trækker 10 skade fra hvert angreb, Heavy Armor 20. Crits ignorerer det."
       ]
     },
     defense: {
-      title: "3. Heroiske Reaktioner (på Fjendens Tur)",
+      title: "3. Heroiske reaktioner (på fjendens tur)",
       desc: "Reaktioner udføres, når det IKKE er din tur, og koster 1 handling hver. Du kan højst udføre hver reaktion 1 gang pr. runde (nulstilles, når din egen tur slutter):",
       items: [
         "Forsvar (Defend): Reducér skaden fra ét angreb med din Defense. Nogle skader kan ikke undgås (fx psykisk skade og visse områdeangreb), og crits ignorerer din Defense.",
@@ -37,7 +37,7 @@ const NIMBLE_DATA = {
       ]
     },
     saves: {
-      title: "4. Redningsslag (Saves) & Færdighedstjek",
+      title: "4. Redningsslag (Saves) & færdighedstjek",
       desc: "Når verden påvirker DIG (magi, fælder, farer), slår du et save: 1d20 + den relevante egenskab. En naturlig 1 fejler altid; en naturlig 20 lykkes altid.",
       items: [
         "1 Advantaged Save (+): Slå altid med Fordel.",
@@ -55,12 +55,20 @@ const NIMBLE_DATA = {
         "Angriber du, mens du er Dying, får du 1 ekstra Wound, medmindre du består et DC 10 STR-save. (Ikke-angribende formularer som Heal er sikre at kaste.)",
         "Tager du skade, mens du er Dying, får du 2 Wounds (3 ved et Crit).",
         "6 Wounds = Karakteren er død (medmindre en evne ændrer tallet).",
-        "Får du HP tilbage (healing), ophører Dying. Wounds heler typisk kun 1 pr. Safe Rest.",
-        "Hvile: Catch Breath (10 min.) – brug Hit Dice enkeltvis, rul dem og læg din STR til hver. Make Camp (8 timer) – tag maks. værdi på hver brugt Hit Die. Safe Rest (sikkert sted, fx en kro) – alle HP, Hit Dice og mana genoprettes, og 1 Wound heler."
+        "Får du HP tilbage (healing), ophører Dying. Wounds heler typisk kun 1 pr. Safe Rest."
+      ]
+    },
+    rest: {
+      title: "6. Hvile & helbredelse",
+      desc: "Mellem kampene får du HP tilbage ved at hvile. Hit Dice (HD) er din pulje til hurtig bedring:",
+      items: [
+        "Catch Breath (mindst 10 minutter): Brug Hit Dice én ad gangen. Rul hver terning, læg din STR til, og få så mange HP tilbage.",
+        "Make Camp (mindst 8 timer med mad og søvn): Som Catch Breath, men du tager terningens maksimale værdi i stedet for at rulle.",
+        "Safe Rest (et sikkert sted, fx en kro): Alle HP, Hit Dice og mana genoprettes, og 1 Wound heler. Camping i det fri eller i et dungeon tæller ikke."
       ]
     },
     inventory: {
-      title: "6. Bæreevne (Inventory Slots)",
+      title: "7. Bæreevne (Inventory Slots)",
       desc: "Du har 10 + STR slots til udstyr og fund (båret, i brug eller i rygsæk). Mindre, beslægtede småting kan samles i ét slot, og ammunition behøver normalt ikke tælles.",
       items: [
         "1 slot: ét enhåndsvåben, skjold, båret rustning, en stak javelins, 500 gp eller 2 helbredelsesdrikke.",
@@ -96,8 +104,8 @@ const NIMBLE_DATA = {
         WIL: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Influence (+1), Insight (+2), Naturecraft (+1), Perception (+1)" }
       },
       attacks: [
-        { name: "Ubevæbnet slag (Unarmed Strike)", damage: "1d4 + 2", traits: "Nærkamp, trænet (kan crit'e), to næver = dual wield (Fordel 1/runde), Momentum" },
-        { name: "Staff (stav)", damage: "1d8 + 2", traits: "Nærkamp, Tohånds, Momentum" }
+        { name: "Ubevæbnet slag (Unarmed Strike)", damage: "1d4 + 2", traits: "Nærkamp, trænet (kan crit'e), to næver = dual wield (Fordel 1/runde), +1 skade pr. brugt Momentum" },
+        { name: "Staff (stav)", damage: "1d8 + 2", traits: "Nærkamp, Tohånds, +1 skade pr. brugt Momentum" }
       ],
       class_features: [
         { title: "Iron Defense", text: "Din Defense er DEX + STR (2 + 2 = 4), så længe du ikke bærer rustning." },
@@ -137,7 +145,7 @@ const NIMBLE_DATA = {
         WIL: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Influence (+1), Insight (+1), Naturecraft (+3), Perception (+2)" }
       },
       attacks: [
-        { name: "Battleaxe (stridsøkse)", damage: "1d10 + 2 + Fury Dice", traits: "Slashing, Nærkamp, Tohånds" }
+        { name: "Battleaxe (stridsøkse)", damage: "1d10 + 2 + Fury Dice (1d4 hver)", traits: "Slashing, Nærkamp, Tohånds" }
       ],
       class_features: [
         { title: "Rage", text: "(1/tur) Handling: Rul en Fury Die (1d4) og læg den til side. Læg den til alle dine STR-angreb. Du kan have maks. KEY (2) Fury Dice ad gangen; de mistes, når din Rage ender." },
@@ -178,7 +186,7 @@ const NIMBLE_DATA = {
         WIL: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Influence (+3), Insight (+3), Naturecraft (+2), Perception (+3)" }
       },
       attacks: [
-        { name: "Mace (stridskølle)", damage: "1d6 + 2", traits: "Bludgeoning, Nærkamp, Judgment Dice" }
+        { name: "Mace (stridskølle)", damage: "1d6 + 2", traits: "Bludgeoning, Nærkamp, ekstra radiant skade fra Judgment Dice ved træf" }
       ],
       class_features: [
         { title: "Radiant Judgment", text: "Hver gang en fjende angriber dig, og du ikke har Judgment Dice: Rul dine Judgment Dice (2d6). Rammer du med dit næste nærkampsangreb i denne encounter, giver terningernes sum ekstra radiant skade. Terningerne bruges, uanset om du rammer eller ej." },
@@ -390,7 +398,7 @@ const NIMBLE_DATA = {
       attacks: [
         { name: "Shadow Blast (Necrotic cantrip)", damage: "1d12 + 2 Nekrotisk", traits: "Magi, Range 8, 1/runde" },
         { name: "Command Shadows (Shadows)", damage: "1d12 Nekrotisk pr. Shadow", traits: "Magi, minions (1 HP, ingen skadebonus, ingen crit), flytter 6 og angriber Reach 1, 1/runde" },
-        { name: "Sickle (ritualsegl)", damage: "1d4 + 2", traits: "Slashing, Nærkamp, Vicious" }
+        { name: "Sickle (forgyldt, krum ritualklinge)", damage: "1d4 + 2", traits: "Slashing, Nærkamp, Vicious" }
       ],
       class_features: [
         { title: "Shadow Blast (Necrotic cantrip)", text: "Handling (1/runde): Range 8. Skade: 1d12 + DEX (2). Hvert 5. level: +1d12 skade." },
@@ -401,7 +409,7 @@ const NIMBLE_DATA = {
       ],
       inventory: [
         "Adventurer's Garb (kappe med ravnefjer)",
-        "Sickle (forgyldt krum ritualsegl)",
+        "Sickle (forgyldt, krum ritualklinge)",
         "Shovel (skovl)",
         "Småting: sort glaskugle, påkaldelsesblæk, bog i koldt skind, kridt og ravnefod-amulet"
       ],

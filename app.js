@@ -394,6 +394,10 @@ function renderRulesView() {
     <p>${r.dying.desc}</p>
     <ul>${r.dying.items.map(i => `<li>${i}</li>`).join('')}</ul>
 
+    <h3>${r.rest.title}</h3>
+    <p>${r.rest.desc}</p>
+    <ul>${r.rest.items.map(i => `<li>${i}</li>`).join('')}</ul>
+
     <h3>${r.inventory.title}</h3>
     <p>${r.inventory.desc}</p>
     <ul>${r.inventory.items.map(i => `<li>${i}</li>`).join('')}</ul>
