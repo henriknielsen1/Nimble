@@ -53,14 +53,14 @@ test('buildCharacterPrompt generates fantasy portrait prompt with character attr
   assert.match(prompt, /65 years old/);
   assert.match(prompt, /Chaotic Good/);
   assert.match(prompt, /bjørneskindskappe/);
-  assert.match(prompt, /Fantasy tabletop RPG character bust portrait/);
+  assert.match(prompt, /tabletop RPG character bust portrait/);
 });
 
 test('buildCharacterPrompt handles empty or minimal character gracefully', () => {
   const minimal = {};
   const prompt = app.buildCharacterPrompt(minimal);
   assert.ok(prompt.length > 20);
-  assert.match(prompt, /Fantasy tabletop RPG character bust portrait/);
+  assert.match(prompt, /tabletop RPG character bust portrait/);
 
   const nullPrompt = app.buildCharacterPrompt(null);
   assert.strictEqual(nullPrompt, '');
@@ -359,3 +359,20 @@ test('renderPortrait updates DOM elements appropriately', () => {
   }
 });
 
+
+test('buildCharacterPrompt uses modern TTRPG style presets and avoids AI-slop keywords', () => {
+  const inst = { character_name: 'Mira', ancestry: 'Elf', class: 'Mage' };
+  const prompt = app.buildCharacterPrompt(inst, 'rødt hår');
+  assert.match(prompt, /gouache/);
+  assert.match(prompt, /watercolor/);
+  assert.match(prompt, /paper grain/);
+  assert.match(prompt, /Avoid: photorealism/);
+  assert.doesNotMatch(prompt, /cinematic/i);
+  assert.ok(prompt.indexOf('rødt hår') > prompt.indexOf('Mira'));
+
+  const legends = app.buildCharacterPrompt(inst, '', 'legends');
+  assert.match(legends, /Legends in the Mist/);
+  const oil = app.buildCharacterPrompt(inst, '', 'oil');
+  assert.match(oil, /oil painting/);
+  assert.strictEqual(app.buildCharacterPrompt(inst, '', 'unknown'), app.buildCharacterPrompt(inst));
+});

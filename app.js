@@ -16,6 +16,10 @@ window.addEventListener('DOMContentLoaded', () => {
   if (extraDescEl) {
     extraDescEl.addEventListener('input', onExtraDescChange);
   }
+  const styleEl = document.getElementById('portrait-style');
+  if (styleEl) {
+    styleEl.addEventListener('change', onExtraDescChange);
+  }
   const promptInputEl = document.getElementById('portrait-prompt-input');
   if (promptInputEl) {
     promptInputEl.addEventListener('input', () => {
@@ -482,8 +486,17 @@ function isSafeImageDataUrl(url) {
   );
 }
 
-function buildCharacterPrompt(inst, extraDesc = '') {
+const PORTRAIT_STYLE_PRESETS = {
+  daggerheart: 'modern tabletop RPG key art in the spirit of Daggerheart: hand-painted gouache and watercolor with ink linework, visible brush strokes, flat-ish painterly shapes, textured paper grain, a limited harmonious color palette, soft natural diffused light, stylized expressive features, warm and storybook-like but grounded',
+  legends: 'modern indie tabletop RPG illustration in the spirit of Legends in the Mist: loose ink linework with translucent watercolor washes, visible brush strokes and ink splatter, textured paper grain, a limited harmonious color palette, soft natural diffused light, stylized expressive features, warm and storybook-like but grounded',
+  oil: 'classic oil painting portrait with visible brushwork, a restrained earthy palette, soft natural diffused light on canvas texture, stylized expressive features, grounded and timeless'
+};
+const DEFAULT_PORTRAIT_STYLE = 'daggerheart';
+
+function buildCharacterPrompt(inst, extraDesc = '', style = DEFAULT_PORTRAIT_STYLE) {
   if (!inst) return '';
+
+  const styleText = PORTRAIT_STYLE_PRESETS[style] || PORTRAIT_STYLE_PRESETS[DEFAULT_PORTRAIT_STYLE];
 
   const name = inst.character_name || '';
   const ancestry = inst.ancestry || '';
@@ -519,24 +532,28 @@ function buildCharacterPrompt(inst, extraDesc = '') {
     }
   }
 
-  const quote = inst.quote ? `Atmosphere and expression: "${inst.quote}"` : '';
+  const who = [gender, age, ancestry, charClass, level].filter(Boolean).join(' ');
+  const sentences = [];
+  if (name || who) {
+    sentences.push(`The portrait shows ${name ? `${name}, ` : ''}${who ? `a ${who}` : 'an adventurer'}`);
+  }
+  if (background) sentences.push(`Their background is: ${background}`);
+  if (alignment) sentences.push(`Their temperament is ${alignment}`);
+  if (visualTraits) sentences.push(`They look like this: ${visualTraits}`);
+  if (gearSummary) sentences.push(`They wear and carry everyday adventurer gear made of believable materials such as worn leather, wool and linen: ${gearSummary}`);
+  if (inst.quote) sentences.push(`Their expression and mood reflect: "${inst.quote}"`);
+  const description = sentences.join('. ');
 
-  const details = [
-    name ? `Character named ${name}` : '',
-    gender,
-    age,
-    ancestry,
-    charClass,
-    level,
-    background ? `Background: ${background}` : '',
-    alignment ? `Alignment: ${alignment}` : '',
-    visualTraits ? `Appearance: ${visualTraits}` : '',
-    gearSummary ? `Equipment and attire: ${gearSummary}` : '',
-    quote,
-    extraDesc && extraDesc.trim() ? `Additional user details: ${extraDesc.trim()}` : ''
-  ].filter(Boolean).join('. ');
+  const extra = extraDesc && extraDesc.trim()
+    ? ` Important additional details from the user, which take priority over everything above: ${extraDesc.trim()}.`
+    : '';
 
-  return `Fantasy tabletop RPG character bust portrait, digital painting, dramatic cinematic lighting, rich painterly fantasy art style, detailed face and attire, upper body framed portrait, atmospheric background. ${details}. High quality character art, highly detailed.`;
+  return `Fantasy tabletop RPG character bust portrait, half-body, painted as ${styleText}. ` +
+    `Grounded and diverse character design with a natural, individual face. The background is simple and loosely painted, like a textured wash of color. ` +
+    `Square composition for a small 28x28 mm print: the subject is centered, with nothing important near the edges. ` +
+    (description ? `${description}. ` : '') +
+    `Avoid: photorealism, 3D render look, glossy or airbrushed skin, plastic sheen, over-sharpened detail, lens flare, neon rim lighting, heavy bokeh, excessive glow or particles, a generic epic fantasy poster composition, symmetrical stock faces, text, watermarks, and borders.` +
+    extra;
 }
 
 async function callGeminiImageApi(apiKey, prompt, model = DEFAULT_GEMINI_IMAGE_MODEL) {
@@ -820,10 +837,15 @@ function openPortraitModal() {
   if (extraDescInput) {
     extraDescInput.value = savedExtra;
   }
+  const styleInput = document.getElementById('portrait-style');
+  const savedStyle = PORTRAIT_STYLE_PRESETS[inst.portrait_style] ? inst.portrait_style : DEFAULT_PORTRAIT_STYLE;
+  if (styleInput) {
+    styleInput.value = savedStyle;
+  }
 
   isUserEditingPrompt = false;
   if (promptInput) {
-    promptInput.value = buildCharacterPrompt(inst, savedExtra);
+    promptInput.value = buildCharacterPrompt(inst, savedExtra, savedStyle);
   }
 
   if (errorBox) {
@@ -864,7 +886,7 @@ function resetPromptToDefault() {
   const extraDesc = document.getElementById('portrait-extra-desc')?.value || '';
   const promptInput = document.getElementById('portrait-prompt-input');
   if (promptInput) {
-    promptInput.value = buildCharacterPrompt(inst, extraDesc);
+    promptInput.value = buildCharacterPrompt(inst, extraDesc, document.getElementById('portrait-style')?.value || DEFAULT_PORTRAIT_STYLE);
   }
   isUserEditingPrompt = false;
 }
@@ -876,7 +898,7 @@ function onExtraDescChange() {
   const extraDesc = document.getElementById('portrait-extra-desc')?.value || '';
   const promptInput = document.getElementById('portrait-prompt-input');
   if (promptInput) {
-    promptInput.value = buildCharacterPrompt(inst, extraDesc);
+    promptInput.value = buildCharacterPrompt(inst, extraDesc, document.getElementById('portrait-style')?.value || DEFAULT_PORTRAIT_STYLE);
   }
 }
 
@@ -889,6 +911,7 @@ async function submitGeneratePortrait() {
   const apiVal = (settingInput?.value || '').trim();
   const prompt = (promptInput?.value || '').trim();
   const extraDesc = (extraDescInput?.value || '').trim();
+  const style = document.getElementById('portrait-style')?.value || DEFAULT_PORTRAIT_STYLE;
 
   if (!apiVal) {
     if (errorBox) {
@@ -912,10 +935,12 @@ async function submitGeneratePortrait() {
   const inst = getInstanceById(activeInstanceId);
   if (inst) {
     inst.portrait_extra_desc = extraDesc;
+    inst.portrait_style = style;
     const list = getAllInstances();
     const idx = list.findIndex(x => x.instance_id === activeInstanceId);
     if (idx !== -1) {
       list[idx].portrait_extra_desc = extraDesc;
+      list[idx].portrait_style = style;
       saveAllInstances(list);
     }
   }
