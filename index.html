@@ -50,6 +50,7 @@
           <button class="btn btn-danger" onclick="deleteCurrentInstance()">Slet kopi</button>
         </div>
         <div class="button-group">
+          <button class="btn btn-secondary" onclick="openPortraitModal()">🎨 Portræt &amp; API-nøgle</button>
           <button class="btn btn-secondary" onclick="window.print()">🖨️ Udskriv karakterark (A4)</button>
           <button class="btn" onclick="saveActiveSheet(true)">💾 Gem</button>
         </div>
@@ -57,19 +58,52 @@
 
       <article class="panel sheet-card print-page">
         
-        <!-- HEADER -->
-        <header class="sheet-header">
-          <div>
-            <h1 id="f-name">Karakternavn</h1>
-            <div id="f-class-meta" class="sheet-meta">Level 1 | Klasse</div>
+        <!-- TOP BANNER MED PORTRÆT & HEADER -->
+        <div class="sheet-top-banner avoid-break">
+          <div class="sheet-portrait-section avoid-break">
+            <div class="sheet-portrait-frame" id="sheet-portrait-frame">
+              <div id="portrait-placeholder" class="portrait-placeholder">
+                <span class="portrait-placeholder-icon" aria-hidden="true">👤</span>
+                <span class="portrait-placeholder-text">Intet portræt</span>
+                <button type="button" class="btn btn-sm btn-portrait-cta screen-only" onclick="openPortraitModal()">🎨 Generér portræt</button>
+              </div>
+              <div id="portrait-loading" class="portrait-loading" style="display:none;">
+                <div class="portrait-spinner"></div>
+                <span>Genererer portræt...</span>
+              </div>
+              <div id="portrait-display" class="portrait-display" style="display:none;">
+                <img id="f-portrait-img" src="" alt="Karakterportræt">
+              </div>
+              <div id="portrait-error" class="portrait-error screen-only" style="display:none;">
+                <span id="portrait-error-msg"></span>
+                <div class="portrait-error-actions">
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="openPortraitModal()">Prøv igen</button>
+                  <button type="button" class="btn btn-sm" onclick="dismissPortraitError()">Luk</button>
+                </div>
+              </div>
+            </div>
+            <div class="portrait-actions-bar screen-only" id="portrait-actions-bar" style="display:none;">
+              <button type="button" class="btn btn-sm btn-secondary" onclick="openPortraitModal()" title="Generér et nyt portræt">🔄 Generér igen</button>
+              <button type="button" class="btn btn-sm btn-danger" onclick="removePortrait()" title="Fjern dette portræt">🗑️ Fjern</button>
+            </div>
           </div>
-          <div class="sheet-player-info">
-            <div><strong>Spiller:</strong> <input type="text" id="f-player" class="inline-input"></div>
-            <div class="text-muted text-small">Nimble 2.0 System</div>
-          </div>
-        </header>
 
-        <p id="f-quote" class="sheet-quote"></p>
+          <div class="sheet-header-main">
+            <!-- HEADER -->
+            <header class="sheet-header">
+              <div>
+                <h1 id="f-name">Karakternavn</h1>
+                <div id="f-class-meta" class="sheet-meta">Level 1 | Klasse</div>
+              </div>
+              <div class="sheet-player-info">
+                <div><strong>Spiller:</strong> <input type="text" id="f-player" class="inline-input"></div>
+                <div class="text-muted text-small">Nimble 2.0 System</div>
+              </div>
+            </header>
+
+            <p id="f-quote" class="sheet-quote"></p>
+          </div>
+        </div>
 
         <!-- KAMP-OVERSIGT & STATS -->
         <div class="table-scroll">
@@ -197,6 +231,60 @@
     </section>
 
   </main>
+
+  <!-- MODAL: GENERÉR KARAKTER-PORTRÆT -->
+  <div id="portrait-modal" class="modal-backdrop screen-only" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="portrait-modal-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="portrait-modal-title">🎨 Generér karakter-portræt</h3>
+        <button type="button" class="modal-close-btn" onclick="closePortraitModal()" aria-label="Luk dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted text-small" style="margin: 0 0 0.5rem 0;">
+          Generér et unikt fantasy-portræt til din karakter vha. Google Gemini API. Billedet nedskaleres og gemmes automatisk i din browser.
+        </p>
+
+        <div class="form-group">
+          <label for="gemini-user-setting">
+            <strong>Google Gemini API-nøgle:</strong>
+          </label>
+          <div class="api-key-input-wrapper">
+            <input type="password" id="gemini-user-setting" placeholder="AIzaSy..." autocomplete="off">
+            <button type="button" class="btn btn-secondary btn-sm" id="toggle-key-visibility" onclick="toggleApiKeyVisibility()">Vis</button>
+          </div>
+          <small class="form-help-text">
+            🔒 <em>API-nøglen gemmes kun lokalt i din egen browser (localStorage) og sendes aldrig til andre end Googles API.</em>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">Få en gratis nøgle i Google AI Studio</a>.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="portrait-extra-desc">
+            <strong>Valgfri ekstra beskrivelse:</strong>
+            <small class="text-muted">(fx udseende, hårfarve, ar, udtryk, kappe)</small>
+          </label>
+          <input type="text" id="portrait-extra-desc" placeholder="Fx: Vildt rødt hår, ar over venstre øje, mørk kappe, selvsikkert smil">
+        </div>
+
+        <div class="form-group">
+          <div class="prompt-header-row">
+            <label for="portrait-prompt-input">
+              <strong>Fuld AI-prompt:</strong>
+              <small class="text-muted">(kan redigeres direkte før generering)</small>
+            </label>
+            <button type="button" class="btn-link" onclick="resetPromptToDefault()">Gendan forslag</button>
+          </div>
+          <textarea id="portrait-prompt-input" rows="4"></textarea>
+        </div>
+
+        <div id="modal-error-box" class="modal-error-box" style="display: none;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closePortraitModal()">Annuller</button>
+        <button type="button" class="btn" id="modal-submit-btn" onclick="submitGeneratePortrait()">✨ Generér portræt</button>
+      </div>
+    </div>
+  </div>
 
   <script src="data.js"></script>
   <script src="app.js"></script>
