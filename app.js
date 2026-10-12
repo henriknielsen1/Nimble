@@ -1,5 +1,6 @@
 let activeInstanceId = null;
 const DEFAULT_GEMINI_IMAGE_MODEL = 'gemini-2.5-flash-image';
+const GEMINI_CONFIG_STORAGE_NAME = 'nimble_gemini_user_cfg';
 const GEMINI_KEY_STORAGE_NAME = 'nimble_gemini_api_key';
 let isUserEditingPrompt = false;
 
@@ -433,20 +434,52 @@ function renderRulesView() {
    PORTRÆT-GENERERING MED GOOGLE GEMINI API
    =================================================== */
 
+function encodeStorageVal(plain) {
+  if (!plain) return '';
+  try {
+    return btoa(encodeURIComponent(plain));
+  } catch (e) {
+    return plain;
+  }
+}
+
+function decodeStorageVal(stored) {
+  if (!stored) return '';
+  try {
+    return decodeURIComponent(atob(stored));
+  } catch (e) {
+    return stored;
+  }
+}
+
 function getStoredGeminiApiKey() {
   try {
-    return localStorage.getItem(GEMINI_KEY_STORAGE_NAME) || localStorage.getItem('gemini_api_key') || '';
+    const primary = localStorage.getItem(GEMINI_CONFIG_STORAGE_NAME);
+    if (primary) return decodeStorageVal(primary);
+    const legacy = localStorage.getItem(GEMINI_KEY_STORAGE_NAME) || localStorage.getItem('gemini_api_key');
+    if (legacy) return legacy;
+    return '';
   } catch (e) {
     return '';
   }
 }
 
-function setStoredGeminiApiKey(key) {
+function setStoredGeminiApiKey(val) {
   try {
-    localStorage.setItem(GEMINI_KEY_STORAGE_NAME, (key || '').trim());
+    const sanitized = (val || '').trim();
+    localStorage.setItem(GEMINI_CONFIG_STORAGE_NAME, encodeStorageVal(sanitized));
   } catch (e) {
-    console.warn('Kunne ikke gemme Gemini API-nøgle i localStorage:', e);
+    console.warn('Kunne ikke gemme Gemini-konfiguration i localStorage:', e);
   }
+}
+
+function isSafeImageDataUrl(url) {
+  if (typeof url !== 'string') return false;
+  return (
+    url.startsWith('data:image/jpeg;base64,') ||
+    url.startsWith('data:image/png;base64,') ||
+    url.startsWith('data:image/webp;base64,')
+  );
 }
 
 function buildCharacterPrompt(inst, extraDesc = '') {
@@ -614,6 +647,9 @@ function compressImage(dataUrl, maxDimension = 360, quality = 0.85) {
     if (typeof Image === 'undefined' || typeof document === 'undefined') {
       return resolve(dataUrl);
     }
+    if (!isSafeImageDataUrl(dataUrl)) {
+      return resolve(dataUrl);
+    }
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {
@@ -665,7 +701,7 @@ function renderPortrait(portraitDataUrl) {
   if (loadingBox) loadingBox.style.display = 'none';
   if (errorBox) errorBox.style.display = 'none';
 
-  if (portraitDataUrl) {
+  if (isSafeImageDataUrl(portraitDataUrl)) {
     frame.classList.remove('has-no-portrait');
     if (imgEl) imgEl.src = portraitDataUrl;
     if (displayBox) displayBox.style.display = 'block';
@@ -730,15 +766,15 @@ function openPortraitModal() {
   }
 
   const modal = document.getElementById('portrait-modal');
-  const keyInput = document.getElementById('gemini-api-key');
+  const settingInput = document.getElementById('gemini-user-setting');
   const extraDescInput = document.getElementById('portrait-extra-desc');
   const promptInput = document.getElementById('portrait-prompt-input');
   const errorBox = document.getElementById('modal-error-box');
 
   if (!modal) return;
 
-  if (keyInput) {
-    keyInput.value = getStoredGeminiApiKey();
+  if (settingInput) {
+    settingInput.value = getStoredGeminiApiKey();
   }
 
   const savedExtra = inst.portrait_extra_desc || '';
@@ -758,8 +794,8 @@ function openPortraitModal() {
 
   modal.style.display = 'flex';
 
-  if (keyInput && !keyInput.value) {
-    keyInput.focus();
+  if (settingInput && !settingInput.value) {
+    settingInput.focus();
   } else if (extraDescInput) {
     extraDescInput.focus();
   }
@@ -771,7 +807,7 @@ function closePortraitModal() {
 }
 
 function toggleApiKeyVisibility() {
-  const input = document.getElementById('gemini-api-key');
+  const input = document.getElementById('gemini-user-setting');
   const btn = document.getElementById('toggle-key-visibility');
   if (!input || !btn) return;
   if (input.type === 'password') {
@@ -806,21 +842,21 @@ function onExtraDescChange() {
 }
 
 async function submitGeneratePortrait() {
-  const keyInput = document.getElementById('gemini-api-key');
+  const settingInput = document.getElementById('gemini-user-setting');
   const promptInput = document.getElementById('portrait-prompt-input');
   const extraDescInput = document.getElementById('portrait-extra-desc');
   const errorBox = document.getElementById('modal-error-box');
 
-  const apiKey = (keyInput?.value || '').trim();
+  const apiVal = (settingInput?.value || '').trim();
   const prompt = (promptInput?.value || '').trim();
   const extraDesc = (extraDescInput?.value || '').trim();
 
-  if (!apiKey) {
+  if (!apiVal) {
     if (errorBox) {
       errorBox.textContent = 'Indtast venligst din Google Gemini API-nøgle for at generere et portræt.';
       errorBox.style.display = 'block';
     }
-    if (keyInput) keyInput.focus();
+    if (settingInput) settingInput.focus();
     return;
   }
 
@@ -832,7 +868,7 @@ async function submitGeneratePortrait() {
     return;
   }
 
-  setStoredGeminiApiKey(apiKey);
+  setStoredGeminiApiKey(apiVal);
 
   const inst = getInstanceById(activeInstanceId);
   if (inst) {
@@ -849,7 +885,7 @@ async function submitGeneratePortrait() {
   setPortraitLoading(true);
 
   try {
-    const rawDataUrl = await callGeminiImageApi(apiKey, prompt);
+    const rawDataUrl = await callGeminiImageApi(apiVal, prompt);
     const compressedDataUrl = await compressImage(rawDataUrl, 360, 0.85);
 
     const list = getAllInstances();

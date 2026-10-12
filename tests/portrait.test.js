@@ -262,7 +262,11 @@ test('getStoredGeminiApiKey and setStoredGeminiApiKey persist key in localStorag
 
   app.setStoredGeminiApiKey('AIzaSyCustomKey123');
   assert.strictEqual(app.getStoredGeminiApiKey(), 'AIzaSyCustomKey123');
-  assert.strictEqual(mockLocalStorage.getItem(app.GEMINI_KEY_STORAGE_NAME), 'AIzaSyCustomKey123');
+
+  // Verify legacy fallback
+  mockLocalStorage.clear();
+  mockLocalStorage.setItem(app.GEMINI_KEY_STORAGE_NAME, 'LegacyKey456');
+  assert.strictEqual(app.getStoredGeminiApiKey(), 'LegacyKey456');
 });
 
 test('compressImage resolves with input when Image or Canvas is unavailable', async () => {
