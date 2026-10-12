@@ -1,4 +1,7 @@
 let activeInstanceId = null;
+const DEFAULT_GEMINI_IMAGE_MODEL = 'gemini-2.5-flash-image';
+const GEMINI_KEY_STORAGE_NAME = 'nimble_gemini_api_key';
+let isUserEditingPrompt = false;
 
 window.addEventListener('DOMContentLoaded', () => {
   populateDropdown();
@@ -6,6 +9,26 @@ window.addEventListener('DOMContentLoaded', () => {
   renderRulesView();
   ['f-gp', 'f-sp', 'f-cp'].forEach(id => {
     document.getElementById(id).addEventListener('input', () => updateInventorySummary());
+  });
+
+  const extraDescEl = document.getElementById('portrait-extra-desc');
+  if (extraDescEl) {
+    extraDescEl.addEventListener('input', onExtraDescChange);
+  }
+  const promptInputEl = document.getElementById('portrait-prompt-input');
+  if (promptInputEl) {
+    promptInputEl.addEventListener('input', () => {
+      isUserEditingPrompt = true;
+    });
+  }
+  const modalEl = document.getElementById('portrait-modal');
+  if (modalEl) {
+    modalEl.addEventListener('click', (e) => {
+      if (e.target === modalEl) closePortraitModal();
+    });
+  }
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closePortraitModal();
   });
 
   const lastId = localStorage.getItem('nimble_last_active');
@@ -136,6 +159,8 @@ function loadInstance(instanceId) {
   updateInventorySummary();
 
   document.getElementById('f-notes').value = inst.notes || '';
+
+  renderPortrait(inst.portrait || null);
 
   syncPrintMirrors();
   switchView('sheet');
@@ -402,4 +427,476 @@ function renderRulesView() {
     <p>${r.inventory.desc}</p>
     <ul>${r.inventory.items.map(i => `<li>${i}</li>`).join('')}</ul>
   `;
+}
+
+/* ===================================================
+   PORTRÆT-GENERERING MED GOOGLE GEMINI API
+   =================================================== */
+
+function getStoredGeminiApiKey() {
+  try {
+    return localStorage.getItem(GEMINI_KEY_STORAGE_NAME) || localStorage.getItem('gemini_api_key') || '';
+  } catch (e) {
+    return '';
+  }
+}
+
+function setStoredGeminiApiKey(key) {
+  try {
+    localStorage.setItem(GEMINI_KEY_STORAGE_NAME, (key || '').trim());
+  } catch (e) {
+    console.warn('Kunne ikke gemme Gemini API-nøgle i localStorage:', e);
+  }
+}
+
+function buildCharacterPrompt(inst, extraDesc = '') {
+  if (!inst) return '';
+
+  const name = inst.character_name || '';
+  const ancestry = inst.ancestry || '';
+  const charClass = inst.class || '';
+  const level = inst.level ? `Level ${inst.level}` : '';
+  const background = inst.background || '';
+  const alignment = inst.alignment || '';
+  const gender = inst.gender || '';
+  const age = inst.age ? `${inst.age} years old` : '';
+
+  // Uddrag visuelle kendetegn fra inst.appearance eller "Kendetegn" i noter
+  let visualTraits = inst.appearance || '';
+  if (inst.notes) {
+    const match = inst.notes.match(/Kendetegn:\s*([^\n]+)/i);
+    if (match && match[1]) {
+      const traitText = match[1].trim().replace(/\.$/, '');
+      visualTraits = visualTraits ? `${visualTraits}, ${traitText}` : traitText;
+    }
+  }
+
+  // Uddrag udstyr og påklædning fra rygsæk/inventory
+  let gearSummary = '';
+  const inventory = Array.isArray(inst.inventory)
+    ? inst.inventory
+    : String(inst.inventory || '').split('\n').filter(Boolean);
+  if (inventory.length > 0) {
+    const topGear = inventory
+      .slice(0, 3)
+      .map(item => item.replace(/\(.*?\)/g, '').replace(/Slot \d+:/i, '').replace(/Småting:/i, '').trim())
+      .filter(Boolean);
+    if (topGear.length > 0) {
+      gearSummary = topGear.join(', ');
+    }
+  }
+
+  const quote = inst.quote ? `Atmosphere and expression: "${inst.quote}"` : '';
+
+  const details = [
+    name ? `Character named ${name}` : '',
+    gender,
+    age,
+    ancestry,
+    charClass,
+    level,
+    background ? `Background: ${background}` : '',
+    alignment ? `Alignment: ${alignment}` : '',
+    visualTraits ? `Appearance: ${visualTraits}` : '',
+    gearSummary ? `Equipment and attire: ${gearSummary}` : '',
+    quote,
+    extraDesc && extraDesc.trim() ? `Additional user details: ${extraDesc.trim()}` : ''
+  ].filter(Boolean).join('. ');
+
+  return `Fantasy tabletop RPG character bust portrait, digital painting, dramatic cinematic lighting, rich painterly fantasy art style, detailed face and attire, upper body framed portrait, atmospheric background. ${details}. High quality character art, highly detailed.`;
+}
+
+async function callGeminiImageApi(apiKey, prompt, model = DEFAULT_GEMINI_IMAGE_MODEL) {
+  if (!apiKey || !apiKey.trim()) {
+    throw new Error('Mangler Gemini API-nøgle. Indtast venligst din API-nøgle fra Google AI Studio.');
+  }
+
+  const trimmedKey = apiKey.trim();
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(trimmedKey)}`;
+
+  let response;
+  try {
+    response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': trimmedKey
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              { text: prompt }
+            ]
+          }
+        ],
+        generationConfig: {
+          responseModalities: ['IMAGE']
+        }
+      })
+    });
+  } catch (netErr) {
+    throw new Error('Netværksfejl: Kunne ikke få forbindelse til Google Gemini API. Kontrollér din internetforbindelse.');
+  }
+
+  let data;
+  try {
+    data = await response.json();
+  } catch (parseErr) {
+    throw new Error(`Uventet svarformat fra Gemini API (status ${response.status}).`);
+  }
+
+  if (!response.ok) {
+    const errMsg = data?.error?.message || response.statusText || 'Ukendt fejl';
+    if (response.status === 400 && /API_KEY_INVALID|invalid api key/i.test(errMsg)) {
+      throw new Error('Ugyldig Gemini API-nøgle (400). Kontrollér at din nøgle fra Google AI Studio er kopieret korrekt.');
+    }
+    if (response.status === 403) {
+      throw new Error(`Adgang nægtet (403): ${errMsg}. Tjek om Gemini API er aktiveret for dit projekt.`);
+    }
+    if (response.status === 429) {
+      throw new Error('Rate limit overskredet (429). Google har midlertidigt begrænset antallet af anmodninger. Vent et øjeblik og prøv igen.');
+    }
+    if (response.status >= 500) {
+      throw new Error(`Google serverfejl (${response.status}). Prøv igen om et øjeblik.`);
+    }
+    throw new Error(`Fejl fra Gemini API (${response.status}): ${errMsg}`);
+  }
+
+  if (data.promptFeedback?.blockReason) {
+    throw new Error(`Prompten blev blokeret af Googles sikkerhedsfilter (${data.promptFeedback.blockReason}). Prøv at ændre beskrivelsen.`);
+  }
+
+  const candidate = data.candidates?.[0];
+  if (!candidate) {
+    throw new Error('Gemini API returnerede intet resultat.');
+  }
+
+  if (candidate.finishReason && !['STOP', 'MAX_TOKENS'].includes(candidate.finishReason)) {
+    if (candidate.finishReason === 'SAFETY') {
+      throw new Error('Billedet blev blokeret af Googles sikkerhedsfilter (Safety). Justér venligst prompten.');
+    }
+    if (candidate.finishReason === 'BLOCKLIST' || candidate.finishReason === 'PROHIBITED_CONTENT') {
+      throw new Error(`Genereringen blev afvist (${candidate.finishReason}). Prøv en anden beskrivelse.`);
+    }
+  }
+
+  let base64 = null;
+  let mimeType = 'image/png';
+  let textFound = '';
+
+  if (candidate.content?.parts && Array.isArray(candidate.content.parts)) {
+    for (const part of candidate.content.parts) {
+      const inline = part.inlineData || part.inline_data;
+      if (inline && inline.data) {
+        base64 = inline.data;
+        mimeType = inline.mimeType || inline.mime_type || 'image/png';
+        break;
+      }
+      if (part.text) {
+        textFound += part.text;
+      }
+    }
+  }
+
+  if (!base64) {
+    if (textFound) {
+      throw new Error(`Gemini returnerede tekst i stedet for et billede: "${textFound.slice(0, 150)}..."`);
+    }
+    throw new Error('Intet billede fundet i svaret fra Gemini API.');
+  }
+
+  return `data:${mimeType};base64,${base64}`;
+}
+
+function compressImage(dataUrl, maxDimension = 360, quality = 0.85) {
+  return new Promise((resolve) => {
+    if (typeof Image === 'undefined' || typeof document === 'undefined') {
+      return resolve(dataUrl);
+    }
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        let width = img.naturalWidth || img.width;
+        let height = img.naturalHeight || img.height;
+        if (!width || !height) return resolve(dataUrl);
+
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return resolve(dataUrl);
+
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressed = canvas.toDataURL('image/jpeg', quality);
+        resolve(compressed);
+      } catch (err) {
+        console.warn('Canvas compression error:', err);
+        resolve(dataUrl);
+      }
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  });
+}
+
+function renderPortrait(portraitDataUrl) {
+  const frame = document.getElementById('sheet-portrait-frame');
+  const imgEl = document.getElementById('f-portrait-img');
+  const displayBox = document.getElementById('portrait-display');
+  const placeholderBox = document.getElementById('portrait-placeholder');
+  const loadingBox = document.getElementById('portrait-loading');
+  const errorBox = document.getElementById('portrait-error');
+  const actionsBar = document.getElementById('portrait-actions-bar');
+
+  if (!frame) return;
+
+  if (loadingBox) loadingBox.style.display = 'none';
+  if (errorBox) errorBox.style.display = 'none';
+
+  if (portraitDataUrl) {
+    frame.classList.remove('has-no-portrait');
+    if (imgEl) imgEl.src = portraitDataUrl;
+    if (displayBox) displayBox.style.display = 'block';
+    if (placeholderBox) placeholderBox.style.display = 'none';
+    if (actionsBar) actionsBar.style.display = 'flex';
+  } else {
+    frame.classList.add('has-no-portrait');
+    if (imgEl) imgEl.src = '';
+    if (displayBox) displayBox.style.display = 'none';
+    if (placeholderBox) placeholderBox.style.display = 'flex';
+    if (actionsBar) actionsBar.style.display = 'none';
+  }
+}
+
+function setPortraitLoading(isLoading) {
+  const displayBox = document.getElementById('portrait-display');
+  const placeholderBox = document.getElementById('portrait-placeholder');
+  const loadingBox = document.getElementById('portrait-loading');
+  const errorBox = document.getElementById('portrait-error');
+  const actionsBar = document.getElementById('portrait-actions-bar');
+
+  if (isLoading) {
+    if (loadingBox) loadingBox.style.display = 'flex';
+    if (displayBox) displayBox.style.display = 'none';
+    if (placeholderBox) placeholderBox.style.display = 'none';
+    if (errorBox) errorBox.style.display = 'none';
+    if (actionsBar) actionsBar.style.display = 'none';
+  } else {
+    if (loadingBox) loadingBox.style.display = 'none';
+  }
+}
+
+function setPortraitError(errorMsg) {
+  const loadingBox = document.getElementById('portrait-loading');
+  const errorBox = document.getElementById('portrait-error');
+  const errorMsgEl = document.getElementById('portrait-error-msg');
+  const placeholderBox = document.getElementById('portrait-placeholder');
+  const displayBox = document.getElementById('portrait-display');
+  const actionsBar = document.getElementById('portrait-actions-bar');
+
+  if (loadingBox) loadingBox.style.display = 'none';
+  if (displayBox) displayBox.style.display = 'none';
+  if (placeholderBox) placeholderBox.style.display = 'none';
+  if (actionsBar) actionsBar.style.display = 'none';
+
+  if (errorBox) {
+    errorBox.style.display = 'flex';
+    if (errorMsgEl) errorMsgEl.textContent = errorMsg;
+  }
+}
+
+function dismissPortraitError() {
+  const inst = getInstanceById(activeInstanceId);
+  renderPortrait(inst?.portrait || null);
+}
+
+function openPortraitModal() {
+  const inst = getInstanceById(activeInstanceId);
+  if (!inst) {
+    alert('Vælg eller opret venligst en karakter først.');
+    return;
+  }
+
+  const modal = document.getElementById('portrait-modal');
+  const keyInput = document.getElementById('gemini-api-key');
+  const extraDescInput = document.getElementById('portrait-extra-desc');
+  const promptInput = document.getElementById('portrait-prompt-input');
+  const errorBox = document.getElementById('modal-error-box');
+
+  if (!modal) return;
+
+  if (keyInput) {
+    keyInput.value = getStoredGeminiApiKey();
+  }
+
+  const savedExtra = inst.portrait_extra_desc || '';
+  if (extraDescInput) {
+    extraDescInput.value = savedExtra;
+  }
+
+  isUserEditingPrompt = false;
+  if (promptInput) {
+    promptInput.value = buildCharacterPrompt(inst, savedExtra);
+  }
+
+  if (errorBox) {
+    errorBox.style.display = 'none';
+    errorBox.textContent = '';
+  }
+
+  modal.style.display = 'flex';
+
+  if (keyInput && !keyInput.value) {
+    keyInput.focus();
+  } else if (extraDescInput) {
+    extraDescInput.focus();
+  }
+}
+
+function closePortraitModal() {
+  const modal = document.getElementById('portrait-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function toggleApiKeyVisibility() {
+  const input = document.getElementById('gemini-api-key');
+  const btn = document.getElementById('toggle-key-visibility');
+  if (!input || !btn) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = 'Skjul';
+  } else {
+    input.type = 'password';
+    btn.textContent = 'Vis';
+  }
+}
+
+function resetPromptToDefault() {
+  const inst = getInstanceById(activeInstanceId);
+  if (!inst) return;
+  const extraDesc = document.getElementById('portrait-extra-desc')?.value || '';
+  const promptInput = document.getElementById('portrait-prompt-input');
+  if (promptInput) {
+    promptInput.value = buildCharacterPrompt(inst, extraDesc);
+  }
+  isUserEditingPrompt = false;
+}
+
+function onExtraDescChange() {
+  if (isUserEditingPrompt) return;
+  const inst = getInstanceById(activeInstanceId);
+  if (!inst) return;
+  const extraDesc = document.getElementById('portrait-extra-desc')?.value || '';
+  const promptInput = document.getElementById('portrait-prompt-input');
+  if (promptInput) {
+    promptInput.value = buildCharacterPrompt(inst, extraDesc);
+  }
+}
+
+async function submitGeneratePortrait() {
+  const keyInput = document.getElementById('gemini-api-key');
+  const promptInput = document.getElementById('portrait-prompt-input');
+  const extraDescInput = document.getElementById('portrait-extra-desc');
+  const errorBox = document.getElementById('modal-error-box');
+
+  const apiKey = (keyInput?.value || '').trim();
+  const prompt = (promptInput?.value || '').trim();
+  const extraDesc = (extraDescInput?.value || '').trim();
+
+  if (!apiKey) {
+    if (errorBox) {
+      errorBox.textContent = 'Indtast venligst din Google Gemini API-nøgle for at generere et portræt.';
+      errorBox.style.display = 'block';
+    }
+    if (keyInput) keyInput.focus();
+    return;
+  }
+
+  if (!prompt) {
+    if (errorBox) {
+      errorBox.textContent = 'Prompten må ikke være tom.';
+      errorBox.style.display = 'block';
+    }
+    return;
+  }
+
+  setStoredGeminiApiKey(apiKey);
+
+  const inst = getInstanceById(activeInstanceId);
+  if (inst) {
+    inst.portrait_extra_desc = extraDesc;
+    const list = getAllInstances();
+    const idx = list.findIndex(x => x.instance_id === activeInstanceId);
+    if (idx !== -1) {
+      list[idx].portrait_extra_desc = extraDesc;
+      saveAllInstances(list);
+    }
+  }
+
+  closePortraitModal();
+  setPortraitLoading(true);
+
+  try {
+    const rawDataUrl = await callGeminiImageApi(apiKey, prompt);
+    const compressedDataUrl = await compressImage(rawDataUrl, 360, 0.85);
+
+    const list = getAllInstances();
+    const idx = list.findIndex(x => x.instance_id === activeInstanceId);
+    if (idx !== -1) {
+      list[idx].portrait = compressedDataUrl;
+      try {
+        saveAllInstances(list);
+      } catch (quotaErr) {
+        if (quotaErr.name === 'QuotaExceededError') {
+          alert('Lagerpladsen i din browser (localStorage) er fuld. Billedet vises på arket, men kunne ikke gemmes permanent.');
+        }
+      }
+      renderSavedInstancesList();
+    }
+    renderPortrait(compressedDataUrl);
+  } catch (err) {
+    console.error('Portrait generation failed:', err);
+    setPortraitError(err.message || 'Der opstod en uventet fejl under genereringen.');
+  }
+}
+
+function removePortrait() {
+  if (!confirm('Vil du fjerne portrættet for denne karakter?')) return;
+  if (!activeInstanceId) return;
+
+  const list = getAllInstances();
+  const idx = list.findIndex(x => x.instance_id === activeInstanceId);
+  if (idx !== -1) {
+    delete list[idx].portrait;
+    saveAllInstances(list);
+    renderSavedInstancesList();
+  }
+  renderPortrait(null);
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    DEFAULT_GEMINI_IMAGE_MODEL,
+    GEMINI_KEY_STORAGE_NAME,
+    buildCharacterPrompt,
+    callGeminiImageApi,
+    compressImage,
+    getStoredGeminiApiKey,
+    setStoredGeminiApiKey,
+    renderPortrait,
+    setPortraitLoading,
+    setPortraitError
+  };
 }

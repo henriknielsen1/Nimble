@@ -406,6 +406,296 @@ textarea {
   display: none;
 }
 
+/* ===================================================
+   PORTRÆT & GEMINI API STYLES
+   =================================================== */
+
+.sheet-top-banner {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  margin-bottom: 0.65rem;
+}
+
+.sheet-portrait-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.sheet-portrait-frame {
+  width: 140px;
+  min-width: 140px;
+  height: 140px;
+  border: 2px solid var(--border-strong);
+  border-radius: 9px;
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 3px 8px rgba(32, 59, 50, 0.08);
+}
+
+.sheet-header-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.portrait-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+.portrait-placeholder-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+  opacity: 0.65;
+}
+
+.portrait-placeholder-text {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.btn-portrait-cta {
+  font-size: 0.74rem;
+  padding: 0.3rem 0.55rem;
+  margin-top: 0.2rem;
+  white-space: nowrap;
+}
+
+.portrait-display {
+  width: 100%;
+  height: 100%;
+}
+
+.portrait-display img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.portrait-actions-bar {
+  display: flex;
+  gap: 0.35rem;
+  justify-content: center;
+  width: 100%;
+}
+
+.portrait-actions-bar .btn {
+  font-size: 0.72rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.portrait-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--primary);
+  width: 100%;
+  height: 100%;
+}
+
+.portrait-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(49, 95, 77, 0.2);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: portrait-spin 0.8s linear infinite;
+}
+
+@keyframes portrait-spin {
+  to { transform: rotate(360deg); }
+}
+
+.portrait-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--danger);
+  line-height: 1.25;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.portrait-error-actions {
+  display: flex;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+}
+
+.portrait-error-actions .btn {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.4rem;
+}
+
+/* Modal dialog */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(20, 35, 28, 0.65);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-card {
+  background: var(--surface);
+  border: 2px solid var(--gold);
+  border-radius: 10px;
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 0.85rem 1.25rem;
+  background: linear-gradient(110deg, #203b32, #315346);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--gold);
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 1.15rem;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  color: #fffdf8;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 0.25rem;
+}
+
+.modal-close-btn:hover {
+  color: var(--gold);
+}
+
+.modal-body {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.modal-footer {
+  padding: 0.75rem 1.2rem;
+  background: var(--accent);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.form-group label {
+  font-size: 0.88rem;
+  color: var(--text-main);
+}
+
+.form-help-text {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.form-help-text a {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.api-key-input-wrapper {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.api-key-input-wrapper input {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.prompt-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--primary);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.btn-link:hover {
+  color: var(--primary-hover);
+}
+
+.modal-error-box {
+  background: #fdf2f2;
+  border-left: 3px solid var(--danger);
+  color: var(--danger);
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  border-radius: 4px;
+}
+
+.btn-sm {
+  padding: 0.3rem 0.55rem;
+  font-size: 0.75rem;
+}
+
 @media screen and (max-width: 760px) {
   header.no-print {
     align-items: stretch;
@@ -463,6 +753,16 @@ textarea {
   .action-bar > .btn {
     min-height: 44px;
     padding: 0.5rem;
+  }
+
+  .sheet-top-banner {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .sheet-header-main {
+    width: 100%;
   }
 
   .sheet-header {
@@ -823,5 +1123,41 @@ textarea {
 
   .sheet-quote {
     margin-bottom: 0.4rem;
+  }
+
+  /* Portræt på print */
+  .portrait-placeholder,
+  .portrait-loading,
+  .portrait-error,
+  .portrait-actions-bar,
+  .btn-portrait-cta {
+    display: none !important;
+  }
+
+  .sheet-portrait-frame {
+    width: 28mm !important;
+    height: 28mm !important;
+    min-width: 28mm !important;
+    border: 1.5px solid #315346 !important;
+    border-radius: 4px !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  .sheet-portrait-frame.has-no-portrait {
+    display: none !important;
+  }
+
+  .sheet-portrait-frame img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .sheet-top-banner {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 5mm !important;
+    margin-bottom: 2mm !important;
   }
 }
