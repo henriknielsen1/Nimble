@@ -548,11 +548,19 @@ function buildCharacterPrompt(inst, extraDesc = '', style = DEFAULT_PORTRAIT_STY
     ? ` Important additional details from the user, which take priority over everything above: ${extraDesc.trim()}.`
     : '';
 
+  const styleAddendum = style === 'custom'
+    ? ''
+    : ` Style target: ${styleText}.`;
+
   return `Fantasy tabletop RPG character bust portrait, half-body, painted as ${styleText}. ` +
+    `Use a highly illustrative, hand-made look with watercolor washes, cel shading, comic-book clarity, and sketch linework. ` +
+    `Visible pencil sketch marks, ink contours, paper texture, loose brush edges, and simple but expressive shapes. ` +
+    `Avoid polished AI look; keep it artistically drawn, imperfect, and characterful. ` +
     `Grounded and diverse character design with a natural, individual face. The background is simple and loosely painted, like a textured wash of color. ` +
     `Square composition for a small 28x28 mm print: the subject is centered, with nothing important near the edges. ` +
     (description ? `${description}. ` : '') +
-    `Avoid: photorealism, 3D render look, glossy or airbrushed skin, plastic sheen, over-sharpened detail, lens flare, neon rim lighting, heavy bokeh, excessive glow or particles, a generic epic fantasy poster composition, symmetrical stock faces, text, watermarks, and borders.` +
+    `Avoid: photorealism, 3D render look, glossy or airbrushed skin, plastic sheen, over-sharpened detail, lens flare, neon rim lighting, heavy bokeh, excessive glow or particles, a generic epic fantasy poster composition, symmetrical stock faces, text, watermarks, borders, and overly smooth corporate illustration styling.` +
+    styleAddendum +
     extra;
 }
 
