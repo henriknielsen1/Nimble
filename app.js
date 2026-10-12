@@ -1,5 +1,5 @@
 let activeInstanceId = null;
-const DEFAULT_GEMINI_IMAGE_MODEL = 'gemini-2.5-flash-image';
+const DEFAULT_GEMINI_IMAGE_MODEL = 'gemini-3.1-flash-image';
 const GEMINI_CONFIG_STORAGE_NAME = 'nimble_gemini_user_cfg';
 const GEMINI_KEY_STORAGE_NAME = 'nimble_gemini_api_key';
 let isUserEditingPrompt = false;
