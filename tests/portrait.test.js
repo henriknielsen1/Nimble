@@ -324,7 +324,7 @@ test('renderPortrait updates DOM elements appropriately', () => {
   try {
     // 1. Render with dataUrl
     app.renderPortrait('data:image/jpeg;base64,1234');
-    assert.strictEqual(elements['f-portrait-img'].src, 'data:image/jpeg;base64,1234');
+    assert.match(elements['f-portrait-img'].src, /^blob:/);
     assert.strictEqual(elements['portrait-display'].style.display, 'block');
     assert.strictEqual(elements['portrait-placeholder'].style.display, 'none');
     assert.strictEqual(elements['portrait-actions-bar'].style.display, 'flex');

@@ -642,6 +642,27 @@ async function callGeminiImageApi(apiKey, prompt, model = DEFAULT_GEMINI_IMAGE_M
   return `data:${mimeType};base64,${base64}`;
 }
 
+let currentPortraitObjectUrl = null;
+
+function dataUrlToBlob(dataUrl) {
+  try {
+    const parts = (dataUrl || '').split(',');
+    if (parts.length < 2) return null;
+    const match = parts[0].match(/:(.*?);/);
+    const mime = match ? match[1] : 'image/jpeg';
+    if (!mime.startsWith('image/')) return null;
+    const bstr = atob(parts[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+  } catch (e) {
+    return null;
+  }
+}
+
 function compressImage(dataUrl, maxDimension = 360, quality = 0.85) {
   return new Promise((resolve) => {
     if (typeof Image === 'undefined' || typeof document === 'undefined') {
@@ -650,10 +671,16 @@ function compressImage(dataUrl, maxDimension = 360, quality = 0.85) {
     if (!isSafeImageDataUrl(dataUrl)) {
       return resolve(dataUrl);
     }
+    const blob = dataUrlToBlob(dataUrl);
+    if (!blob || typeof URL === 'undefined' || typeof URL.createObjectURL !== 'function') {
+      return resolve(dataUrl);
+    }
+    const objectUrl = URL.createObjectURL(blob);
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {
       try {
+        URL.revokeObjectURL(objectUrl);
         let width = img.naturalWidth || img.width;
         let height = img.naturalHeight || img.height;
         if (!width || !height) return resolve(dataUrl);
@@ -682,8 +709,11 @@ function compressImage(dataUrl, maxDimension = 360, quality = 0.85) {
         resolve(dataUrl);
       }
     };
-    img.onerror = () => resolve(dataUrl);
-    img.src = dataUrl;
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(dataUrl);
+    };
+    img.src = objectUrl;
   });
 }
 
@@ -701,9 +731,18 @@ function renderPortrait(portraitDataUrl) {
   if (loadingBox) loadingBox.style.display = 'none';
   if (errorBox) errorBox.style.display = 'none';
 
-  if (isSafeImageDataUrl(portraitDataUrl)) {
+  if (currentPortraitObjectUrl && typeof URL !== 'undefined' && typeof URL.revokeObjectURL === 'function') {
+    try {
+      URL.revokeObjectURL(currentPortraitObjectUrl);
+    } catch (e) {}
+    currentPortraitObjectUrl = null;
+  }
+
+  const blob = isSafeImageDataUrl(portraitDataUrl) ? dataUrlToBlob(portraitDataUrl) : null;
+  if (blob && typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function') {
     frame.classList.remove('has-no-portrait');
-    if (imgEl) imgEl.src = portraitDataUrl;
+    currentPortraitObjectUrl = URL.createObjectURL(blob);
+    if (imgEl) imgEl.src = currentPortraitObjectUrl;
     if (displayBox) displayBox.style.display = 'block';
     if (placeholderBox) placeholderBox.style.display = 'none';
     if (actionsBar) actionsBar.style.display = 'flex';
