@@ -399,39 +399,46 @@ function exportCurrentInstance() {
 function renderRulesView() {
   const container = document.getElementById('rules-content');
   const r = NIMBLE_DATA.rules;
+  const sections = [
+    ['actions', r.actions],
+    ['attacks', r.attacks],
+    ['defense', r.defense],
+    ['saves', r.saves],
+    ['dying', r.dying],
+    ['rest', r.rest],
+    ['inventory', r.inventory]
+  ];
 
   container.innerHTML = `
-    <h3>${r.actions.title}</h3>
-    <p>${r.actions.desc}</p>
-    <ul>${r.actions.items.map(i => `<li>${i}</li>`).join('')}</ul>
-    <div class="rules-box">
-      <strong>${r.actions.refreshNote}</strong>
+    <p class="rules-intro">Vælg et emne for at folde reglerne ud. Brug hurtigmenuen til at springe direkte til det, du leder efter.</p>
+    <nav class="rules-quick-nav" aria-label="Hurtig adgang til regler">
+      ${sections.map(([key, section]) => `
+        <a class="rules-quick-link" href="#rules-${key}">${section.title}</a>
+      `).join('')}
+    </nav>
+    <div class="rules-grid">
+      ${sections.map(([key, section]) => `
+        <details class="rules-section" id="rules-${key}">
+          <summary>
+            <span>${section.title}</span>
+            <span class="rules-section-count">${section.items.length} punkter</span>
+          </summary>
+          <div class="rules-section-content">
+            <p>${section.desc}</p>
+            <ul>${section.items.map(i => `<li>${i}</li>`).join('')}</ul>
+            ${section.refreshNote ? `<div class="rules-box"><strong>${section.refreshNote}</strong></div>` : ''}
+          </div>
+        </details>
+      `).join('')}
     </div>
-
-    <h3>${r.attacks.title}</h3>
-    <p>${r.attacks.desc}</p>
-    <ul>${r.attacks.items.map(i => `<li>${i}</li>`).join('')}</ul>
-
-    <h3>${r.defense.title}</h3>
-    <p>${r.defense.desc}</p>
-    <ul>${r.defense.items.map(i => `<li>${i}</li>`).join('')}</ul>
-
-    <h3>${r.saves.title}</h3>
-    <p>${r.saves.desc}</p>
-    <ul>${r.saves.items.map(i => `<li>${i}</li>`).join('')}</ul>
-
-    <h3>${r.dying.title}</h3>
-    <p>${r.dying.desc}</p>
-    <ul>${r.dying.items.map(i => `<li>${i}</li>`).join('')}</ul>
-
-    <h3>${r.rest.title}</h3>
-    <p>${r.rest.desc}</p>
-    <ul>${r.rest.items.map(i => `<li>${i}</li>`).join('')}</ul>
-
-    <h3>${r.inventory.title}</h3>
-    <p>${r.inventory.desc}</p>
-    <ul>${r.inventory.items.map(i => `<li>${i}</li>`).join('')}</ul>
   `;
+
+  container.querySelectorAll('.rules-quick-link').forEach(link => {
+    link.addEventListener('click', () => {
+      const section = document.getElementById(link.hash.slice(1));
+      if (section) section.open = true;
+    });
+  });
 }
 
 /* ===================================================
