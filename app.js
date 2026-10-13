@@ -494,9 +494,9 @@ function isSafeImageDataUrl(url) {
 }
 
 const PORTRAIT_STYLE_PRESETS = {
-  daggerheart: 'modern tabletop RPG key art in the spirit of Daggerheart: hand-painted gouache and watercolor with ink linework, visible brush strokes, flat-ish painterly shapes, textured paper grain, a limited harmonious color palette, soft natural diffused light, stylized expressive features, warm and storybook-like but grounded',
-  legends: 'modern indie tabletop RPG illustration in the spirit of Legends in the Mist: loose ink linework with translucent watercolor washes, visible brush strokes and ink splatter, textured paper grain, a limited harmonious color palette, soft natural diffused light, stylized expressive features, warm and storybook-like but grounded',
-  oil: 'classic oil painting portrait with visible brushwork, a restrained earthy palette, soft natural diffused light on canvas texture, stylized expressive features, grounded and timeless'
+  daggerheart: 'bold hand-drawn fantasy illustration, opaque gouache color blocks, confident dark ink contours, a few loose watercolor accents, visible imperfect brush edges, simplified expressive face and silhouette, limited warm palette',
+  legends: 'loose storybook fantasy drawing, expressive ink contours with varied line weight, sparse translucent watercolor washes, open paper, simplified playful shapes, only a few broad shadows, limited muted palette',
+  oil: 'stylized storybook fantasy illustration painted in matte oil, simplified shapes, loose visible brushwork, expressive features and a restrained earthy palette'
 };
 const DEFAULT_PORTRAIT_STYLE = 'daggerheart';
 
@@ -548,7 +548,7 @@ function buildCharacterPrompt(inst, extraDesc = '', style = DEFAULT_PORTRAIT_STY
   if (alignment) sentences.push(`Their temperament is ${alignment}`);
   if (visualTraits) sentences.push(`They look like this: ${visualTraits}`);
   if (gearSummary) sentences.push(`They wear and carry everyday adventurer gear made of believable materials such as worn leather, wool and linen: ${gearSummary}`);
-  if (inst.quote) sentences.push(`Their expression and mood reflect: "${inst.quote}"`);
+  if (inst.quote) sentences.push(`Their expression hints at this personality: "${inst.quote}"`);
   const description = sentences.join('. ');
 
   const extra = extraDesc && extraDesc.trim()
@@ -559,14 +559,12 @@ function buildCharacterPrompt(inst, extraDesc = '', style = DEFAULT_PORTRAIT_STY
     ? ''
     : ` Style target: ${styleText}.`;
 
-  return `Fantasy tabletop RPG character bust portrait, half-body, painted as ${styleText}. ` +
-    `Use a highly illustrative, hand-made look with watercolor washes, cel shading, comic-book clarity, and sketch linework. ` +
-    `Visible pencil sketch marks, ink contours, paper texture, loose brush edges, and simple but expressive shapes. ` +
-    `Avoid polished AI look; keep it artistically drawn, imperfect, and characterful. ` +
-    `Grounded and diverse character design with a natural, individual face. The background is simple and loosely painted, like a textured wash of color. ` +
-    `Square composition for a small 28x28 mm print: the subject is centered, with nothing important near the edges. ` +
+  return `Create a simple, clearly illustrated fantasy tabletop RPG character bust portrait, chest-up, in this style: ${styleText}. ` +
+    `Make it look drawn and painted, not like a photograph: use an instantly readable silhouette, simplified expressive features, confident imperfect outlines, broad flat color areas and just a few clear shadow shapes. ` +
+    `Keep it lightly cartoon-like and full of personality, with deliberate hand-made irregularities. Use a plain, quiet background with one or two loose color shapes; keep the character as the focus. ` +
+    `Square composition for a small 28x28 mm print: center the face and shoulders and keep important features away from the edges. ` +
     (description ? `${description}. ` : '') +
-    `Avoid: photorealism, 3D render look, glossy or airbrushed skin, plastic sheen, over-sharpened detail, lens flare, neon rim lighting, heavy bokeh, excessive glow or particles, a generic epic fantasy poster composition, symmetrical stock faces, text, watermarks, borders, and overly smooth corporate illustration styling.` +
+    `Avoid: photographic or realistic rendering, realistic skin texture or pores, 3D renders, glossy or airbrushed surfaces, intricate micro-detail, dramatic cinematic lighting, lens flare, heavy gradients, bokeh, glow, particles, ornate scenery, generic epic-poster poses, stock-photo faces, text, watermarks, and borders.` +
     styleAddendum +
     extra;
 }

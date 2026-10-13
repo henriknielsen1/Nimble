@@ -360,19 +360,23 @@ test('renderPortrait updates DOM elements appropriately', () => {
 });
 
 
-test('buildCharacterPrompt uses modern TTRPG style presets and avoids AI-slop keywords', () => {
+test('buildCharacterPrompt prioritizes simple hand-drawn illustration over faux realism', () => {
   const inst = { character_name: 'Mira', ancestry: 'Elf', class: 'Mage' };
   const prompt = app.buildCharacterPrompt(inst, 'rødt hår');
-  assert.match(prompt, /gouache/);
-  assert.match(prompt, /watercolor/);
-  assert.match(prompt, /paper grain/);
-  assert.match(prompt, /Avoid: photorealism/);
-  assert.doesNotMatch(prompt, /cinematic/i);
+  assert.match(prompt, /opaque gouache color blocks/);
+  assert.match(prompt, /confident dark ink contours/);
+  assert.match(prompt, /simplified expressive features/);
+  assert.match(prompt, /broad flat color areas and just a few clear shadow shapes/);
+  assert.match(prompt, /Avoid: photographic or realistic rendering/);
+  assert.match(prompt, /dramatic cinematic lighting/);
+  assert.doesNotMatch(prompt, /photorealistic key art|soft natural diffused light|believable materials/i);
   assert.ok(prompt.indexOf('rødt hår') > prompt.indexOf('Mira'));
 
   const legends = app.buildCharacterPrompt(inst, '', 'legends');
-  assert.match(legends, /Legends in the Mist/);
+  assert.match(legends, /varied line weight/);
+  assert.match(legends, /sparse translucent watercolor washes/);
+  assert.match(legends, /open paper/);
   const oil = app.buildCharacterPrompt(inst, '', 'oil');
-  assert.match(oil, /oil painting/);
+  assert.match(oil, /stylized storybook fantasy illustration painted in matte oil/);
   assert.strictEqual(app.buildCharacterPrompt(inst, '', 'unknown'), app.buildCharacterPrompt(inst));
 });

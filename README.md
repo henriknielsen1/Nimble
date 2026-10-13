@@ -14,7 +14,7 @@ Digitalt karakterark og spillerguide til bordrollespillet (TTRPG) Nimble 2.0, by
 
 ## Karakter-portrætter med Google Gemini API
 
-I portræt-dialogen kan du vælge en **stil**: *Daggerheart-agtig gouache* (standard), *Legends in the Mist-agtig blæk & akvarel* eller *Klassisk oliemaleri*. Valget gemmes på karakteren sammen med den ekstra beskrivelse.
+I portræt-dialogen kan du vælge en **stil**: *Daggerheart-inspireret gouache & blæk* (standard), *Legends in the Mist-inspireret blæk & akvarel* eller *Stiliseret oliemaleri*. Alle valgene sigter mod en enkel, udtryksfuld illustration med tydelige former og få skygger frem for et realistisk foto-look. Valget gemmes på karakteren sammen med den ekstra beskrivelse.
 
 Karakterarket kan generere et stemningsfuldt fantasy-portræt, der automatisk skræddersys efter karakterens herkomst (ancestry), klasse, baggrund, kendetegn/udseende, udstyr og citat.
 
