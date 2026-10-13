@@ -47,6 +47,20 @@ header.no-print h1 {
   letter-spacing: 0.01em;
 }
 
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.brand-logo {
+  display: block;
+  width: clamp(100px, 14vw, 140px);
+  height: auto;
+  flex: 0 0 auto;
+}
+
 .nav-tabs {
   display: flex;
   gap: 0.5rem;
@@ -823,6 +837,16 @@ textarea {
 
   header.no-print h1 {
     text-align: center;
+  }
+
+  .brand {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.6rem;
+  }
+
+  .brand-logo {
+    width: min(140px, 38vw);
   }
 
   .nav-tabs {
