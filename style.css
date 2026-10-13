@@ -115,6 +115,11 @@ header.no-print h1 {
   margin-bottom: 1rem;
 }
 
+.sheet-layout {
+  display: flex;
+  flex-direction: column;
+}
+
 .button-group {
   display: flex;
   gap: 0.5rem;
@@ -884,6 +889,16 @@ textarea {
     gap: 0.5rem;
   }
 
+  .sheet-layout > .sheet-card {
+    order: 1;
+  }
+
+  .sheet-layout > .action-bar {
+    order: 2;
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+  }
+
   .button-group {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1163,6 +1178,10 @@ textarea {
     box-shadow: none !important;
     padding: 0.8rem !important;
     margin-bottom: 0 !important;
+  }
+
+  .sheet-layout {
+    display: block;
   }
 
   .print-page {
