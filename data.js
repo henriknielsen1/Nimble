@@ -98,10 +98,10 @@ const NIMBLE_DATA = {
       initiative: "+3",
       wounds: 0,
       stats: {
-        STR: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Might (+4)" },
-        DEX: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Finesse (+4), Stealth (+4)" },
-        INT: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Arcana (0), Examination (0), Lore (0)" },
-        WIL: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Influence (+1), Insight (+2), Naturecraft (+1), Perception (+1)" }
+        STR: { rating: "+2", key: true, save: "Neutral (1d20)",         skills: "Might (+3)" },
+        DEX: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Finesse (+4), Stealth (+3)" },
+        INT: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Arcana (-1), Examination (-1), Lore (-1)" },
+        WIL: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Influence (0), Insight (0), Naturecraft (0), Perception (0)" }
       },
       attacks: [
         { name: "Ubevæbnet slag (Unarmed Strike)", damage: "1d4 + 2", traits: "Nærkamp, trænet (kan crit'e), to næver = dual wield (Fordel 1/runde), +1 skade pr. brugt Momentum" },
@@ -142,10 +142,10 @@ const NIMBLE_DATA = {
       initiative: "+3",
       wounds: 0,
       stats: {
-        STR: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Might (+5)" },
-        DEX: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Finesse (+3), Stealth (+3)" },
-        INT: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Arcana (0), Examination (0), Lore (0)" },
-        WIL: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Influence (+1), Insight (+1), Naturecraft (+3), Perception (+2)" }
+        STR: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)",         skills: "Might (+4)" },
+        DEX: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Finesse (+2), Stealth (+2)" },
+        INT: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Arcana (-1), Examination (-1), Lore (-1)" },
+        WIL: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Influence (0), Insight (0), Naturecraft (+1), Perception (+1)" }
       },
       attacks: [
         { name: "Battleaxe (stridsøkse)", damage: "1d10 + 2 + Fury Dice (1d4 hver)", traits: "Slashing, Nærkamp, Tohånds" }
@@ -179,7 +179,7 @@ const NIMBLE_DATA = {
       quote: "En urokkelig, svært pansret beskytter, der kanaliserer guddommelig glans i sine knusende slag og holder sine forbundsfæller oprejst.",
       hp: 17,
       hp_max: 17,
-      hit_die: "3d10",
+      hit_die: "1d10",
       defense: 8,
       defense_calc: "Rusty Mail 6 + DEX 0 + Wooden Buckler 2",
       speed: "5 felter",
@@ -277,9 +277,9 @@ const NIMBLE_DATA = {
       wounds: 0,
       stats: {
         STR: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Might (0)" },
-        DEX: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Finesse (+2), Stealth (+4)" },
+        DEX: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)",         skills: "Finesse (+2), Stealth (+3)" },
         INT: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Arcana (-1), Examination (-1), Lore (-1)" },
-        WIL: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Influence (+2), Insight (+3), Naturecraft (+5), Perception (+2)" }
+        WIL: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Influence (+2), Insight (+3), Naturecraft (+4), Perception (+2)" }
       },
       attacks: [
         { name: "Shortbow (kortbue)", damage: "1d6 + 2", traits: "Piercing, Tohånds, Range 12" },
@@ -322,10 +322,10 @@ const NIMBLE_DATA = {
       initiative: "+3",
       wounds: 0,
       stats: {
-        STR: { rating: "-1", key: false, save: "Neutral (1d20)", skills: "Might (0)" },
-        DEX: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Finesse (+4), Stealth (+5)" },
-        INT: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Arcana (+3), Examination (+4), Lore (+3)" },
-        WIL: { rating: "0", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Influence (+1), Insight (+1), Naturecraft (+1), Perception (+1)" }
+        STR: { rating: "-1", key: false, save: "Neutral (1d20)",         skills: "Might (-1)" },
+        DEX: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)",         skills: "Finesse (+3), Stealth (+4)" },
+        INT: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Arcana (+2), Examination (+3), Lore (+2)" },
+        WIL: { rating: "0", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Influence (0), Insight (0), Naturecraft (0), Perception (0)" }
       },
       attacks: [
         { name: "2x Daggers (tvillingedolke)", damage: "1d4 + 2", traits: "Piercing, Light, to dolke = dual wield (Fordel 1/runde), Thrown 4" },
@@ -368,10 +368,10 @@ const NIMBLE_DATA = {
       initiative: "+1",
       wounds: 0,
       stats: {
-        STR: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Might (+4)" },
-        DEX: { rating: "0", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Finesse (+1), Stealth (+1)" },
-        INT: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Arcana (+3), Examination (+4), Lore (+4)" },
-        WIL: { rating: "-1", key: false, save: "Neutral (1d20)", skills: "Influence (+1), Insight (0), Naturecraft (0), Perception (0)" }
+        STR: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)",         skills: "Might (+3)" },
+        DEX: { rating: "0", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Finesse (0), Stealth (0)" },
+        INT: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Arcana (+2), Examination (+3), Lore (+3)" },
+        WIL: { rating: "-1", key: false, save: "Neutral (1d20)", skills: "Influence (0), Insight (-1), Naturecraft (-1), Perception (-1)" }
       },
       attacks: [
         { name: "Short Sword (kortsværd)", damage: "1d6 + 0", traits: "Piercing, Nærkamp, Light" },
@@ -460,10 +460,10 @@ const NIMBLE_DATA = {
       initiative: "0",
       wounds: 0,
       stats: {
-        STR: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Might (+3)" },
-        DEX: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Finesse (0), Stealth (0)" },
-        INT: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Arcana (+1), Examination (+3), Lore (+1)" },
-        WIL: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Influence (+3), Insight (+4), Naturecraft (+4), Perception (+3)" }
+        STR: { rating: "+2", key: true, save: "Neutral (1d20)",         skills: "Might (+2)" },
+        DEX: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Finesse (-1), Stealth (-1)" },
+        INT: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Arcana (0), Examination (0), Lore (0)" },
+        WIL: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Influence (+3), Insight (+4), Naturecraft (+3), Perception (+2)" }
       },
       attacks: [
         { name: "Mace (velsignet stridskølle)", damage: "1d6 + 2", traits: "Bludgeoning, Nærkamp" },
@@ -547,7 +547,7 @@ const NIMBLE_DATA = {
       quote: "En uforudsigelig naturpræst, der behersker lyn og tordenskyer på afstand og forvandler sig til en frygtindgydende rovdyrsform midt i kampen.",
       hp: 13,
       hp_max: 13,
-      hit_die: "2d8",
+      hit_die: "1d8",
       defense: 5,
       defense_calc: "Cheap Hides 3 + DEX 2",
       speed: "7 felter",

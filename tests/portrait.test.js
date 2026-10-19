@@ -401,6 +401,13 @@ test('premades have 15 gp and consistent inventory slots', () => {
     const str = parseInt(c.stats.STR.rating, 10) || 0;
     const sum = c.inventory_slots.reduce((a, b) => a + b, 0);
     assert.ok(sum <= 10 + str, `${c.name}: ${sum} > ${10 + str}`);
+    assert.equal(c.hit_die.split('d')[0], '1', c.name);
+    let pts = 0;
+    for (const s of Object.values(c.stats)) {
+      const r = parseInt(s.rating, 10) || 0;
+      for (const m of s.skills.matchAll(/\(([+-]?\d+)\)/g)) pts += parseInt(m[1], 10) - r;
+    }
+    assert.equal(pts, 4, `${c.name}: ${pts} skill points`);
   }
 });
 
