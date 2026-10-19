@@ -125,8 +125,22 @@
             <tbody>
               <tr>
                 <td>
-                  <input type="number" id="f-hp" class="hp-input"> /
-                  <span id="f-hp-max">10</span>
+                  <div class="hp-tracker">
+                    <div class="hp-main">
+                      <input type="number" id="f-hp" class="hp-input"> /
+                      <span id="f-hp-max">10</span>
+                      <span id="f-bloodied" class="hp-flag" hidden>Bloodied</span>
+                    </div>
+                    <div class="hp-buttons screen-only-flex">
+                      <button type="button" class="hp-btn hp-dmg" data-hp-delta="-5">−5</button>
+                      <button type="button" class="hp-btn hp-dmg" data-hp-delta="-1">−1</button>
+                      <button type="button" class="hp-btn hp-heal" data-hp-delta="1">+1</button>
+                      <button type="button" class="hp-btn hp-heal" data-hp-delta="5">+5</button>
+                    </div>
+                    <label class="hp-temp">Temp HP
+                      <input type="number" id="f-hp-temp" min="0" value="0">
+                    </label>
+                  </div>
                 </td>
                 <td id="f-hitdie">1d8</td>
                 <td><strong id="f-defense">4</strong> <small id="f-defcalc" class="text-muted"></small></td>

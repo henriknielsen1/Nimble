@@ -446,3 +446,10 @@ test('openPremadeCharactersPrintView renders premade characters from data withou
     delete global.NIMBLE_DATA;
   }
 });
+
+const { applyHpChange } = require('../app.js');
+test('applyHpChange uses temp HP first and clamps', () => {
+  assert.deepStrictEqual(applyHpChange(10, 3, 12, -5), { hp: 8, temp: 0 });
+  assert.deepStrictEqual(applyHpChange(2, 0, 12, -5), { hp: 0, temp: 0 });
+  assert.deepStrictEqual(applyHpChange(10, 0, 12, 5), { hp: 12, temp: 0 });
+});

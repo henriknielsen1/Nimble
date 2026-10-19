@@ -176,6 +176,17 @@ textarea {
   padding: 0.2rem 0.3rem !important;
 }
 
+.hp-tracker { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+.hp-main .hp-input { width: 70px !important; font-size: 1.4rem; }
+.hp-buttons { display: flex; gap: 0.3rem; }
+.hp-btn { border: none; border-radius: 6px; padding: 0.4rem 0.7rem; font-weight: bold; color: #fff; cursor: pointer; min-width: 2.4rem; }
+.hp-dmg { background: #b3261e; }
+.hp-heal { background: #2e7d32; }
+.hp-temp { font-size: 0.75rem; display: flex; align-items: center; gap: 0.3rem; }
+.hp-temp input { width: 50px !important; margin: 0 !important; padding: 0.1rem 0.2rem !important; text-align: center; }
+.hp-flag { background: #b3261e; color: #fff; border-radius: 4px; padding: 0 0.4rem; font-size: 0.7rem; margin-left: 0.3rem; vertical-align: middle; }
+@media print { .hp-buttons { display: none !important; } }
+
 .btn {
   background: var(--primary);
   color: white;

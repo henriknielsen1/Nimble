@@ -278,6 +278,8 @@ function loadInstance(instanceId) {
 
   document.getElementById('f-hp').value = inst.hp;
   document.getElementById('f-hp-max').textContent = inst.hp_max;
+  document.getElementById('f-hp-temp').value = inst.hp_temp || 0;
+  updateBloodied();
   document.getElementById('f-hitdie').textContent = inst.hit_die;
   document.getElementById('f-defense').textContent = inst.defense;
   document.getElementById('f-defcalc').textContent = `(${inst.defense_calc})`;
@@ -333,6 +335,56 @@ function loadInstance(instanceId) {
 
   syncPrintMirrors();
   switchView('sheet');
+}
+
+function applyHpChange(hp, temp, max, delta) {
+  let newHp = hp;
+  let newTemp = Math.max(0, temp);
+  if (delta < 0) {
+    const absorbed = Math.min(newTemp, -delta);
+    newTemp -= absorbed;
+    newHp += delta + absorbed;
+  } else {
+    newHp += delta;
+  }
+  newHp = Math.max(0, Math.min(max, newHp));
+  return { hp: newHp, temp: newTemp };
+}
+
+function updateBloodied() {
+  const hpEl = document.getElementById('f-hp');
+  const flag = document.getElementById('f-bloodied');
+  if (!hpEl || !flag) return;
+  const max = parseInt(document.getElementById('f-hp-max').textContent, 10) || 0;
+  const hp = parseInt(hpEl.value, 10) || 0;
+  flag.hidden = !(max > 0 && hp <= max / 2);
+  flag.textContent = hp <= 0 ? 'Dying' : 'Bloodied';
+}
+
+function adjustHp(delta) {
+  const hpEl = document.getElementById('f-hp');
+  const tempEl = document.getElementById('f-hp-temp');
+  const max = parseInt(document.getElementById('f-hp-max').textContent, 10) || 0;
+  const res = applyHpChange(parseInt(hpEl.value, 10) || 0, parseInt(tempEl.value, 10) || 0, max, delta);
+  hpEl.value = res.hp;
+  tempEl.value = res.temp;
+  updateBloodied();
+  saveActiveSheet(false);
+}
+
+function initHpTracker() {
+  document.querySelectorAll('[data-hp-delta]').forEach(btn => {
+    btn.addEventListener('click', () => adjustHp(parseInt(btn.dataset.hpDelta, 10)));
+  });
+  ['f-hp', 'f-hp-temp'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', () => { updateBloodied(); saveActiveSheet(false); });
+  });
+}
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initHpTracker);
+  else initHpTracker();
 }
 
 function syncPrintMirrors() {
@@ -486,6 +538,7 @@ function saveActiveSheet(showAlert = true) {
   const current = list[idx];
   current.player_name = document.getElementById('f-player').value.trim();
   current.hp = parseInt(document.getElementById('f-hp').value, 10) || 0;
+  current.hp_temp = Math.max(0, parseInt(document.getElementById('f-hp-temp').value, 10) || 0);
 
   let checkedWounds = 0;
   document.querySelectorAll('.wb').forEach(b => { if (b.checked) checkedWounds++; });
@@ -1168,6 +1221,7 @@ if (typeof module !== 'undefined' && module.exports) {
     openPremadeCharactersPrintView,
     closePremadeCharactersPrintView,
     renderPremadeCharacterSheet,
+    applyHpChange,
     DEFAULT_GEMINI_IMAGE_MODEL,
     GEMINI_KEY_STORAGE_NAME,
     buildCharacterPrompt,
