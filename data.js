@@ -98,18 +98,18 @@ const NIMBLE_DATA = {
       initiative: "+3",
       wounds: 0,
       stats: {
-        STR: { rating: "+2", key: true, save: "Neutral (1d20)",         skills: "Might (+3)" },
-        DEX: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Finesse (+4), Stealth (+3)" },
-        INT: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Arcana (-1), Examination (-1), Lore (-1)" },
-        WIL: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Influence (0), Insight (0), Naturecraft (0), Perception (0)" }
+        STR: { rating: "+2", key: true, save: "Neutral (1d20)",                 skills: "Might (+4)" },
+                DEX: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Finesse (+5), Stealth (+4)" },
+                INT: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Arcana (0), Examination (0), Lore (0)" },
+                WIL: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Influence (+1), Insight (+1), Naturecraft (+1), Perception (+1)" }
       },
       attacks: [
-        { name: "Ubevæbnet slag (Unarmed Strike)", damage: "1d4 + 2", traits: "Nærkamp, trænet (kan crit'e), to næver = dual wield (Fordel 1/runde), +1 skade pr. brugt Momentum" },
-        { name: "Staff (stav)", damage: "1d8 + 2", traits: "Nærkamp, Tohånds, +1 skade pr. brugt Momentum" }
+        { name: "Ubevæbnet slag (Unarmed Strike)", damage: "1d4 + 2", traits: "Nærkamp, Swift Fists: ingen Ulempe fra Rushed Attacks" },
+        { name: "Staff (stav)", damage: "1d8 + 2", traits: "Nærkamp, Tohånds" }
       ],
       class_features: [
         { title: "Iron Defense", text: "Din Defense er DEX + STR (2 + 2 = 4), så længe du ikke bærer rustning." },
-        { title: "Momentum", text: "Få 1 Momentum for hvert nyt felt, du går ind i på din tur. Brug 1 Momentum for at lægge 1 skade til et nærkampsangreb. Al Momentum mistes, hvis du tager skade, eller når kampen slutter." },
+        { title: "Swift Fists", text: "Dine ubevæbnede slag er ikke underlagt Ulempe fra Rushed Attacks, og deres skade er 1d4 + STR (2)." },
         { title: "Tenacious (herkomst: Menneske)", text: "+1 til alle færdigheder og Initiative (allerede indregnet)." },
         { title: "Acrobat (baggrund)", text: "Du kan blive kastet af en større allieret – virkelig langt. Du tager halv skade fra fald og tvungen bevægelse." }
       ],
@@ -142,10 +142,10 @@ const NIMBLE_DATA = {
       initiative: "+3",
       wounds: 0,
       stats: {
-        STR: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)",         skills: "Might (+4)" },
-        DEX: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Finesse (+2), Stealth (+2)" },
-        INT: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Arcana (-1), Examination (-1), Lore (-1)" },
-        WIL: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Influence (0), Insight (0), Naturecraft (+1), Perception (+1)" }
+        STR: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)",                 skills: "Might (+5)" },
+                DEX: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Finesse (+3), Stealth (+3)" },
+                INT: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Arcana (0), Examination (0), Lore (0)" },
+                WIL: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Influence (+1), Insight (+1), Naturecraft (+3), Perception (+2)" }
       },
       attacks: [
         { name: "Battleaxe (stridsøkse)", damage: "1d10 + 2 + Fury Dice (1d4 hver)", traits: "Slashing, Nærkamp, Tohånds" }
@@ -154,7 +154,7 @@ const NIMBLE_DATA = {
         { title: "Rage", text: "(1/tur) Handling: Rul en Fury Die (1d4) og læg den til side. Læg den til alle dine STR-angreb. Du kan have maks. KEY (2) Fury Dice ad gangen; de mistes, når din Rage ender." },
         { title: "That all you got?!", text: "Når du bliver angrebet, kan du bruge 1 eller flere Fury Dice til at reducere skaden med STR + DEX (4) for hver brugt terning." },
         { title: "Tenacious (herkomst: Menneske)", text: "+1 til alle færdigheder og Initiative (allerede indregnet)." },
-        { title: "Wild One (baggrund)", text: "Vilde dyr er mindre bange for dig og mere villige til at hjælpe dig. +1 Naturecraft (allerede indregnet). Ved Field Rest i vildmarken genvinder dine Hit Dice +KEY (2) ekstra HP." }
+                { title: "Wild One (baggrund)", text: "Vilde dyr er mindre bange for dig og mere villige til at hjælpe dig. +1 Naturecraft (allerede indregnet). Ved Field Rest i vildmarken ruller du dine Hit Dice med Fordel (Advantage)." }
       ],
       inventory: [
         "Battleaxe (massiv stridsøkse)",
@@ -237,9 +237,9 @@ const NIMBLE_DATA = {
       },
       attacks: [
         { name: "Staff (egetræsstav)", damage: "1d8 - 1", traits: "Bludgeoning, Nærkamp, Tohånds" },
-        { name: "Flame Dart (Fire cantrip)", damage: "1d10 Ild", traits: "Magi, Range 10, ved Crit: Smoldering" },
+        { name: "Flame Dart (Fire cantrip)", damage: "1d10 Ild", traits: "Magi, Range 8, ved Crit: Smoldering" },
         { name: "Ice Lance (Ice cantrip)", damage: "1d6 Kulde/Piercing", traits: "Magi, Range 12, ved træf: Slowed" },
-        { name: "Zap (Lightning cantrip)", damage: "1d8 + 4 Lyn", traits: "Magi, Range 8, ved Fejlskud tager du halv skade selv" }
+        { name: "Zap (Lightning cantrip)", damage: "2d8 Lyn", traits: "Magi, Range 12, ved Fejlskud rammer lynet dig selv" }
       ],
       class_features: [
         { title: "Elemental Spellcasting", text: "Du kender Fire-, Ice- og Lightning-cantrips (fx Flame Dart, Ice Lance, Zap, Heart's Fire, Snowblind og Overload). Cantrips koster ingen mana. Mana og tier 1-formularer låses op på level 2." },
@@ -277,9 +277,9 @@ const NIMBLE_DATA = {
       wounds: 0,
       stats: {
         STR: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Might (0)" },
-        DEX: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)",         skills: "Finesse (+2), Stealth (+3)" },
+        DEX: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)",                 skills: "Finesse (+2), Stealth (+4)" },
         INT: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Arcana (-1), Examination (-1), Lore (-1)" },
-        WIL: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Influence (+2), Insight (+3), Naturecraft (+4), Perception (+2)" }
+                WIL: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Influence (+2), Insight (+3), Naturecraft (+4), Perception (+3)" }
       },
       attacks: [
         { name: "Shortbow (kortbue)", damage: "1d6 + 2", traits: "Piercing, Tohånds, Range 12" },
@@ -289,7 +289,7 @@ const NIMBLE_DATA = {
         { title: "Hunter's Mark (Handling)", text: "En skabning, du kan se, bliver dit bytte (quarry) i 1 dag (eller til du udpeger en anden). Den kan ikke skjule sig for dig, og dine angreb mod den får efter eget valg Fordel ELLER +LVL (1) skade – vælges før hvert angreb." },
         { title: "Forager", text: "Fordel på færdighedstjek for at finde mad og vand i vildmarken." },
         { title: "Elusive (herkomst: Halvering)", text: "+1 Stealth (allerede indregnet). Fejler du et save, kan du i stedet lykkes (1/Safe Rest)." },
-        { title: "Wild One (baggrund)", text: "Vilde dyr er mindre bange for dig og mere villige til at hjælpe dig. +1 Naturecraft (allerede indregnet). Ved Field Rest i vildmarken genvinder dine Hit Dice +KEY (2) ekstra HP." }
+        { title: "Wild One (baggrund)", text: "Vilde dyr er mindre bange for dig og mere villige til at hjælpe dig. +1 Naturecraft (allerede indregnet). Ved Field Rest i vildmarken ruller du dine Hit Dice med Fordel (Advantage)." }
       ],
       inventory: [
         "Shortbow (kortbue med kogger og pile)",
@@ -322,10 +322,10 @@ const NIMBLE_DATA = {
       initiative: "+3",
       wounds: 0,
       stats: {
-        STR: { rating: "-1", key: false, save: "Neutral (1d20)",         skills: "Might (-1)" },
-        DEX: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)",         skills: "Finesse (+3), Stealth (+4)" },
-        INT: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Arcana (+2), Examination (+3), Lore (+2)" },
-        WIL: { rating: "0", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Influence (0), Insight (0), Naturecraft (0), Perception (0)" }
+        STR: { rating: "-1", key: false, save: "Neutral (1d20)",                 skills: "Might (0)" },
+        DEX: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)",                 skills: "Finesse (+4), Stealth (+5)" },
+                INT: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Arcana (+3), Examination (+4), Lore (+3)" },
+                WIL: { rating: "0", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Influence (+1), Insight (+1), Naturecraft (+1), Perception (+1)" }
       },
       attacks: [
         { name: "2x Daggers (tvillingedolke)", damage: "1d4 + 2", traits: "Piercing, Light, to dolke = dual wield (Fordel 1/runde), Thrown 4" },
@@ -368,10 +368,10 @@ const NIMBLE_DATA = {
       initiative: "+1",
       wounds: 0,
       stats: {
-        STR: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)",         skills: "Might (+3)" },
-        DEX: { rating: "0", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Finesse (0), Stealth (0)" },
-        INT: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Arcana (+2), Examination (+3), Lore (+3)" },
-        WIL: { rating: "-1", key: false, save: "Neutral (1d20)", skills: "Influence (0), Insight (-1), Naturecraft (-1), Perception (-1)" }
+        STR: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)",                 skills: "Might (+4)" },
+                DEX: { rating: "0", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Finesse (+1), Stealth (+1)" },
+                INT: { rating: "+2", key: true, save: "Neutral (1d20)", skills: "Arcana (+3), Examination (+4), Lore (+4)" },
+                WIL: { rating: "-1", key: false, save: "Neutral (1d20)", skills: "Influence (+1), Insight (0), Naturecraft (0), Perception (0)" }
       },
       attacks: [
         { name: "Short Sword (kortsværd)", damage: "1d6 + 0", traits: "Piercing, Nærkamp, Light" },
@@ -419,13 +419,12 @@ const NIMBLE_DATA = {
       },
       attacks: [
         { name: "Shadow Blast (Necrotic cantrip)", damage: "1d12 + 2 Nekrotisk", traits: "Magi, Range 8, 1/runde" },
-        { name: "Command Shadows (Shadows)", damage: "1d12 Nekrotisk pr. Shadow", traits: "Magi, minions (1 HP, ingen skadebonus, ingen crit), flytter 6 og angriber Reach 1, 1/runde" },
+        { name: "Summon Shadows (Shadows)", damage: "1d12 Nekrotisk pr. Shadow", traits: "Magi, Handling: fremmaner en Shadow-minion inden for Reach 1 (maks. INT/LVL). Handling (1/runde): alle Shadows flytter 6 og angriber Reach 1" },
         { name: "Sickle (forgyldt, krum ritualklinge)", damage: "1d4 + 2", traits: "Slashing, Nærkamp, Vicious" }
       ],
       class_features: [
         { title: "Shadow Blast (Necrotic cantrip)", text: "Handling (1/runde): Range 8. Skade: 1d12 + DEX (2). Hvert 5. level: +1d12 skade." },
-        { title: "Summon Shadow (Necrotic cantrip)", text: "Handling: Fremmaner 1 tilstødende Shadow (en d12-minion). Shadow Limit: du kan have op til INT (2) Shadows. Hvert 5. level: +1 Shadow. Dine Shadows forlader dig, så snart kampen er slut." },
-        { title: "Command Shadows (Necrotic cantrip)", text: "ALLE dine Shadows flytter 6 og angriber derefter (Reach 1, 1d12 hver). 1/runde." },
+        { title: "Summon Shadows (Necrotic cantrip)", text: "Handling: Fremmaner en Shadow-minion (d12) inden for Reach 1 (maks. INT (2) eller LVL minions). Handling (1/runde): Kommandér ALLE dine minions til at flytte 6 og angribe (Reach 1, 1d12 hver). Hvert 5. level: +1 Reach. Dine Shadows forlader dig, når kampen er slut." },
         { title: "Lithe (herkomst: Elf)", text: "Fordel på Initiative og +1 Speed (allerede indregnet). Du kender Elvish." },
         { title: "Haunted Past (baggrund)", text: "Du plages af stemmer, der af og til giver kryptiske råd – nogle gange MEGET nyttige, andre gange vil de bare se dig lide. Fordel mod frygt." }
       ],
@@ -450,7 +449,7 @@ const NIMBLE_DATA = {
       level: 1,
       ancestry: "Menneske",
       background: "Tradesman/Artisan (klosterlæge og feltpræst)",
-      quote: "En barmhjertig og standhaftig sjælehyrde, der mestrer balancen mellem liv og død, altid ledsaget af en lysende åndefælle (Lifebinding Spirit).",
+      quote: "En barmhjertig og standhaftig sjælehyrde, der mestrer balancen mellem liv og død og bærer Guds lys ind i krigens mørke.",
       hp: 17,
       hp_max: 17,
       hit_die: "1d10",
@@ -460,20 +459,20 @@ const NIMBLE_DATA = {
       initiative: "0",
       wounds: 0,
       stats: {
-        STR: { rating: "+2", key: true, save: "Neutral (1d20)",         skills: "Might (+2)" },
-        DEX: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Finesse (-1), Stealth (-1)" },
-        INT: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Arcana (0), Examination (0), Lore (0)" },
-        WIL: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Influence (+3), Insight (+4), Naturecraft (+3), Perception (+2)" }
+        STR: { rating: "+2", key: true, save: "Neutral (1d20)",                 skills: "Might (+3)" },
+                DEX: { rating: "-1", key: false, save: "🔽 Ulempe (Disadvantage)", skills: "Finesse (0), Stealth (0)" },
+                INT: { rating: "0", key: false, save: "Neutral (1d20)", skills: "Arcana (+1), Examination (+1), Lore (+1)" },
+                WIL: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Influence (+4), Insight (+5), Naturecraft (+3), Perception (+4)" }
       },
       attacks: [
         { name: "Mace (velsignet stridskølle)", damage: "1d6 + 2", traits: "Bludgeoning, Nærkamp" },
-        { name: "Rebuke (Radiant cantrip)", damage: "1d8 Radiant", traits: "Magi, Reach 4, ignorerer rustning, dobbelt skade mod udøde og fej (Frightened eller i dækning)" },
+        { name: "Rebuke (Radiant cantrip)", damage: "1d6 Radiant", traits: "Magi, Reach 4, ignorerer rustning, rammer altid, dobbelt skade mod udøde og fej (Frightened eller i dækning)" },
         { name: "Withering Touch (Necrotic cantrip)", damage: "1d12 Nekrotisk", traits: "Magi, Reach 1, ved træf: målet regnes som udødt i 1 runde" },
-        { name: "Lifebinding Spirit: Harm", damage: "1d8 + 2 Radiant", traits: "1 handling, ånden angriber op til Reach 4 væk, ignorerer rustning" }
+                { name: "Searing Light (WIL (2) gange/Safe Rest)", damage: "2d8 Radiant", traits: "Handling, Reach 6, kun mod udøde eller Bloodied fjender; ELLER heal 2d8 HP til en Dying skabning" }
       ],
       class_features: [
         { title: "Keeper of Life & Death", text: "Du kender Radiant- og Necrotic-cantrips. Mana og tier 1-formularer låses op på level 2." },
-        { title: "Lifebinding Spirit (My Buddy!)", text: "Cantrip uden mana: Du har én åndefælle, der kan rejse op til Reach 4 væk for at handle og derefter vende tilbage til din side. Harm (1 handling): ånden angriber for 1d8 + STR (ignorerer rustning); +STR skade hvert 5. level. Mend (1 handling, WIL (2) gange/Safe Rest, Reach 4): ånden genopretter WIL d20 HP til en Dying skabning." },
+        { title: "Searing Light", text: "(WIL (2) gange/Safe Rest) Handling: Heal WIL d8 (2d8) HP til en Dying skabning inden for Reach 6, ELLER påfør WIL d8 (2d8) radiant skade til en udød eller Bloodied fjende inden for Reach 6." },
         { title: "Tenacious (herkomst: Menneske)", text: "+1 til alle færdigheder og Initiative (allerede indregnet)." },
         { title: "Tradesman/Artisan (baggrund)", text: "Profession: læge og healer. Tjek relateret til din profession slås med Fordel, og du har særlig viden om faget." }
       ],
@@ -513,14 +512,14 @@ const NIMBLE_DATA = {
         WIL: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Influence (+4), Insight (+3), Naturecraft (+2), Perception (+2)" }
       },
       attacks: [
-        { name: "Vicious Mockery (Wind cantrip)", damage: "1d6 + 2 Psykisk", traits: "Magi, Range 12, ignorerer rustning, ved træf: Taunted indtil slutningen af deres næste tur" },
-        { name: "Razor Wind (Wind cantrip)", damage: "2d4 Slashing", traits: "Magi, Range 12, vælg: Fordel ELLER ram også 1 tilstødende mål" },
-        { name: "Breath of Life (Wind cantrip)", damage: "Heal 1d4", traits: "Magi, Range 6, en Dying skabning; heles 4+, får den 1 handling" },
+        { name: "Vicious Mockery (Wind cantrip)", damage: "1d4 + 2 Psykisk", traits: "Magi, Range 12, ignorerer rustning, ved træf: Taunted indtil slutningen af deres næste tur" },
+        { name: "Razor Wind (Wind cantrip)", damage: "1d4 Slashing", traits: "Magi, Range 12, Vicious, rammer også op til 1 tilstødende mål" },
+        { name: "Breath of Life (Wind cantrip)", damage: "Heal 1 HP", traits: "Magi, Range 6, en Dying skabning genopretter 1 HP" },
         { name: "Dagger (dolk)", damage: "1d4 + 0", traits: "Piercing, Light, Thrown 4" }
       ],
       class_features: [
-        { title: "Wind Spellcasting", text: "Du kender cantrips fra Wind-skolen samt Vicious Mockery. Du vælger din anden skole på level 2. Mana og tier 1-formularer låses også op på level 2." },
-        { title: "Songweaver's Inspiration", text: "(2 x WIL (4) gange/Safe Rest) Fri reaktion: Lad en allieret omrulle en enkelt terning ELLER hæve resultatet af en terning med 1." },
+        { title: "Wind Spellcasting", text: "Du kender cantrips fra Wind-skolen         samt 1 anden skole efter eget valg. Du kender også Vicious Mockery (Handling, Range 12, 1d4+INT psykisk, ignorerer rustning; ved træf er målet Taunted i sin næste tur)." },
+                { title: "Songweaver's Inspiration", text: "(2 x WIL (4) gange/Safe Rest) Fri reaktion: Lad en allieret omrulle en enkelt terning relateret til et angreb eller save (må beholde begge resultater at vælge imellem)." },
         { title: "Lithe (herkomst: Elf)", text: "Fordel på Initiative og +1 Speed (allerede indregnet). Du kender Elvish. Som halvelver bruger du kun elvernes bonus." },
         { title: "Taste for the Finer Things (baggrund)", text: "Du kender altid de højere klassers skikke og klædedragt og måske mange af deres hemmeligheder. Fordel på Influence-tjek mod overklassen." }
       ],
@@ -560,17 +559,15 @@ const NIMBLE_DATA = {
         WIL: { rating: "+2", key: true, save: "🔼 Fordel (Advantage)", skills: "Influence (+2), Insight (+2), Naturecraft (+4), Perception (+3)" }
       },
       attacks: [
-        { name: "Zap (Lightning cantrip)", damage: "1d8 + 4 Lyn", traits: "Magi, Range 8, ved Fejlskud tager du halv skade selv" },
-        { name: "Razor Wind (Wind cantrip)", damage: "2d4 Slashing", traits: "Magi, Range 12, vælg: Fordel ELLER ram også 1 tilstødende mål" },
-        { name: "Staff (asketræsstav)", damage: "1d8 + 0", traits: "Bludgeoning, Nærkamp, Tohånds" },
-        { name: "Gore (Fearsome Beast-form)", damage: "1d8 + 1", traits: "Handling, ved træf: få LVL (1) temp HP" }
+        { name: "Zap (Lightning cantrip)", damage: "2d8 Lyn", traits: "Magi, Range 12, ved Fejlskud rammer lynet dig selv" },
+        { name: "Razor Wind (Wind cantrip)", damage: "1d4 Slashing", traits: "Magi, Range 12, Vicious, rammer også op til 1 tilstødende mål" },
+        { name: "Staff (asketræsstav)", damage: "1d8 + 0", traits: "Bludgeoning, Nærkamp, Tohånds" }
       ],
       class_features: [
         { title: "Master of Storms", text: "Du kender cantrips fra Lightning- og Wind-skolerne (fx Zap, Overload, Razor Wind og Breath of Life). Mana og tier 1-formularer låses op på level 2." },
-        { title: "Beastshift", text: "Du kan frit forvandle dig til et harmløst dyr (egern, due osv.) og tale med dyr. Formen varer, til du når 0 HP, kaster en formular eller afslutter den frit på din tur." },
-        { title: "Direbeast Form: Fearsome Beast", text: "DEX (2) gange pr. encounter kan du Beastshift til en stor Direbeast-form (op til 1 minut): Få WIL (2) Defense, WIL + LVL (3) temp HP og Fordel på STR-saves. Angrebet Gore: 1d8 + LVL, ved træf får du LVL temp HP." },
+        { title: "Beastshift", text: "        Handling: Forvandl dig til et harmløst dyr (egern, due osv.) og tal med dyr. Formen varer, til du når 0 HP, kaster en formular eller afslutter den frit på din tur. Du har DEX (2) Beastshift-charges, som nulstilles ved Safe Rest." },
         { title: "Lithe (herkomst: Elf)", text: "Fordel på Initiative og +1 Speed (allerede indregnet)." },
-        { title: "Survivalist (baggrund)", text: "Du løber aldrig tør for dine egne rationer. Fordel mod gift-saves og +1 maks. Hit Die (allerede indregnet). (1/Safe Rest) Afslut gift på dig selv." }
+        { title: "Survivalist (baggrund)", text: "Du løber aldrig tør for dine egne rationer. Fordel mod gift-saves og +1 maks. Hit Die." }
       ],
       inventory: [
         "Cheap Hides (læderrustning, båret)",

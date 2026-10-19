@@ -403,11 +403,14 @@ test('premades have 15 gp and consistent inventory slots', () => {
     assert.ok(sum <= 10 + str, `${c.name}: ${sum} > ${10 + str}`);
     assert.equal(c.hit_die.split('d')[0], '1', c.name);
     let pts = 0;
+    const free = /human|menneske/i.test(c.ancestry) ? 1 : 0;
     for (const s of Object.values(c.stats)) {
       const r = parseInt(s.rating, 10) || 0;
-      for (const m of s.skills.matchAll(/\(([+-]?\d+)\)/g)) pts += parseInt(m[1], 10) - r;
+      for (const m of s.skills.matchAll(/\(([+-]?\d+)\)/g)) pts += parseInt(m[1], 10) - r - free;
     }
-    assert.equal(pts, 4, `${c.name}: ${pts} skill points`);
+    if (/halfling|halvering/i.test(c.ancestry)) pts -= 1;
+    if (/wild one/i.test(c.background)) pts -= 1;
+    assert.equal(pts, 4, `${c.character_name}: ${pts} skill points`);
   }
 });
 
