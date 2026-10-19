@@ -1293,7 +1293,10 @@ textarea {
   }
 
   /* Skjul browser controls under print */
-  .screen-only {
+  .screen-only,
+  .screen-only-flex,
+  .hp-buttons,
+  .sheet-card button {
     display: none !important;
   }
 

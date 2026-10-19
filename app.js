@@ -90,6 +90,9 @@ function buildPremadeSheetClone(char) {
   const sheet = document.querySelector('#view-sheet .sheet-card');
   populateSheet({ ...char, player_name: '', portrait: '' });
   const clone = sheet.cloneNode(true);
+  clone.querySelectorAll('button, .hp-buttons, .screen-only, .screen-only-flex').forEach(el => {
+    if (!el.matches('#f-notes, #f-inventory-items, #f-inventory-summary') && !el.querySelector('input, textarea')) el.remove();
+  });
 
   clone.querySelectorAll('input').forEach(input => {
     if (input.type === 'checkbox' || input.type === 'radio') {
