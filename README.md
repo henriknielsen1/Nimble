@@ -5,6 +5,7 @@ Digitalt karakterark og spillerguide til bordrollespillet (TTRPG) Nimble 2.0, by
 ## Funktioner
 
 - **Karakterkatalog & Kloning:** Vælg mellem foruddefinerede karakterer og opret redigerbare kopier, der gemmes lokalt i din browser (`localStorage`).
+- **Premade print:** Udskriv alle foruddefinerede karakterer direkte fra kataloget uden først at klone dem eller gemme noget i browseren.
 - **Aktivt karakterark:** Hold styr på HP, wounds, egenskaber, kamphandlinger, udstyr med slot-beregning og noter.
 - **A4-udskrift:** Optimeret print-stylesheet til udskrift på papir eller PDF.
 - **Spillerguide:** Hurtigt opslagsværk over Nimble 2.0-reglerne.

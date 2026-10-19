@@ -380,3 +380,36 @@ test('buildCharacterPrompt prioritizes simple hand-drawn illustration over faux 
   assert.match(oil, /stylized storybook fantasy illustration painted in matte oil/);
   assert.strictEqual(app.buildCharacterPrompt(inst, '', 'unknown'), app.buildCharacterPrompt(inst));
 });
+
+test('openPremadeCharactersPrintView renders premade characters from data without saving instances', () => {
+  const appended = [];
+  const content = { innerHTML: '' };
+  const overlay = {
+    id: '', className: '', innerHTML: '',
+    remove() { this.removed = true; },
+    querySelector: (sel) => (sel === '#premade-print-content' ? content : null)
+  };
+  const ctx = {};
+  vm.createContext(ctx);
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '../data.js'), 'utf8').replace('const NIMBLE_DATA', 'var NIMBLE_DATA'), ctx);
+  const characters = ctx.NIMBLE_DATA.characters;
+  global.NIMBLE_DATA = ctx.NIMBLE_DATA;
+  const saved = { ...mockLocalStorage.store };
+  const origCreate = global.document.createElement;
+  const origBody = global.document.body;
+  global.document.createElement = () => overlay;
+  global.document.body = { appendChild: (n) => appended.push(n) };
+  try {
+    app.openPremadeCharactersPrintView();
+    assert.strictEqual(appended.length, 1);
+    assert.strictEqual(overlay.id, 'premade-print-overlay');
+    assert.ok(characters.length > 0);
+    for (const c of characters) assert.ok(content.innerHTML.includes(c.character_name));
+    assert.doesNotMatch(content.innerHTML, /instance_id/);
+    assert.deepStrictEqual(mockLocalStorage.store, saved);
+  } finally {
+    global.document.createElement = origCreate;
+    global.document.body = origBody;
+    delete global.NIMBLE_DATA;
+  }
+});

@@ -1156,7 +1156,33 @@ textarea {
   margin: 8mm 10mm;
 }
 
+.premade-print-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: auto;
+  padding: 1rem;
+  background: var(--bg, #0f172a);
+}
+
+.premade-list {
+  columns: 2;
+  margin: 0.4rem 0;
+}
+
 @media print {
+  body:has(.premade-print-overlay) > *:not(.premade-print-overlay) {
+    display: none !important;
+  }
+
+  .premade-print-overlay {
+    position: static;
+    overflow: visible;
+    padding: 0;
+    background: white;
+    color: black;
+  }
+
   body {
     background: white !important;
     color: black !important;

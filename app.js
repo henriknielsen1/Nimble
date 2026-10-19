@@ -80,6 +80,56 @@ function getInstanceById(instId) {
   return list.find(x => x.instance_id === instId);
 }
 
+function escapePremadeHtml(value) {
+  return String(value === undefined || value === null ? '' : value)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function openPremadeCharactersPrintView() {
+  const existing = document.getElementById('premade-print-overlay');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'premade-print-overlay';
+  overlay.className = 'premade-print-overlay';
+  overlay.innerHTML = `
+    <div class="action-bar no-print">
+      <div class="button-group">
+        <button class="btn btn-secondary" onclick="window.print()">🖨️ Udskriv</button>
+        <button class="btn btn-danger" onclick="closePremadeCharactersPrintView()">Luk</button>
+      </div>
+    </div>
+    <div id="premade-print-content"></div>
+  `;
+  document.body.appendChild(overlay);
+
+  const e = escapePremadeHtml;
+  const content = overlay.querySelector('#premade-print-content');
+  content.innerHTML = NIMBLE_DATA.characters.map(char => {
+    const stats = Object.entries(char.stats || {})
+      .map(([k, v]) => `<li><strong>${e(k)}:</strong> ${e(v)}</li>`).join('');
+    const inventory = (char.inventory || []).map(i => `<li>${e(typeof i === 'string' ? i : (i && i.name))}</li>`).join('');
+    return `
+    <article class="panel print-page premade-character-card">
+      <h2>${e(char.character_name)}</h2>
+      <p><strong>Klasse:</strong> ${e(char.class)}</p>
+      <p><strong>Ancestry:</strong> ${e(char.ancestry)}</p>
+      <p><strong>Baggrund:</strong> ${e(char.background)}</p>
+      <p><strong>Level:</strong> ${e(char.level || 1)}</p>
+      <p><strong>HP:</strong> ${e(char.hp_max || char.hp)} &nbsp; <strong>Defense:</strong> ${e(char.defense)} &nbsp; <strong>Speed:</strong> ${e(char.speed)} &nbsp; <strong>Initiative:</strong> ${e(char.initiative)}</p>
+      <p>${e(char.quote)}</p>
+      ${stats ? `<ul class="premade-list">${stats}</ul>` : ''}
+      ${inventory ? `<h3>Udstyr</h3><ul class="premade-list">${inventory}</ul>` : ''}
+    </article>`;
+  }).join('');
+}
+
+function closePremadeCharactersPrintView() {
+  const overlay = document.getElementById('premade-print-overlay');
+  if (overlay) overlay.remove();
+}
+
 function cloneAndActivateCharacter() {
   const pName = document.getElementById('player-name-in').value.trim() || 'Ukendt Spiller';
   const charId = document.getElementById('char-select-in').value;
@@ -1001,6 +1051,8 @@ function removePortrait() {
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
+    openPremadeCharactersPrintView,
+    closePremadeCharactersPrintView,
     DEFAULT_GEMINI_IMAGE_MODEL,
     GEMINI_KEY_STORAGE_NAME,
     buildCharacterPrompt,
