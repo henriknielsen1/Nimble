@@ -1165,9 +1165,14 @@ textarea {
   background: var(--bg, #0f172a);
 }
 
-.premade-list {
-  columns: 2;
-  margin: 0.4rem 0;
+.premade-print-overlay .print-mirror {
+  display: block;
+  min-height: 4rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 @media print {
@@ -1297,7 +1302,9 @@ textarea {
   }
 
   #f-inventory-print::after,
-  #f-notes-print::after {
+  #f-notes-print::after,
+  .premade-print-inventory::after,
+  .premade-print-notes::after {
     content: "";
     display: block;
     background: repeating-linear-gradient(
@@ -1309,11 +1316,13 @@ textarea {
     );
   }
 
-  #f-inventory-print::after {
+  #f-inventory-print::after,
+  .premade-print-inventory::after {
     height: 32mm;
   }
 
-  #f-notes-print::after {
+  #f-notes-print::after,
+  .premade-print-notes::after {
     height: 55mm;
   }
 

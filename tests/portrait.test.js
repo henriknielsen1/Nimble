@@ -404,7 +404,40 @@ test('openPremadeCharactersPrintView renders premade characters from data withou
     assert.strictEqual(appended.length, 1);
     assert.strictEqual(overlay.id, 'premade-print-overlay');
     assert.ok(characters.length > 0);
-    for (const c of characters) assert.ok(content.innerHTML.includes(c.character_name));
+    const escapeHtml = (value) => String(value ?? '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    for (const c of characters) {
+      const sheet = app.renderPremadeCharacterSheet(c);
+      assert.ok(content.innerHTML.includes(c.character_name));
+      assert.ok(sheet.includes('Hit Points (HP)'));
+      assert.ok(sheet.includes('Egenskaber, saves &amp; færdigheder'));
+      assert.ok(sheet.includes('Våben &amp; kamphandlinger'));
+      assert.ok(sheet.includes('Klasseevner'));
+      assert.ok(sheet.includes(`(${escapeHtml(c.defense_calc)})`));
+      assert.ok(sheet.includes(`${c.hp} / <span>${c.hp_max}</span>`));
+      assert.ok(sheet.includes(`GP:</span> ${c.gold.gp}`));
+      assert.ok(sheet.includes(`SP:</span> ${c.gold.sp}`));
+      assert.ok(sheet.includes(`CP:</span> ${c.gold.cp}`));
+      for (const stat of Object.values(c.stats)) {
+        assert.ok(sheet.includes(escapeHtml(stat.rating)));
+        assert.ok(sheet.includes(escapeHtml(stat.save)));
+        assert.ok(sheet.includes(escapeHtml(stat.skills)));
+      }
+      for (const attack of c.attacks) {
+        assert.ok(sheet.includes(escapeHtml(attack.name)));
+        assert.ok(sheet.includes(escapeHtml(attack.damage)));
+        assert.ok(sheet.includes(escapeHtml(attack.traits)));
+      }
+      for (const feature of c.class_features) {
+        assert.ok(sheet.includes(escapeHtml(feature.title)));
+        assert.ok(sheet.includes(escapeHtml(feature.text)));
+      }
+      for (const item of c.inventory) assert.ok(sheet.includes(escapeHtml(item)));
+      assert.ok(sheet.includes(escapeHtml(c.notes).replace(/\n/g, '<br>')));
+      assert.ok(sheet.includes('premade-print-inventory'));
+      assert.ok(sheet.includes('premade-print-notes'));
+    }
     assert.doesNotMatch(content.innerHTML, /instance_id/);
     assert.deepStrictEqual(mockLocalStorage.store, saved);
   } finally {
