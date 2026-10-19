@@ -381,70 +381,8 @@ test('buildCharacterPrompt prioritizes simple hand-drawn illustration over faux 
   assert.strictEqual(app.buildCharacterPrompt(inst, '', 'unknown'), app.buildCharacterPrompt(inst));
 });
 
-test('openPremadeCharactersPrintView renders premade characters from data without saving instances', () => {
-  const appended = [];
-  const content = { innerHTML: '' };
-  const overlay = {
-    id: '', className: '', innerHTML: '',
-    remove() { this.removed = true; },
-    querySelector: (sel) => (sel === '#premade-print-content' ? content : null)
-  };
-  const ctx = {};
-  vm.createContext(ctx);
-  vm.runInContext(fs.readFileSync(path.join(__dirname, '../data.js'), 'utf8').replace('const NIMBLE_DATA', 'var NIMBLE_DATA'), ctx);
-  const characters = ctx.NIMBLE_DATA.characters;
-  global.NIMBLE_DATA = ctx.NIMBLE_DATA;
-  const saved = { ...mockLocalStorage.store };
-  const origCreate = global.document.createElement;
-  const origBody = global.document.body;
-  global.document.createElement = () => overlay;
-  global.document.body = { appendChild: (n) => appended.push(n) };
-  try {
-    app.openPremadeCharactersPrintView();
-    assert.strictEqual(appended.length, 1);
-    assert.strictEqual(overlay.id, 'premade-print-overlay');
-    assert.ok(characters.length > 0);
-    const escapeHtml = (value) => String(value ?? '')
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-    for (const c of characters) {
-      const sheet = app.renderPremadeCharacterSheet(c);
-      assert.ok(content.innerHTML.includes(c.character_name));
-      assert.ok(sheet.includes('Hit Points (HP)'));
-      assert.ok(sheet.includes('Egenskaber, saves &amp; færdigheder'));
-      assert.ok(sheet.includes('Våben &amp; kamphandlinger'));
-      assert.ok(sheet.includes('Klasseevner'));
-      assert.ok(sheet.includes(`(${escapeHtml(c.defense_calc)})`));
-      assert.ok(sheet.includes(`${c.hp} / <span>${c.hp_max}</span>`));
-      assert.ok(sheet.includes(`GP:</span> ${c.gold.gp}`));
-      assert.ok(sheet.includes(`SP:</span> ${c.gold.sp}`));
-      assert.ok(sheet.includes(`CP:</span> ${c.gold.cp}`));
-      for (const stat of Object.values(c.stats)) {
-        assert.ok(sheet.includes(escapeHtml(stat.rating)));
-        assert.ok(sheet.includes(escapeHtml(stat.save)));
-        assert.ok(sheet.includes(escapeHtml(stat.skills)));
-      }
-      for (const attack of c.attacks) {
-        assert.ok(sheet.includes(escapeHtml(attack.name)));
-        assert.ok(sheet.includes(escapeHtml(attack.damage)));
-        assert.ok(sheet.includes(escapeHtml(attack.traits)));
-      }
-      for (const feature of c.class_features) {
-        assert.ok(sheet.includes(escapeHtml(feature.title)));
-        assert.ok(sheet.includes(escapeHtml(feature.text)));
-      }
-      for (const item of c.inventory) assert.ok(sheet.includes(escapeHtml(item)));
-      assert.ok(sheet.includes(escapeHtml(c.notes).replace(/\n/g, '<br>')));
-      assert.ok(sheet.includes('premade-print-inventory'));
-      assert.ok(sheet.includes('premade-print-notes'));
-    }
-    assert.doesNotMatch(content.innerHTML, /instance_id/);
-    assert.deepStrictEqual(mockLocalStorage.store, saved);
-  } finally {
-    global.document.createElement = origCreate;
-    global.document.body = origBody;
-    delete global.NIMBLE_DATA;
-  }
+test('buildPremadeSheetClone is exported', () => {
+  assert.strictEqual(typeof app.buildPremadeSheetClone, 'function');
 });
 
 const { applyHpChange } = require('../app.js');

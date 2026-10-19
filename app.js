@@ -1,4 +1,4 @@
-let activeInstanceId = null;
+﻿let activeInstanceId = null;
 const DEFAULT_GEMINI_IMAGE_MODEL = 'gemini-3.1-flash-image';
 const GEMINI_CONFIG_STORAGE_NAME = 'nimble_gemini_user_cfg';
 const GEMINI_KEY_STORAGE_NAME = 'nimble_gemini_api_key';
@@ -86,135 +86,30 @@ function escapePremadeHtml(value) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
-function renderPremadeCharacterSheet(char) {
-  const e = escapePremadeHtml;
-  const stats = Object.entries(char.stats || {}).map(([key, stat]) => `
-    <tr>
-      <td><strong>${e(key)}</strong> ${stat.key ? '<em>(Key)</em>' : ''}</td>
-      <td><strong>${e(stat.rating)}</strong></td>
-      <td>${e(stat.save)}</td>
-      <td>${e(stat.skills)}</td>
-    </tr>`).join('');
-  const attacks = (char.attacks || []).map(attack => `
-    <tr>
-      <td><strong>${e(attack.name)}</strong></td>
-      <td>${e(attack.damage)}</td>
-      <td>${e(attack.traits)}</td>
-    </tr>`).join('');
-  const features = (char.class_features || []).map(feature => `
-    <div class="feature-item"><strong>${e(feature.title)}:</strong> ${e(feature.text)}</div>`).join('');
-  const inventory = Array.isArray(char.inventory) ? char.inventory : String(char.inventory || '').split('\n').filter(Boolean);
-  const slots = Array.isArray(char.inventory_slots) ? char.inventory_slots : [];
-  let assignedSlots = 0;
-  let smallItems = 0;
-  let freeSmallItems = 0;
-  const inventoryLines = inventory.map((item, index) => {
-    const slotCount = Number.isInteger(slots[index]) && slots[index] >= 0
-      ? slots[index]
-      : inferInventorySlots(item);
-    assignedSlots += slotCount;
-    let effectiveSlots = slotCount;
-    if (slotCount === 0) {
-      smallItems++;
-      if (freeSmallItems < 5) freeSmallItems++;
-      else effectiveSlots = 1;
+function buildPremadeSheetClone(char) {
+  const sheet = document.querySelector('#view-sheet .sheet-card');
+  populateSheet({ ...char, player_name: '', portrait: '' });
+  const clone = sheet.cloneNode(true);
+
+  clone.querySelectorAll('input').forEach(input => {
+    if (input.type === 'checkbox' || input.type === 'radio') {
+      if (input.checked) input.setAttribute('checked', ''); else input.removeAttribute('checked');
+    } else {
+      input.setAttribute('value', input.value);
     }
-    return `${e(item)} — ${effectiveSlots} ${effectiveSlots === 1 ? 'slot' : 'slots'}`;
   });
-  const strength = parseInt(char.stats?.STR?.rating, 10) || 0;
-  const capacity = 10 + strength;
-  const gold = char.gold || {};
-  const coins = (parseInt(gold.gp, 10) || 0) + (parseInt(gold.sp, 10) || 0) + (parseInt(gold.cp, 10) || 0);
-  const coinSlots = Math.ceil(Math.max(0, coins) / 100);
-  const usedSlots = assignedSlots + Math.max(0, smallItems - 5) + coinSlots;
-  if (coins > 0) inventoryLines.push(`${coins} mønter — ${coinSlots} ${coinSlots === 1 ? 'slot' : 'slots'}`);
+  clone.querySelectorAll('textarea').forEach(t => { t.textContent = t.value; });
+  clone.querySelectorAll('select').forEach(s => {
+    Array.from(s.options).forEach((o, i) => { if (i === s.selectedIndex) o.setAttribute('selected', ''); else o.removeAttribute('selected'); });
+  });
 
-  let inventoryStatus = `Normal belastning · ${Math.max(0, capacity - usedSlots)} slots tilbage`;
-  let speed = char.speed || '6 felter';
-  if (usedSlots > capacity + 5) {
-    inventoryStatus = `Immobiliseret · ${usedSlots}/${capacity + 5} slots før immobilisering`;
-    speed = '0 felter (Immobiliseret)';
-  } else if (usedSlots > capacity) {
-    inventoryStatus = `Overbelastet · ${usedSlots - capacity} slots over grænsen · Ulempe på STR- og DEX-tjek samt saves`;
-    speed = `${Math.max(0, (parseInt(char.speed, 10) || 6) - 2)} felter (-2, Overbelastet)`;
-  }
-
-  return `
-    <article class="panel sheet-card print-page">
-      <div class="sheet-top-banner avoid-break">
-        <div class="sheet-portrait-section avoid-break">
-          <div class="sheet-portrait-frame">
-            <div class="portrait-placeholder">
-              <span class="portrait-placeholder-icon" aria-hidden="true">👤</span>
-              <span class="portrait-placeholder-text">Intet portræt</span>
-            </div>
-          </div>
-        </div>
-        <div class="sheet-header-main">
-          <header class="sheet-header">
-            <div>
-              <h1>${e(char.character_name)}</h1>
-              <div class="sheet-meta">Level ${e(char.level)} ${e(char.class)} | ${e(char.ancestry)} | ${e(char.background)}</div>
-            </div>
-            <div class="sheet-player-info"><div><strong>Spiller:</strong></div><div class="text-muted text-small">Nimble 2.0 System</div></div>
-          </header>
-          <p class="sheet-quote">"${e(char.quote)}"</p>
-        </div>
-      </div>
-
-      <div class="table-scroll">
-        <table class="data-table combat-table text-center">
-          <thead><tr><th>Hit Points (HP)</th><th>Hit Die</th><th>Defense</th><th>Speed</th><th>Initiative</th></tr></thead>
-          <tbody><tr>
-            <td>${e(char.hp)} / <span>${e(char.hp_max)}</span></td>
-            <td>${e(char.hit_die)}</td>
-            <td><strong>${e(char.defense)}</strong> <small class="text-muted">(${e(char.defense_calc)})</small></td>
-            <td>${e(speed)}</td><td><strong>${e(char.initiative)}</strong></td>
-          </tr></tbody>
-        </table>
-      </div>
-
-      <div class="wounds-container avoid-break">
-        <div class="wounds-header"><strong>⚠️ Wounds (Dying ved 0 HP)</strong><small class="text-muted">6 Wounds = Død</small></div>
-        <div class="wounds-boxes">${Array.from({ length: 6 }, (_, index) =>
-          `<label class="wound-box${index === 5 ? ' wound-dead' : ''}"><input type="checkbox" disabled${index < (char.wounds || 0) ? ' checked' : ''}> ${index === 5 ? '☠️ 6 (DØD)' : index + 1}</label>`
-        ).join('')}</div>
-        <p class="wounds-note">Ved 0 HP får du 1 Wound og bliver Dying: kun 1 handling pr. tur. Angriber du, får du 1 ekstra Wound, medmindre du består et DC 10 STR-save. Tager du skade som Dying, får du 2 Wounds (3 ved Crit).</p>
-      </div>
-
-      <h3 class="section-title">🎲 Egenskaber, saves &amp; færdigheder</h3>
-      <div class="table-scroll">
-        <table class="data-table"><thead><tr><th style="width: 15%;">Egenskab</th><th style="width: 12%;">Rating</th><th style="width: 33%;">Save-slag</th><th>Færdigheder &amp; bonusser</th></tr></thead>
-          <tbody>${stats}</tbody>
-        </table>
-      </div>
-
-      <h3 class="section-title">⚔️ Våben &amp; kamphandlinger</h3>
-      <div class="table-scroll">
-        <table class="data-table"><thead><tr><th>Handling / våben</th><th style="width: 20%;">Skade</th><th>Egenskaber &amp; rækkevidde</th></tr></thead>
-          <tbody>${attacks}</tbody>
-        </table>
-      </div>
-
-      <h3 class="section-title">🌟 Klasseevner</h3>
-      <div class="features-list avoid-break">${features}</div>
-
-      <div class="gear-currency-wrapper avoid-break">
-        <div class="gear-col">
-          <label>🎒 Udstyr &amp; rygsæk (slots):</label>
-          <div class="print-mirror premade-print-inventory">${inventoryLines.join('<br>')}<br><br>Belastning: ${usedSlots}/${capacity} slots — ${e(inventoryStatus)}</div>
-        </div>
-        <div class="currency-col">
-          <label>💰 Møntpung:</label>
-          <div class="currency-inputs"><div><span>GP:</span> ${e(gold.gp || 0)}</div><div><span>SP:</span> ${e(gold.sp || 0)}</div><div><span>CP:</span> ${e(gold.cp || 0)}</div></div>
-        </div>
-      </div>
-
-      <div class="avoid-break notes-wrapper">
-        <label>📝 Noter, kendetegn &amp; mål:</label>
-        <div class="print-mirror premade-print-notes">${e(char.notes).replace(/\n/g, '<br>')}</div>
-      </div>
-    </article>`;
+  const inv = clone.querySelector('#f-inventory-print');
+  const notes = clone.querySelector('#f-notes-print');
+  if (inv) inv.classList.add('premade-print-inventory');
+  if (notes) notes.classList.add('premade-print-notes');
+  clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+  clone.querySelectorAll('button').forEach(b => b.setAttribute('tabindex', '-1'));
+  return clone;
 }
 
 function openPremadeCharactersPrintView() {
@@ -236,7 +131,12 @@ function openPremadeCharactersPrintView() {
   document.body.appendChild(overlay);
 
   const content = overlay.querySelector('#premade-print-content');
-  content.innerHTML = NIMBLE_DATA.characters.map(renderPremadeCharacterSheet).join('');
+  if (activeInstanceId) saveActiveSheet(false);
+  NIMBLE_DATA.characters.forEach(char => content.appendChild(buildPremadeSheetClone(char)));
+  if (activeInstanceId) {
+    const inst = getAllInstances().find(x => x.instance_id === activeInstanceId);
+    if (inst) populateSheet(inst);
+  }
 }
 
 function closePremadeCharactersPrintView() {
@@ -271,6 +171,11 @@ function loadInstance(instanceId) {
   activeInstanceId = instanceId;
   localStorage.setItem('nimble_last_active', instanceId);
 
+  populateSheet(inst);
+  switchView('sheet');
+}
+
+function populateSheet(inst) {
   document.getElementById('f-name').textContent = inst.character_name;
   document.getElementById('f-class-meta').textContent = `Level ${inst.level} ${inst.class} | ${inst.ancestry} | ${inst.background}`;
   document.getElementById('f-quote').textContent = `"${inst.quote}"`;
@@ -334,7 +239,6 @@ function loadInstance(instanceId) {
   renderPortrait(inst.portrait || null);
 
   syncPrintMirrors();
-  switchView('sheet');
 }
 
 function applyHpChange(hp, temp, max, delta) {
@@ -1220,7 +1124,7 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     openPremadeCharactersPrintView,
     closePremadeCharactersPrintView,
-    renderPremadeCharacterSheet,
+    buildPremadeSheetClone,
     applyHpChange,
     DEFAULT_GEMINI_IMAGE_MODEL,
     GEMINI_KEY_STORAGE_NAME,
