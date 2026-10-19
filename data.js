@@ -116,10 +116,13 @@ const NIMBLE_DATA = {
       inventory: [
         "Staff (stav af jerntræ)",
         "Traveling Robes & Sandals (rejsekutte og sandaler)",
-        "Småting: bønnesnor, røgelsespinde, urtete og rejserationer"
+        "Rations (3 dages rejseproviant) og feltflaske",
+        "2x Healing Potion (helbredelsesdrikke)",
+        "Bedroll (sovemåtte) og 2 fakler",
+        "Småting: bønnesnor, røgelsespinde, urtete og tændstål"
       ],
-      inventory_slots: [2, 1, 1],
-      gold: { gp: 0, sp: 0, cp: 0 },
+      inventory_slots: [2, 1, 1, 1, 1, 1],
+      gold: { gp: 15, sp: 0, cp: 0 },
       notes: "Kendetegn: Rolig, kontrolleret vejrtrækning; bevæger sig fuldstændig lydløst.\nPersonligt mål: Finde den forsvundne mester og bringe klosterets stjålne skriftrulle tilbage."
     },
     {
@@ -155,12 +158,15 @@ const NIMBLE_DATA = {
       ],
       inventory: [
         "Battleaxe (massiv stridsøkse)",
+        "Javelins (3 kastespyd til afstand)",
+        "Traveling Clothes (rejsedragt af pels og læder)",
         "Rope (50 ft.)",
-        "Rations (røget vildtkød)",
+        "Rations (røget vildtkød) og feltflaske",
+        "2x Healing Potion (helbredelsesdrikke)",
         "Småting: slibesten, drikkehorn, uldtæppe og flint"
       ],
-      inventory_slots: [2, 1, 1, 1],
-      gold: { gp: 0, sp: 0, cp: 0 },
+      inventory_slots: [2, 1, 1, 1, 1, 1, 1],
+      gold: { gp: 15, sp: 0, cp: 0 },
       notes: "Kendetegn: Brede skuldre dækket af ar; ler triumferende midt i kampens hede.\nPersonligt mål: Nedlægge et sagnomspundet udyr alene og bringe dets kranie hjem som trofæ."
     },
     {
@@ -199,10 +205,12 @@ const NIMBLE_DATA = {
         "Rusty Mail (ringbrynje, båret)",
         "Wooden Buckler (træskjold med jernbeslag)",
         "Manacles (håndjern med nøgle)",
-        "Småting: helligt symbol af granit, bandager, vievand og lampe"
+        "Rations (3 dages proviant) og feltflaske",
+        "2x Healing Potion (helbredelsesdrikke)",
+        "Småting: helligt symbol af granit, bandager, vievand og lampe med olie"
       ],
-      inventory_slots: [1, 1, 1, 1, 1],
-      gold: { gp: 0, sp: 0, cp: 0 },
+      inventory_slots: [1, 1, 1, 1, 1, 1, 1],
+      gold: { gp: 15, sp: 0, cp: 0 },
       notes: "Kendetegn: Flettet mørkt skæg bundet med bronzeringe; taler med en dyb, bydende røst.\nPersonligt mål: Rense et vanhelliget bjergtempel og genrejse dets faldne alter."
     },
     {
@@ -241,10 +249,14 @@ const NIMBLE_DATA = {
       inventory: [
         "Adventurer's Garb (kappe)",
         "Staff (udskåret egetræsstav med fokus-sten)",
-        "Småting: formelbog, blækhus og fjerpenne, lyssten og sæbe"
+        "Dagger (dolk til nødsituationer)",
+        "Spellbook (formelbog)",
+        "Rations (3 dages proviant) og feltflaske",
+        "2x Healing Potion (helbredelsesdrikke)",
+        "Småting: blækhus og fjerpenne, lyssten, sæbe og 2 fakler"
       ],
-      inventory_slots: [1, 2, 1],
-      gold: { gp: 0, sp: 0, cp: 0 },
+      inventory_slots: [1, 2, 1, 1, 1, 1, 1],
+      gold: { gp: 15, sp: 0, cp: 0 },
       notes: "Kendetegn: Ravgyldne øjne; mumler formler dæmpet under åndedrættet.\nPersonligt mål: Bevise over for akademiet, at elementarkræfterne ikke lader sig tæmme af rigide dogmer og regelrytteri."
     },
     {
@@ -284,10 +296,13 @@ const NIMBLE_DATA = {
         "Cheap Hides (læderrustning, båret)",
         "Dagger (jægerdolk i bælteskede)",
         "Hunting Trap (kraftig jægerfælde af jern)",
-        "Småting: sejlgarn, feltflaske, uldtæppe og tændstål"
+        "Rope (50 ft.)",
+        "Rations (3 dages tørret kød) og feltflaske",
+        "2x Healing Potion (helbredelsesdrikke)",
+        "Småting: sejlgarn, uldtæppe, tændstål og 2 fakler"
       ],
-      inventory_slots: [2, 1, 1, 1, 1],
-      gold: { gp: 0, sp: 0, cp: 0 },
+              inventory_slots: [2, 1, 1, 1, 1, 1, 1, 0],
+      gold: { gp: 15, sp: 0, cp: 0 },
       notes: "Kendetegn: Piberygende og fåmælt; observerer altid terræn og vindretning.\nPersonligt mål: Opspore det udyr, der fordrev hans familie fra de sydlige skove."
     },
     {
@@ -326,10 +341,14 @@ const NIMBLE_DATA = {
         "2x Daggers (stål i specialskeder)",
         "Sling (læderslynge med rullesten)",
         "Cheap Hides (læderrustning, båret)",
-        "Småting: kridt, låsedirke, tændstål og rebsnøre"
+        "Thieves' Tools (tyveværktøj: dirke, fil og spejl)",
+        "Rope (50 ft.) og enterhage",
+        "Rations (3 dages proviant) og feltflaske",
+        "2x Healing Potion (helbredelsesdrikke)",
+        "Småting: kridt, tændstål, mørk hætte og 2 fakler"
       ],
-      inventory_slots: [2, 1, 1, 1],
-      gold: { gp: 0, sp: 0, cp: 0 },
+      inventory_slots: [2, 1, 1, 1, 1, 1, 1, 1],
+      gold: { gp: 15, sp: 0, cp: 0 },
       notes: "Kendetegn: Et tyndt ar over venstre øjenbryn; træder altid blødt og uden lyd.\nPersonligt mål: Afsløre, hvem der forrådte den gamle gadebande i havnekvarteret."
     },
     {
@@ -367,10 +386,13 @@ const NIMBLE_DATA = {
         "Short Sword (kortsværd i bælteskede)",
         "Javelins (4 kastespyd over ryggen)",
         "Rusty Mail (ringbrynje, båret)",
-        "Småting: feltoversigtskort, signalhorn, feltkirurgisk nål og tråd, vokslys og kridt"
+        "Småting: feltoversigtskort, signalhorn, feltkirurgisk nål og tråd, vokslys og kridt",
+        "Rope (50 ft.)",
+        "Rations (3 dages proviant) og feltflaske",
+        "2x Healing Potion (helbredelsesdrikke)"
       ],
-      inventory_slots: [1, 1, 1, 1],
-      gold: { gp: 0, sp: 0, cp: 0 },
+      inventory_slots: [1, 1, 1, 1, 1, 1, 1],
+      gold: { gp: 15, sp: 0, cp: 0 },
       notes: "Kendetegn: Taler med myndig baryton; vurderer instinktivt flugtveje og flaskehalse i ethvert rum.\nPersonligt mål: Genopbygge en faldet legion og bevise over for riget, at ægte sejr vindes gennem kammeratskab.\nAllierede: Garnisonsmesteren i grænsefæstningen; en gammel våbensmed, der skylder ham sit liv."
     },
     {
@@ -411,10 +433,14 @@ const NIMBLE_DATA = {
         "Adventurer's Garb (kappe med ravnefjer)",
         "Sickle (forgyldt, krum ritualklinge)",
         "Shovel (skovl)",
-        "Småting: sort glaskugle, påkaldelsesblæk, bog i koldt skind, kridt og ravnefod-amulet"
+        "Småting: sort glaskugle, påkaldelsesblæk, bog i koldt skind, kridt og ravnefod-amulet",
+        "Sling (slynge med rullesten)",
+        "Rations (3 dages proviant) og feltflaske",
+        "2x Healing Potion (helbredelsesdrikke)",
+        "Torches (3 fakler) og tændstål"
       ],
-      inventory_slots: [1, 1, 2, 1],
-      gold: { gp: 0, sp: 0, cp: 0 },
+      inventory_slots: [1, 1, 2, 1, 1, 1, 1, 1],
+      gold: { gp: 15, sp: 0, cp: 0 },
       notes: "Kendetegn: Bleg hud og kulsorte øjne; taler ofte lavmælt til skyggerne i krogene, som var de gamle venner.\nPersonligt mål: Afdække sin patrons sande navn og bryde den forbandelse, der plager hendes slægt.\nAllierede: En lyssky antikvar i havnebyen; en forvist nekromantiker, der kender de gamle ritualer."
     },
     {
@@ -455,10 +481,13 @@ const NIMBLE_DATA = {
         "Mace (stridskølle)",
         "Rusty Mail (ringbrynje, båret)",
         "Wooden Buckler (træskjold med solhjul)",
-        "Småting: klokke, feltlægetaske, sølvkæde med solsymbol og salvingsolie"
+        "Småting: klokke, feltlægetaske, sølvkæde med solsymbol og salvingsolie",
+        "Rations (3 dages proviant) og feltflaske",
+        "2x Healing Potion (helbredelsesdrikke)",
+        "Torches (3 fakler) og tændstål"
       ],
-      inventory_slots: [1, 1, 1, 1],
-      gold: { gp: 0, sp: 0, cp: 0 },
+      inventory_slots: [1, 1, 1, 1, 1, 1, 1],
+      gold: { gp: 15, sp: 0, cp: 0 },
       notes: "Kendetegn: Venligt ansigt med dybe smilerynker; lægger altid en trøstende hånd på skulderen af folk i nød.\nPersonligt mål: Lindre lidelserne i de krigshærgede grænselande og bygge et hospice for de sårede.\nAllierede: En abbedisse ved bjergklosteret; en helbredt landevejsrøver, der har svoret troskab."
     },
     {
@@ -499,10 +528,13 @@ const NIMBLE_DATA = {
         "Adventurer's Garb (rejsedragt)",
         "Instrument (håndbygget kirsebærtræslut med sølvstrenge)",
         "Dagger (dolk i lakeret læderskede)",
-        "Småting: lommespejl, nodepapir og fjerpen, spillekort og terninger"
+        "Småting: lommespejl, nodepapir og fjerpen, spillekort og terninger",
+        "Rations (3 dages proviant) og feltflaske",
+        "2x Healing Potion (helbredelsesdrikke)",
+        "Bedroll (sovemåtte) og 2 fakler"
       ],
-      inventory_slots: [1, 1, 1, 1],
-      gold: { gp: 0, sp: 0, cp: 0 },
+      inventory_slots: [1, 1, 1, 1, 1, 1, 1],
+      gold: { gp: 15, sp: 0, cp: 0 },
       notes: "Kendetegn: Altid et glimt i øjet og et vittigt svar på læben; kan ikke modstå et godt væddemål eller en god historie.\nPersonligt mål: Komponere det store epos om gruppens heltegerninger og synge det for højkongens bord.\nAllierede: En berømt teaterdirektør i hovedstaden; kroværter langs alle store kongeveje."
     },
     {
@@ -543,10 +575,14 @@ const NIMBLE_DATA = {
       inventory: [
         "Cheap Hides (læderrustning, båret)",
         "Staff (asketræsstav)",
-        "Småting: Strange Plant (tordengræsfrø), knoglefløjte, rovfuglekløer, regnslag og tørrede bær"
+        "Småting: Strange Plant (tordengræsfrø), knoglefløjte, rovfuglekløer, regnslag og tørrede bær",
+        "Sling (slynge med rullesten)",
+        "Rations (3 dages proviant) og feltflaske",
+        "2x Healing Potion (helbredelsesdrikke)",
+        "Bedroll (sovemåtte) og 2 fakler"
       ],
-      inventory_slots: [1, 2, 1],
-      gold: { gp: 0, sp: 0, cp: 0 },
+      inventory_slots: [1, 2, 1, 1, 1, 1, 1],
+      gold: { gp: 15, sp: 0, cp: 0 },
       notes: "Kendetegn: Vågent blik og en lugtesans som en ulv; sidder helst på hug og trives bedst under åben himmel.\nPersonligt mål: Bringe balancen tilbage til skoven, efter at en mørk korruption har forgiftet dyrene.\nAllierede: En gammel kæmpeugle i trækronerne; eneboerdruiden i Tågedalen."
     }
   ]

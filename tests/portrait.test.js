@@ -1,4 +1,4 @@
-const test = require('node:test');
+﻿const test = require('node:test');
 const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
@@ -391,3 +391,16 @@ test('applyHpChange uses temp HP first and clamps', () => {
   assert.deepStrictEqual(applyHpChange(2, 0, 12, -5), { hp: 0, temp: 0 });
   assert.deepStrictEqual(applyHpChange(10, 0, 12, 5), { hp: 12, temp: 0 });
 });
+
+test('premades have 15 gp and consistent inventory slots', () => {
+  const NIMBLE_DATA = new (require('vm').Script)(require('fs').readFileSync(require('path').join(__dirname, '..', 'data.js'), 'utf8') + '\nNIMBLE_DATA;').runInNewContext({});
+  assert.equal(NIMBLE_DATA.characters.length, 11);
+  for (const c of NIMBLE_DATA.characters) {
+    assert.equal(c.gold.gp, 15, c.name);
+    assert.equal(c.inventory.length, c.inventory_slots.length, c.name);
+    const str = parseInt(c.stats.STR.rating, 10) || 0;
+    const sum = c.inventory_slots.reduce((a, b) => a + b, 0);
+    assert.ok(sum <= 10 + str, `${c.name}: ${sum} > ${10 + str}`);
+  }
+});
+
